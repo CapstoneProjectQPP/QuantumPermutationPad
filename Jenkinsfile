@@ -4,17 +4,12 @@ pipeline {
     stage('Build') {
       agent any
       steps {
+        sh 'pwd'
         dir('C++') {
+          sh 'pwd'
           sh 'make'
         }
       }
     }
-
-  }
-  parameters {
-    choice(choices: '''stage
-preprod
-prod
-''', description: 'Choose environment', name: 'ENV')
   }
 }
