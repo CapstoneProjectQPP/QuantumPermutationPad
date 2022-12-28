@@ -4,8 +4,9 @@ pipeline {
     stage('Build') {
       agent any
       steps {
-        sh 'cd C++/'
-        sh 'make'
+        dir('C++') {
+          sh 'make'
+        }
       }
     }
 
