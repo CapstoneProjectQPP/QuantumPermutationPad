@@ -4,10 +4,9 @@ pipeline {
     stage('Build') {
       agent any
       steps {
-        sh 'pwd'
         dir('C++') {
-          sh 'pwd'
           sh 'make'
+          archiveArtifacts artifacts: 'bin/*' , fingerprint: true
         }
       }
     }
