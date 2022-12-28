@@ -1,8 +1,5 @@
 pipeline {
   agent any
-  parameters {
-     choice(choices: "stage\npreprod\nprod\n", description: 'Choose environment', name: 'ENV')
-  }
   stages {
     stage('Build') {
       steps {
@@ -11,5 +8,11 @@ pipeline {
       }
     }
 
+  }
+  parameters {
+    choice(choices: '''stage
+preprod
+prod
+''', description: 'Choose environment', name: 'ENV')
   }
 }
