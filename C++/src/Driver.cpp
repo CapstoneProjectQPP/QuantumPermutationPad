@@ -8,8 +8,6 @@ int main() {
 
     calculator::add();
 
-    abc
-
     return 0;
 }
 
