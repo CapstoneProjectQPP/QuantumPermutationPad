@@ -12,21 +12,19 @@ pipeline {
     }
   }
   post {
-        steps {
-            step([$class: 'GitHubCommitStatusSetter'])
-        }
 
       // Clean after build
-//       always {
-//
-//
-//
-//           cleanWs(cleanWhenNotBuilt: false,
-//                   deleteDirs: true,
-//                   disableDeferredWipeout: true,
-//                   notFailBuild: true,
-//                   patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
-//                              [pattern: '.propsfile', type: 'EXCLUDE']])
-//       }
+      always {
+
+          step([$class: 'GitHubCommitStatusSetter'])
+
+
+          cleanWs(cleanWhenNotBuilt: false,
+                  deleteDirs: true,
+                  disableDeferredWipeout: true,
+                  notFailBuild: true,
+                  patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
+                             [pattern: '.propsfile', type: 'EXCLUDE']])
+      }
   }
 }
