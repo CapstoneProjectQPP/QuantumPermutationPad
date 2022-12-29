@@ -13,10 +13,16 @@ pipeline {
   }
   post {
 
+        success {
+            setBuildStatus("Build succeeded", "SUCCESS");
+        }
+        failure {
+            setBuildStatus("Build failed", "FAILURE");
+        }
       // Clean after build
       always {
 
-            gitHubPRStatus githubPRMessage('${GITHUB_PR_COND_REF} run started')
+
 
           cleanWs(cleanWhenNotBuilt: false,
                   deleteDirs: true,
