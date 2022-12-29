@@ -12,24 +12,24 @@ pipeline {
     }
   }
   post {
-
+        success {
+                            setBuildStatus("Build succeeded", "SUCCESS");
+                        }
+                        failure {
+                            setBuildStatus("Build failed", "FAILURE");
+                        }
 
       // Clean after build
-      always {
-
-        success {
-                    setBuildStatus("Build succeeded", "SUCCESS");
-                }
-                failure {
-                    setBuildStatus("Build failed", "FAILURE");
-                }
-
-          cleanWs(cleanWhenNotBuilt: false,
-                  deleteDirs: true,
-                  disableDeferredWipeout: true,
-                  notFailBuild: true,
-                  patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
-                             [pattern: '.propsfile', type: 'EXCLUDE']])
-      }
+//       always {
+//
+//
+//
+//           cleanWs(cleanWhenNotBuilt: false,
+//                   deleteDirs: true,
+//                   disableDeferredWipeout: true,
+//                   notFailBuild: true,
+//                   patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
+//                              [pattern: '.propsfile', type: 'EXCLUDE']])
+//       }
   }
 }
