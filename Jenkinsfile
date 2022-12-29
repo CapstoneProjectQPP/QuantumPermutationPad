@@ -12,12 +12,9 @@ pipeline {
     }
   }
   post {
-        success {
-                            setBuildStatus("Build succeeded", "SUCCESS");
-                        }
-                        failure {
-                            setBuildStatus("Build failed", "FAILURE");
-                        }
+        steps {
+            step([$class: 'GitHubCommitStatusSetter'])
+        }
 
       // Clean after build
 //       always {
