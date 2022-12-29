@@ -5,7 +5,13 @@ pipeline {
       agent any
       steps {
         dir('C++') {
-          sh 'make'
+            try {
+                    sh 'make'
+                } catch (err) {
+                    echo "Caught: ${err}"
+                    currentBuild.result = 'FAILURE'
+                }
+
           archiveArtifacts artifacts: 'bin/*' , fingerprint: true
         }
       }
