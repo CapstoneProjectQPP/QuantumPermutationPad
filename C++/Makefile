@@ -66,7 +66,7 @@ $(BLDDIR)/%.o: $(SRCDIR)/%.cpp
 clean:
 	rm -fr $(BLDDIR)
 	rm -fr bin/*
-	rm -rf $(PRJNAME)
+
 
 
 
