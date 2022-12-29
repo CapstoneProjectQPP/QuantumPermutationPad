@@ -5,10 +5,7 @@ pipeline {
       agent any
       steps {
         dir('C++') {
-
-          catchError {
-            sh 'make'
-          }
+          sh 'make'
           archiveArtifacts artifacts: 'bin/*' , fingerprint: true
         }
       }
