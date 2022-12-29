@@ -5,7 +5,7 @@
 #
 # https://github.com/danny-cpp
 ###############################################################
-PRJNAME := qqp
+PRJNAME := qpp
 
 # These following directories are assumed to exist; abide to GNU guideline.
 CC	:= g++
