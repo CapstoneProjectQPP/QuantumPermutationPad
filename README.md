@@ -7,13 +7,13 @@
     Example: <code>git commit https://github.com/dany-cpp/QuantumPermutationPad.git </code>
     </li>
     <li>
-    After you have cloned the repository, change your terminal directory to the repository you just cloned and type <code>git checkout -b &lt;name of your branch&gr; </code> <br>
+    After you have cloned the repository, change your terminal directory to the repository you just cloned and type <code>git checkout -b &lt;name of your branch&gt; </code> <br>
     Example: <code>git checkout -b MyName-new-branch </code> <br>
     The checkout command switches your working branch, and the -b flag creates a new branch.
     </li>
     <li>
     You can check all of the local branches on your machines using  <code>git branch </code> <br>
-    If another member has created new remote branches that are not yet on your machines, you can access those branches using <code> git fetch </code>
+    If another member has created new remote branches that are not yet on your machines, you can access those branches using <br> <code> git fetch </code>
     </li>
 </ol>
     
