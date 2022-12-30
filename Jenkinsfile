@@ -14,9 +14,9 @@ pipeline {
             agent any
             steps {
                 dir('test_framework_package') {
-                    sh 'sudo chmod a+x /C++/bin/*'
+                    sh 'sudo chmod -R 777 /C++/bin/*'
                     sh 'sudo chmod a+x test_cpp_binary.sh'
-                    sh './test_cpp_binary.sh'
+                    sh 'sudo ./test_cpp_binary.sh'
                 }
             }
         }
