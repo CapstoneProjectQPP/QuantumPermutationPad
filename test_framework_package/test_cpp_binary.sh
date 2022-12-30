@@ -2,5 +2,5 @@
 
 DEFAULT_DIR='/..'
 
-.$DEFAULT_DIR/C++/bin/qpp.exe
+sudo .$DEFAULT_DIR/C++/bin/qpp.exe
 
