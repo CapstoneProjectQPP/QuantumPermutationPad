@@ -6,7 +6,7 @@ pipeline {
       steps {
         dir('C++') {
           sh 'make'
-          archiveArtifacts artifacts: 'bin/*' , fingerprint: true
+          archiveArtifacts artifacts: 'bin/*.exe' , fingerprint: true
         }
       }
     }
