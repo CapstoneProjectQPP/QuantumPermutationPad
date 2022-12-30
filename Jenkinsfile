@@ -13,7 +13,7 @@ pipeline {
         stage('Test') {
             agent any
             steps {
-                sh 'sudo chmod -R 777 /C++/bin/*'
+                sh 'sudo chmod -R 777 C++/bin/*'
                 dir('test_framework_package') {
                     sh 'sudo chmod a+x test_cpp_binary.sh'
                     sh 'sudo ./test_cpp_binary.sh'
