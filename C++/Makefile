@@ -5,7 +5,7 @@
 #
 # https://github.com/danny-cpp
 ###############################################################
-PRJNAME := qpp
+PRJNAME := qpp.exe
 
 # These following directories are assumed to exist; abide to GNU guideline.
 CC	:= g++
@@ -46,12 +46,11 @@ INCLUDE	:= -I include
 .PHONY: all clean
 
 all: $(TARGET)
-	#cp ./bin/$(PRJNAME) ./
 
 $(TARGET): $(OBJS)
 	@echo "\n##__Linking objs"
 	@echo "Total process spawned for compilation: $(NPROCS)"
-	@$(CC) $(MODE) -o $@ $^ || (echo "Compilation failed"; exit 10)
+	@$(CC) $(MODE) -o $@ $^ || (echo "Linking failed"; exit 20)
 -include $(BLDDIR)/*.d
 
 # This section already include automatic dependency tracking by using -include
@@ -60,12 +59,12 @@ $(BLDDIR)/%.o: $(SRCDIR)/%.cpp
 	@mkdir -p $(BLDDIR) || $(SUPPR_ECHO)
 	$(shell rsync -a --include='*/' --exclude='*' $(SRCDIR)/ $(BLDDIR))
 	@echo "\n##__Compiling translation unit" $@
-	@$(CC) $(INCLUDE) $(MODE) -c -o $@ $< || (echo "Linking failed"; exit 20)
+	@$(CC) $(INCLUDE) $(MODE) -c -o $@ $< || (echo "Compilation failed"; exit 10)
 
 
 clean:
 	rm -fr $(BLDDIR)
-	rm -fr bin/*
+	rm -fr bin/*.exe
 	rm -rf $(PRJNAME)
 
 
