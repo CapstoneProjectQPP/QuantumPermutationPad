@@ -13,6 +13,7 @@ pipeline {
         stage('Test') {
             agent any
             steps {
+                sh 'pwd'
                 dir('test_framework_package') {
                     sh 'sudo chmod +x test_cpp_binary.sh'
                     sh './test_cpp_binary.sh'
