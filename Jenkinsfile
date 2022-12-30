@@ -4,6 +4,7 @@ pipeline {
         stage('Build') {
             agent any
             steps {
+                step([$class: 'GitHubCommitStatusSetter'])
                 dir('C++') {
                   sh 'make'
                   archiveArtifacts artifacts: 'bin/*.exe' , fingerprint: true
