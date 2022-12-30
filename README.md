@@ -1,6 +1,5 @@
 # Contribution guide
 
-___
 
 ## Pull request
 <ol>
@@ -26,5 +25,23 @@ ___
     </li>
     <li>
     Ping on Discord to get it reviewed.
+    </li>
+</ol>
+
+___
+
+# Compile and execute guide
+
+## For C++ code
+<ol>
+    <li>
+    In the C++ directory, you will find the Makefile. In line 38, change it to <code>MODE := $(RELEASE)</code> or <code>MODE := $(DEBUG)</code> as you wish.
+    Currently, we only support these 2 modes. Note that to use GDB to debug, you must use Debug profile.
+    </li>
+    <li>
+    In the same directory use <code>make</code> the compile the code; <code>make clean</code> to clean everything.
+    </li>
+    <li>
+    If the process run successfully, you will find a new binary in <code>bin/</code>. To execute, run <code>./bin/qpp.exe</code>.
     </li>
 </ol>
