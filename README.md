@@ -13,7 +13,7 @@
     </li>
     <li>
     You can check all of the local branches on your machines using  <code>git branch </code> <br>
-    If another member has created new remote branches that are not yet on your machines, you can access those branches using <br> <code> git fetch </code>
+    If another member has created new remote branches that are not yet on your machine, you can access those branches using <br> <code> git fetch </code>
     </li>
 </ol>
     
