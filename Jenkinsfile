@@ -11,8 +11,11 @@ pipeline {
             }
         }
         stage('Test') {
-            dir('test_framework_package') {
-                sh './test_cpp_binary.sh'
+            agent any
+            steps {
+                dir('test_framework_package') {
+                    sh './test_cpp_binary.sh'
+                }
             }
         }
     }
