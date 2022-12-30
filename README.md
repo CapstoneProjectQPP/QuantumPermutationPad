@@ -4,10 +4,10 @@
 <ol>
     <li>
     To create a branch, you will first need to clone the repository to a directory on your machine. Open a terminal in the directory you wish to place the  repository files and then type <code>git clone &lt;https link to repo&gt; </code> <br>
-    Example <code>git commit https://github.com/dany-cpp/QuantumPermutationPad.git </code>
+    Example: <code>git commit https://github.com/dany-cpp/QuantumPermutationPad.git </code>
     </li>
     <li>
-    After you have cloned the repository, change your terminal directory to the repository you just cloned and type <code>git checkout -b &lt;name of your branch&gr; <br>
+    After you have cloned the repository, change your terminal directory to the repository you just cloned and type <code>git checkout -b &lt;name of your branch&gr; </code> <br>
     Example: <code>git checkout -b MyName-new-branch </code> <br>
     The checkout command switches your working branch, and the -b flag creates a new branch.
     </li>
