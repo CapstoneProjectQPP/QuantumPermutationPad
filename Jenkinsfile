@@ -6,6 +6,7 @@ pipeline {
             steps {
                 step([$class: 'GitHubCommitStatusSetter'])
                 dir('C++') {
+                  sh 'make clean'
                   sh 'make'
                   archiveArtifacts artifacts: 'bin/*.exe' , fingerprint: true
                 }
