@@ -1,4 +1,7 @@
 /.idea
 
+# Directories to ignore
+/bin
+
 # Mac/OSX
 .DS_Store
