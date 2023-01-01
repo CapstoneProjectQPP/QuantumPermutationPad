@@ -3,8 +3,9 @@ pipeline {
     stages {
         stage('Build') {
             agent any
+            options { skipDefaultCheckout() }
             steps {
-                step([$class: 'GitHubCommitStatusSetter'])
+                checkout scm
                 dir('C++') {
                   sh 'make clean'
                   sh 'make'

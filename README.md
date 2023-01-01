@@ -12,6 +12,9 @@
     The checkout command switches your working branch, and the -b flag creates a new branch.
     </li>
     <li>
+    Branch, name, if linked to an issue, must contains the issue number in this format. For example "MP-10" for PR linked to issue #10. 
+    </li>
+    <li>
     You can check all of the local branches on your machines using  <code>git branch </code> <br>
     If another member has created new remote branches that are not yet on your machine, you can access those branches using <br> <code> git fetch </code>
     </li>
