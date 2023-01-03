@@ -9,6 +9,6 @@ namespace QPP {
         StateArray();
 
     private:
-        std::vector<std::vector<char16_t>> matrix;
+        std::vector<std::vector<char>> matrix;
     };
 }
