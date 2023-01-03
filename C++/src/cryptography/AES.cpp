@@ -4,8 +4,39 @@
 namespace QPP {
     std::string AES::encrypt(std::string& plain_text, std::string& key, int key_size) {
 
-        std::cout << "Encrypting" << std::endl;
+        this->plain_text = &plain_text;
+        this->key = &key;
+        this->key_size = key_size;
+
+        parse();
+        subBytes();
 
         return "";
+    }
+
+    void AES::parse() {
+        int n = 0;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (n < plain_text->size()) {
+                    stateArray.setValueAt(i, j, plain_text->at(n));
+                    n++;
+                }
+                else {
+                    stateArray.setValueAt(i, j, 0x00);
+                }
+            }
+        }
+    }
+
+    void AES::subBytes() {
+        StateArray temp;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                int col = stateArray.getValueAt(i, j) ^ 0b00001111;
+                int row = (stateArray.getValueAt(i, j) ^ 0b11110000) >> 4;
+                temp.setValueAt(i, j, SubstitutionBox[row][col]);
+            }
+        }
     }
 }

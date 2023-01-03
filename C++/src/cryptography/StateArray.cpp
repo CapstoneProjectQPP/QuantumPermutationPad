@@ -2,8 +2,13 @@
 
 
 QPP::StateArray::StateArray() {
-    matrix = std::vector<std::vector<uint8_t>>(4);
-    for (int i = 0; i < 4; i++) {
-        matrix[i] = std::vector<uint8_t>(4);
-    }
 }
+
+uint8_t QPP::StateArray::getValueAt(int row, int col) {
+    return matrix[row][col];
+}
+
+uint8_t QPP::StateArray::setValueAt(int row, int col, int value) {
+    matrix[row][col] = value;
+}
+
