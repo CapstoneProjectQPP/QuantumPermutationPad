@@ -9,9 +9,9 @@ int main() {
 
     QPP::AES aes;
 
-    std::string input = "Something";
-    std::string key = "Key";
-    aes.encrypt(input, key, 256);
+    std::string input = "something";
+    std::string key = "abcdefghijklmnop";
+    aes.encrypt(input, key, 128);
 
     return 0;
 }

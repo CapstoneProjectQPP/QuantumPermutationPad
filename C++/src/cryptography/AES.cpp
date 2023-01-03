@@ -33,8 +33,9 @@ namespace QPP {
         StateArray temp;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                int col = stateArray.getValueAt(i, j) ^ 0b00001111;
-                int row = (stateArray.getValueAt(i, j) ^ 0b11110000) >> 4;
+                uint8_t original = stateArray.getValueAt(i, j);
+                uint8_t col = original & 0b00001111;
+                uint8_t row = (original & 0b11110000) >> 4;
                 temp.setValueAt(i, j, SubstitutionBox[row][col]);
             }
         }
