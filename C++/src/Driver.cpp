@@ -7,8 +7,11 @@ int main() {
 
     std::cout << "Hello World" << std::endl;
 
-    QPP::AES<int> aes;
-    aes.encrypt("Something", "Key", 256);
+    QPP::AES aes;
+
+    std::string input = "Something";
+    std::string key = "Key";
+    aes.encrypt(input, key, 256);
 
     return 0;
 }

@@ -2,9 +2,10 @@
 
 #include <PCH.h>
 
+#include "StateArray.h"
+
 
 namespace QPP {
-    template <class T>
     class AES {
     public:
 
@@ -16,7 +17,7 @@ namespace QPP {
      * @param key_size
      * @return
      */
-    std::string encrypt(std::string plain_text, std::string key, int key_size);
+    std::string encrypt(std::string& plain_text, std::string& key, int key_size);
 
 
 
