@@ -10,6 +10,7 @@ namespace QPP {
 
         parse();
         subBytes();
+        shiftRows();
 
         return "";
     }
@@ -39,5 +40,22 @@ namespace QPP {
                 temp.setValueAt(i, j, SubstitutionBox[row][col]);
             }
         }
+        stateArray = temp;
+    }
+
+    void AES::shiftRows() {
+
+        // Rotate 0 row 1
+        StateArray temp;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                temp.setValueAt(i, (size + ((j - i) % size)) % size, stateArray.getValueAt(i, j));
+            }
+        }
+        stateArray = temp;
+    }
+
+    void AES::mixColumns() {
+
     }
 }

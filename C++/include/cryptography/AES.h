@@ -21,8 +21,9 @@ namespace QPP {
 
     // TODO - Migrate the following functions to private
     void parse();
-
     void subBytes();
+    void shiftRows();
+    void mixColumns();
 
 
     private:
