@@ -2,8 +2,8 @@
 
 
 QPP::StateArray::StateArray() {
-    matrix = std::vector<std::vector<char>>(4);
+    matrix = std::vector<std::vector<uint8_t>>(4);
     for (int i = 0; i < 4; i++) {
-        matrix[i] = std::vector<char>(4);
+        matrix[i] = std::vector<uint8_t>(4);
     }
 }
