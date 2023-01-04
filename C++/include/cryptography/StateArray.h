@@ -12,7 +12,7 @@ namespace QPP {
 
         uint8_t getValueAt(int row, int col);
         void setValueAt(int row, int col, int value);
-
+        std::array<uint8_t, size> getColumn(int col);
         // TODO - Under construction
         uint8_t galoisVectorMix(std::array<uint8_t, size> & a);
     private:
