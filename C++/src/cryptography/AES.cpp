@@ -106,11 +106,11 @@ namespace QPP {
                     [3c]        [09]
             */
             for (int i = 0; i < size; i++) {
-                col1[i] = col[(i + 1) % size];
+                col1[i] = col1[(i + 1) % size];
             }
             //now go through the S-box
             for (int j = 0; j < size; j++) {
-                col1[j] = SubstitutionBox[(col[j] & 0b11110000) >> 4][col[j] & 0b00001111];
+                col1[j] = SubstitutionBox[(col1[j] & 0b11110000) >> 4][col1[j] & 0b00001111];
             }
 
             //now xor with the rcon
