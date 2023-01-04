@@ -95,8 +95,7 @@ namespace QPP {
         for (int round = 0; round < 10; round++){
 
             //first we need to rotate the last column
-            std::array<uint8_t, size> col = tempArray.getColumn(size - 1);
-            std::array<uint8_t, size> col1;
+            std::array<uint8_t, size> col1 = tempArray.getColumn(size - 1);
             //now we need to shift the column
             //rotate by 1
             /*
@@ -119,7 +118,7 @@ namespace QPP {
                 col1[j] = col1[j] ^ Rcon[round][j];
             }
 
-            //now xor with the first
+            //now xor with the first col
             for (int j = 0; j < size; j++) {
                 col1[j] = col1[j] ^ tempArray.getValueAt(0, j);
             }
