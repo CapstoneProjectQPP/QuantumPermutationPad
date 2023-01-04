@@ -12,3 +12,9 @@ void QPP::StateArray::setValueAt(int row, int col, int value) {
     matrix[row][col] = value;
 }
 
+uint8_t QPP::StateArray::galoisVectorMix(std::array<uint8_t, size> &a) {
+
+    // TODO
+    return 0;
+}
+
