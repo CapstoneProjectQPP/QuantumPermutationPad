@@ -97,7 +97,7 @@ namespace QPP {
             //first we need to rotate the last column
             std::array<uint8_t, size> col1 = tempArray.getColumn(size - 1);
             //now we need to shift the column
-            //rotate by 1
+            
             /*
             eg.
                     [09]        [cf]
@@ -106,7 +106,7 @@ namespace QPP {
                     [3c]        [09]
             */
             for (int i = 0; i < size; i++) {
-                col1[i] = col1[(i + 1) % size];
+                col1[i] = col1[(((i - 1) % size) + size) % size];
             }
             //now go through the S-box
             for (int j = 0; j < size; j++) {
