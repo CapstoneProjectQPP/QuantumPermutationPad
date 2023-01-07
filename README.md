@@ -19,7 +19,6 @@
     If another member has created new remote branches that are not yet on your machine, you can access those branches using <br> <code> git fetch </code>
     </li>
 </ol>
-    
 
 
 ## Pull request
