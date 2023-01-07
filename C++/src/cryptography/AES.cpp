@@ -7,7 +7,8 @@ namespace QPP {
         this->plain_text = &plain_text;
         this->key = &key;
         this->key_size = key_size;
-
+        parseKey();
+        keyExpansion();
         parse();
         subBytes();
         shiftRows();
@@ -61,4 +62,83 @@ namespace QPP {
 
         }
     }
+
+    //pasring the key into a 4x4 matrix
+    //similar to the parse method for the state array
+    void AES::parseKey() {
+        int n = 0;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (n < key->size()) {
+                    keyArray.setValueAt(i, j, key->at(n));
+                    n++;
+                }
+                else {
+                    keyArray.setValueAt(i, j, 0x00);
+                }
+            }
+        }
+    }
+    //implementation of key expansion stage
+    //we need n+1 keys for n rounds
+    //the key schedule is a vector of key state arrays
+    void AES::keyExpansion() {
+        //init
+
+        StateArray tempArray = keyArray;
+        StateArray generatedKeyArray;
+
+        //preserving the original key as round 0
+        keySchedule.push_back(keyArray);
+        
+        //now we need to generate the rest of the keys
+        for (int round = 0; round < 10; round++){
+
+            //first we need to rotate the last column
+            std::array<uint8_t, size> col1 = tempArray.getColumn(size - 1);
+            //now we need to shift the column
+            
+            /*
+            eg.
+                    [09]        [cf]
+                    [cf]   =>   [4f]  
+                    [4f]        [3c]
+                    [3c]        [09]
+            */
+            for (int i = 0; i < size; i++) {
+                col1[i] = col1[(((i - 1) % size) + size) % size];
+            }
+            //now go through the S-box
+            for (int j = 0; j < size; j++) {
+                col1[j] = SubstitutionBox[(col1[j] & 0b11110000) >> 4][col1[j] & 0b00001111];
+            }
+
+            //now xor with the rcon
+            for (int j = 0; j < size; j++) {
+                col1[j] = col1[j] ^ Rcon[round][j];
+            }
+
+            //now xor with the first col
+            for (int j = 0; j < size; j++) {
+                col1[j] = col1[j] ^ tempArray.getValueAt(0, j);
+            }
+
+            //now we need to add the new column to the key schedule
+            for (int j = 0; j < size; j++) {
+                generatedKeyArray.setValueAt(0, j, col1[j]);
+            }
+
+            //now we need to generate the rest of the columns
+            for (int i = 1; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    generatedKeyArray.setValueAt(i, j, tempArray.getValueAt(i, j) ^ generatedKeyArray.getValueAt(i - 1, j));
+                }
+            }
+
+            //now we need to add the generated key to the key schedule
+            keySchedule.push_back(generatedKeyArray);
+            tempArray = generatedKeyArray;
+        }
+    }
+
 }
