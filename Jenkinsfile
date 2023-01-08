@@ -16,10 +16,14 @@ pipeline {
         stage('Test') {
             agent any
             steps {
-                sh 'sudo chmod -R 777 C++/bin/*'
                 dir('test_framework_package') {
-                    sh 'sudo chmod a+x test_cpp_binary.sh'
+                    sh 'sudo chmod a+x *.sh'
                     sh 'sudo ./test_cpp_binary.sh'
+
+                    sh 'sudo ./automation.sh'
+                    sh 'robot automation/*'
+                    robot outputPath: '.', logFileName: 'log.html', outputFileName: 'output.xml',
+                    reportFileName: 'report.hml', passThreshold: 100, unstableThreshold: 75.0
                 }
             }
         }
