@@ -22,6 +22,7 @@ pipeline {
                     sh 'sudo ./test_cpp_binary.sh'
 
                     sh 'export PYTHONPATH="$PWD"'
+                    sh 'robot automation/*'
                     robot outputPath: '.', logFileName: 'log.html', outputFileName: 'output.xml',
                     reportFileName: 'report.hml', passThreshold: 100, unstableThreshold: 75.0
                 }
