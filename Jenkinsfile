@@ -21,7 +21,6 @@ pipeline {
                     sh 'sudo ./test_cpp_binary.sh'
 
                     sh 'sudo ./automation.sh'
-                    sh 'robot automation/*'
                     robot outputPath: '.', logFileName: 'log.html', outputFileName: 'output.xml',
                     reportFileName: 'report.hml', passThreshold: 100, unstableThreshold: 75.0
                 }
