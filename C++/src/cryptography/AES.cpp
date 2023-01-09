@@ -62,9 +62,10 @@ namespace QPP {
         for (int i = 0; i < size; i++) {
             col = stateArray.galoisVectorMix(stateArray.getColumn(i));
             for (int j = 0; j < size; j++) {
-                stateArray.setValueAt(i, j, col[j]);
+                temp.setValueAt(i, j, col[j]);
             }
         }
+        stateArray = temp;
     }
 
     //pasring the key into a 4x4 matrix
