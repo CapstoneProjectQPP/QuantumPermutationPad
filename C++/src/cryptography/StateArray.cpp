@@ -19,7 +19,7 @@ std::array<uint8_t, size> QPP::StateArray::getColumn(int col) {
     }
     return column;
 }
-uint8_t QPP::StateArray::galoisVectorMix(std::array<uint8_t, size> &a) {
+std::array<uint8_t,size> QPP::StateArray::galoisVectorMix(const std::array<uint8_t, size> &a) {
 
     // TODO
     return 0;
