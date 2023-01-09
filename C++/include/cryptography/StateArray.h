@@ -14,7 +14,7 @@ namespace QPP {
         void setValueAt(int row, int col, int value);
         std::array<uint8_t, size> getColumn(int col);
         // TODO - Under construction
-        uint8_t galoisVectorMix(std::array<uint8_t, size> & a);
+        std::array<uint8_t,size> galoisVectorMix(const std::array<uint8_t, size> &a);
     private:
         std::array<std::array<uint8_t, size>, size> matrix;
     };
