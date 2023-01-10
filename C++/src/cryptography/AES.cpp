@@ -1,5 +1,6 @@
 #include "cryptography/AES.h"
 
+#define NUM_ROUNDS 10
 
 namespace QPP {
     std::string AES::encrypt(std::string& plain_text, std::string& key, int key_size) {
@@ -7,11 +8,28 @@ namespace QPP {
         this->plain_text = &plain_text;
         this->key = &key;
         this->key_size = key_size;
-        parseKey();
-        keyExpansion();
+
+        // Copy plain text to the state array
         parse();
+        // Copy key to the key array
+        parseKey();
+        // Generate keys needed for each round
+        keyExpansion();
+
+        // Add round 0 key
+        addRoundKey(0);
+        // Compute rounds 1 to Nr-1
+        for(int i = 1; i < NUM_ROUNDS-1; i++) {
+            subBytes();
+            shiftRows();
+            mixColumns();
+            addRoundKey();
+        }
+        // Compute round Nr - the final round does not use mixColumns
         subBytes();
         shiftRows();
+        addRoundKey();
+
 
         return "";
     }
