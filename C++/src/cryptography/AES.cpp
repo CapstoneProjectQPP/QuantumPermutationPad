@@ -73,7 +73,7 @@ namespace QPP {
     //Adds the round key to the state array using
     //bitwise xor.
     void AES::addRoundKey(int i) {
-        StateArray roundKey = keyExpansion[i];
+        StateArray roundKey = keySchedule[i];
         for(int j = 0; j < size; j++) {
             for(int k = 0; k < size; k++) {
                 uint8_t value = stateArray.getValueAt(j, k) ^ roundKey.getValueAt(j, k);
