@@ -10,6 +10,8 @@ namespace QPP {
         parseKey();
         keyExpansion();
         parse();
+        addRoundKey(0);
+
         subBytes();
         shiftRows();
 
@@ -67,6 +69,19 @@ namespace QPP {
         }
         stateArray = temp;
     }
+
+    //Adds the round key to the state array using
+    //bitwise xor.
+    void AES::addRoundKey(int i) {
+        StateArray roundKey = keyExpansion[i];
+        for(int j = 0; j < size; j++) {
+            for(int k = 0; k < size; k++) {
+                uint8_t value = stateArray.getValueAt(j, k) ^ roundKey.getValueAt(j, k);
+                stateArray.setValueAt(j, k, value);
+            }
+        }
+    }
+
 
     //pasring the key into a 4x4 matrix
     //similar to the parse method for the state array
