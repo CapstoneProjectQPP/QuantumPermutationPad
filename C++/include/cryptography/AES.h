@@ -24,6 +24,7 @@ namespace QPP {
     void subBytes();
     void shiftRows();
     void mixColumns();
+    void addRoundKey(int i);
     void parseKey();
     void keyExpansion();
     
