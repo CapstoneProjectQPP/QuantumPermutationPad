@@ -21,8 +21,6 @@ pipeline {
                     sh 'sudo ./test_cpp_binary.sh'
 
                     sh 'sudo ./automation.sh'
-                    robot outputPath: '.', logFileName: 'log.html', outputFileName: 'output.xml',
-                    reportFileName: 'report.hml', passThreshold: 100, unstableThreshold: 75.0
                 }
             }
         }
@@ -32,6 +30,9 @@ pipeline {
         always {
 
             step([$class: 'GitHubCommitStatusSetter'])
+
+            robot outputPath: '.', logFileName: 'log.html', outputFileName: 'output.xml',
+                                reportFileName: 'report.hml', passThreshold: 100, unstableThreshold: 75.0
 
             cleanWs(cleanWhenNotBuilt: false,
                     deleteDirs: true,
