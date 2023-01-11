@@ -31,7 +31,7 @@ pipeline {
 
             step([$class: 'GitHubCommitStatusSetter'])
 
-            robot outputPath: '.', logFileName: 'log.html', outputFileName: 'output.xml',
+            robot outputPath: 'test_framework_package/', logFileName: 'log.html', outputFileName: 'output.xml',
                                 reportFileName: 'report.hml', passThreshold: 100, unstableThreshold: 75.0
 
             cleanWs(cleanWhenNotBuilt: false,
