@@ -20,7 +20,9 @@ pipeline {
                     sh 'sudo chmod a+x *.sh'
                     sh 'sudo ./test_cpp_binary.sh'
 
-                    sh 'sudo ./automation.sh'
+                    catchError {
+                        sh 'sudo ./automation.sh'
+                    }
                     robot outputPath: '.', logFileName: 'log.html', outputFileName: 'output.xml',
                                                     reportFileName: 'report.hml', passThreshold: 100, unstableThreshold: 75.0, onlyCritical : false
                 }
