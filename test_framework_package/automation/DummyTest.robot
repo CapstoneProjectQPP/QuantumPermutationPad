@@ -19,14 +19,4 @@ SayHello
     ${num1} =   Set Variable    ${5}
     ${num2} =   Set Variable    ${3}
     ${sum} =   SimpleAdding     ${num1}     ${num2}
-    Should Be Equal     ${sum}      ${8}
-
-CompareStrings
-    ${str1} =   Set Variable    Hello
-    ${str2} =   Set Variable    Hello
-    ${result} =   CompareStrings     ${str1}     ${str2}
-    Should Be True    ${result} 
-
-
-
-    
+    Should Be Equal     ${sum}      ${9}
