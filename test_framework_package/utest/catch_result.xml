@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="main" errors="0" failures="1" tests="1" hostname="tbd" time="0.002" timestamp="2023-01-12T01:59:31Z">
+    <properties>
+      <property name="random-seed" value="3969164307"/>
+    </properties>
+    <testcase classname="main.global" name="Factorials are computed" time="0.000" status="run">
+      <failure message="aes.encrypt(input, key, 128) == &quot;hi&quot;" type="REQUIRE">
+FAILED:
+  REQUIRE( aes.encrypt(input, key, 128) == "hi" )
+with expansion:
+  "" == "hi"
+at case1.cpp:16
+      </failure>
+    </testcase>
+    <system-out/>
+    <system-err/>
+  </testsuite>
+</testsuites>

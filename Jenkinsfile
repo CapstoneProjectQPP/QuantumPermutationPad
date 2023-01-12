@@ -26,7 +26,7 @@ pipeline {
                     robot outputPath: '.', logFileName: 'log.html', outputFileName: 'output.xml',
                                                     reportFileName: 'report.hml', passThreshold: 100, unstableThreshold: 75.0, onlyCritical : false
 
-                    junit 'utest/output.xml'
+                    junit 'utest/catch_result.xml'
                 }
             }
         }
