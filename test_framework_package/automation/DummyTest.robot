@@ -14,6 +14,12 @@ compareStrings
     [Arguments]    ${A}     ${B}
     ${Result} =   compareStrings_api    ${A}    ${B}
     [Return]    ${Result}
+
+encryptionAesTest
+    [Arguments]    ${A}     ${B}
+    ${Result} =   encryptionAesTest_api    ${A}    ${B}
+    [Return]    ${Result}
+
 *** Test Cases ***
 SayHello
     ${num1} =   Set Variable    ${5}
@@ -27,6 +33,10 @@ CompareStrings
     ${result} =   CompareStrings     ${str1}     ${str2}
     Should Be True    ${result} 
 
-
-
+TestEncryptionAes
+    ${text} =   Set Variable    "Hello World"
+    ${key} =   Set Variable    abcdefghijklmnop
+    ${cipher} =   Set Variable    081f66d85a5e739b3142e2c2f487a6f0
+    ${result} =   EncryptionAesTest     ${text}     ${key}
+    Should Be Equal    ${result}    ${cipher}
     
