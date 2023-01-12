@@ -26,7 +26,7 @@ pipeline {
                     robot outputPath: '.', logFileName: 'log.html', outputFileName: 'output.xml',
                                                     reportFileName: 'report.hml', passThreshold: 100, unstableThreshold: 75.0, onlyCritical : false
 
-                    junit skipPublishingChecks: true, testResults: 'utest/catch_result.xml'
+
                 }
             }
         }
@@ -37,6 +37,7 @@ pipeline {
 
             step([$class: 'GitHubCommitStatusSetter'])
 
+            junit skipPublishingChecks: true, testResults: 'utest/catch_result.xml'
 
             cleanWs(cleanWhenNotBuilt: false,
                     deleteDirs: true,
