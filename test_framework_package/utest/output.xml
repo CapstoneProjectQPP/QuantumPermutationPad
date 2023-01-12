@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Catch2TestRun name="main" rng-seed="1439753818" xml-format-version="2" catch2-version="3.2.1">
+  <TestCase name="Factorials are computed" tags="[factorial]" filename="case1.cpp" line="9">
+    <Expression success="false" type="REQUIRE" filename="case1.cpp" line="16">
+      <Original>
+        aes.encrypt(input, key, 128) == "hi"
+      </Original>
+      <Expanded>
+        "" == "hi"
+      </Expanded>
+    </Expression>
+    <OverallResult success="false"/>
+  </TestCase>
+  <OverallResults successes="0" failures="1" expectedFailures="0"/>
+  <OverallResultsCases successes="0" failures="1" expectedFailures="0"/>
+</Catch2TestRun>
