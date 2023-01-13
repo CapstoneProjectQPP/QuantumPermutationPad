@@ -16,16 +16,31 @@ pipeline {
         stage('Test') {
             agent any
             steps {
-                dir('test_framework_package') {
-                    sh 'sudo chmod a+x *.sh'
-                    sh 'sudo ./test_cpp_binary.sh'
+                parallel(
+                    E2E: {
+                        dir('test_framework_package') {
+                            sh 'sudo chmod a+x robot_automation.sh'
+                            catchError {
+                                sh 'sudo ./robot_automation.sh'
+                            }
+                            robot outputPath: '.', logFileName: 'log.html', outputFileName: 'output.xml',
+                                                            reportFileName: 'report.hml', passThreshold: 100, unstableThreshold: 75.0, onlyCritical : false
 
-                    catchError {
-                        sh 'sudo ./automation.sh'
+                        }
+                    },
+                    Unit: {
+                        dir('C++') {
+                            sh 'make test'
+                            archiveArtifacts artifacts: 'bin/unit_test.exe' , fingerprint: true
+                        }
+                        dir('test_framework_package') {
+                            sh 'sudo chmod a+x unit_automation.sh'
+                            sh 'sudo ./unit_automation.sh'
+
+                            junit testResults: 'catch_result.xml'
+                        }
                     }
-                    robot outputPath: '.', logFileName: 'log.html', outputFileName: 'output.xml',
-                                                    reportFileName: 'report.hml', passThreshold: 100, unstableThreshold: 75.0, onlyCritical : false
-                }
+                )
             }
         }
     }
@@ -34,7 +49,6 @@ pipeline {
         always {
 
             step([$class: 'GitHubCommitStatusSetter'])
-
 
             cleanWs(cleanWhenNotBuilt: false,
                     deleteDirs: true,
