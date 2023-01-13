@@ -29,12 +29,15 @@ pipeline {
                         }
                     },
                     Unit: {
+                        dir('C++') {
+                            sh 'make test'
+                            archiveArtifacts artifacts: 'bin/unit_test.exe' , fingerprint: true
+                        }
                         dir('test_framework_package') {
                             sh 'sudo chmod a+x unit_automation.sh'
                             sh 'sudo ./unit_automation.sh'
 
                             junit skipPublishingChecks: true, testResults: 'catch_result.xml'
-
                         }
                     }
                 )
