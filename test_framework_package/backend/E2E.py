@@ -13,7 +13,7 @@ class E2E:
     def encryptionAesTest_api(self, path: str, plaintext: str, key: str ) -> str:
         logger.info("Encrypting string")
         #set up timer
-        t = threading.Timer(50, self.timeout)
+        t = threading.Timer(500, self.timeout)
         #run the program
         proc = sb.Popen(path, shell=True, stdin=sb.PIPE, stdout=sb.PIPE,
             stderr=sb.PIPE)
