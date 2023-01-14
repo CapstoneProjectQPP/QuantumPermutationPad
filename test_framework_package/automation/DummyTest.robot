@@ -16,7 +16,7 @@ compareStrings
     [Return]    ${Result}
 
 encryptionAesTest
-    [Arguments]    ${A}     ${B}
+    [Arguments]    ${P}    ${A}     ${B}
     ${Result} =   encryptionAesTest_api    ${A}    ${B}
     [Return]    ${Result}
 
@@ -36,6 +36,7 @@ CompareStrings
 TestEncryptionAes
     ${text} =   Set Variable    "Hello World"
     ${key} =   Set Variable    abcdefghijklmnop
+    ${path} =   Set Variable    ../../C++/bin/qpp.exe
     ${cipher} =   Set Variable    081f66d85a5e739b3142e2c2f487a6f0
-    ${result} =   EncryptionAesTest     ${text}     ${key}
+    ${result} =   EncryptionAesTest     ${path}    ${text}     ${key}
     Should Be Equal    ${result}    ${cipher}
