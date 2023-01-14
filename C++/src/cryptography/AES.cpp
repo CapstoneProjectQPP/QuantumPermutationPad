@@ -16,6 +16,21 @@ namespace QPP {
         return "";
     }
 
+    std::string AES::decrypt(std::string& plain_text, std::string& key, int key_size) {
+    
+        this->plain_text = &plain_text;
+        this->key = &key;
+        this->key_size = key_size;
+        
+        parseKey();
+        keyExpansion();
+        parse();
+        subBytes();
+        shiftRows();
+
+        return "";
+    }
+
     void AES::parse() {
         int n = 0;
         for (int i = 0; i < size; i++) {
@@ -83,6 +98,21 @@ namespace QPP {
                 }
             }
         }
+    }
+
+    // SubBytes for decryption
+    void AES::invSubBytes() {
+
+    }
+
+    // ShiftRows for decryption
+    void AES::invShiftRows() {
+
+    }
+
+    // MixColumns for decryption
+    void AES::invMixColumns() {
+
     }
     //implementation of key expansion stage
     //we need n+1 keys for n rounds
