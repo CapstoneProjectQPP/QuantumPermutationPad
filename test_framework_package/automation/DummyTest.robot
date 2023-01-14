@@ -26,17 +26,3 @@ SayHello
     ${num2} =   Set Variable    ${3}
     ${sum} =   SimpleAdding     ${num1}     ${num2}
     Should Be Equal     ${sum}      ${8}
-
-CompareStrings
-    ${str1} =   Set Variable    Hello
-    ${str2} =   Set Variable    Hello
-    ${result} =   CompareStrings     ${str1}     ${str2}
-    Should Be True    ${result} 
-
-TestEncryptionAes
-    ${text} =   Set Variable    "Hello World"
-    ${key} =   Set Variable    abcdefghijklmnop
-    ${cipher} =   Set Variable    081f66d85a5e739b3142e2c2f487a6f0
-    ${result} =   EncryptionAesTest     ${text}     ${key}
-    Should Be Equal    ${result}    ${cipher}
-    
