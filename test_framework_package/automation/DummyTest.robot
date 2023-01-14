@@ -17,7 +17,7 @@ compareStrings
 
 encryptionAesTest
     [Arguments]    ${P}    ${A}     ${B}
-    ${Result} =   encryptionAesTest_api    ${A}    ${B}
+    ${Result} =   encryptionAesTest_api    ${P} ${A}    ${B}
     [Return]    ${Result}
 
 *** Test Cases ***
