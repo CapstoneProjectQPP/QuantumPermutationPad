@@ -1,5 +1,6 @@
 #include "cryptography/AES.h"
 
+#define NUM_ROUNDS 10
 
 namespace QPP {
     std::string AES::encrypt(std::string& plain_text, std::string& key, int key_size) {
