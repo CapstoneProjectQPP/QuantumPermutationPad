@@ -35,8 +35,10 @@ pipeline {
                         }
                         dir('test_framework_package') {
                             sh 'sudo chmod a+x unit_automation.sh'
-                            sh 'sudo ./unit_automation.sh'
 
+                            catchError {
+                                sh 'sudo ./unit_automation.sh'
+                            }
                             junit testResults: 'catch_result.xml'
                         }
                     }
