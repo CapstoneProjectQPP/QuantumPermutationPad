@@ -4,11 +4,12 @@
 
 #include "StateArray.h"
 
+static const int num_rounds = 10;
+
 
 namespace QPP {
-    class AES {
-    public:
-
+class AES {
+public:
     /**
      * Encrypt a string called plain text using a string key.
      *
@@ -27,6 +28,7 @@ namespace QPP {
         void addRoundKey(int i);
         void parseKey();
         void keyExpansion();
+        std::string getResult();
         std::string* plain_text;
         std::string* key;
         int key_size;
