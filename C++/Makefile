@@ -52,6 +52,14 @@ INCLUDE	:= -I include
 
 all: $(TARGET)
 
+test: bin/unit_test.exe
+
+bin/unit_test.exe: $(OBJS_T) $(filter-out $(BLDDIR)/Driver.o, $(OBJS))
+	echo "\n##__Linking test objs"
+	echo "Total process spawned for compilation: $(NPROCS)"
+	$(CC) $(MODE) -o $@ $^ || (echo "Linking failed"; exit 20)
+-include $(BLDDIR_T)/*.d
+
 $(TARGET): $(OBJS)
 	@echo "\n##__Linking objs"
 	@echo "Total process spawned for compilation: $(NPROCS)"
@@ -65,16 +73,6 @@ $(BLDDIR)/%.o: $(SRCDIR)/%.cpp
 	$(shell rsync -a --include='*/' --exclude='*' $(SRCDIR)/ $(BLDDIR))
 	@echo "\n##__Compiling translation unit" $@
 	@$(CC) $(INCLUDE) $(MODE) -c -o $@ $< || (echo "Compilation failed"; exit 10)
-
-
-test: bin/unit_test.exe
-
-bin/unit_test.exe: $(OBJS_T)
-	@echo "\n##__Linking test objs"
-	@echo "Total process spawned for compilation: $(NPROCS)"
-	@echo $(OBJS_T)
-	$(CC) $(MODE) -o $@ $^ || (echo "Linking failed"; exit 20)
--include $(BLDDIR_T)/*.d
 
 $(BLDDIR_T)/%.o: $(TESTDIR)/%.cpp
 	mkdir -p $(BLDDIR_T)

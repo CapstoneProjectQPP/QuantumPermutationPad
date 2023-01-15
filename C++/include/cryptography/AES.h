@@ -19,23 +19,17 @@ namespace QPP {
      */
     std::string encrypt(std::string& plain_text, std::string& key, int key_size);
 
-    // TODO - Migrate the following functions to private
-    void parse();
-    void subBytes();
-    void shiftRows();
-    void mixColumns();
-    void addRoundKey(int i);
-    void parseKey();
-    void keyExpansion();
-    
-
-
-    private:
-
+    protected:
+        void parse();
+        void subBytes();
+        void shiftRows();
+        void mixColumns();
+        void addRoundKey(int i);
+        void parseKey();
+        void keyExpansion();
         std::string* plain_text;
         std::string* key;
         int key_size;
-
         StateArray stateArray;
         StateArray keyArray;
         std::vector<StateArray> keySchedule;
