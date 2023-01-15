@@ -15,7 +15,7 @@ class E2E:
         #set up timer
         t = threading.Timer(500, self.timeout)
         #run the program
-        proc = sb.Popen(path, shell=True, stdin=sb.PIPE, stdout=sb.PIPE,
+        proc = sb.Popen(path, stdin=sb.PIPE, stdout=sb.PIPE,
             stderr=sb.PIPE)
 
         #give the program the inputs,(assume here inputs are command line inputs)

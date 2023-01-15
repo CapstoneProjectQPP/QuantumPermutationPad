@@ -36,7 +36,7 @@ CompareStrings
 TestEncryptionAes
     ${text} =   Set Variable    "Hello World"
     ${key} =   Set Variable    abcdefghijklmnop
-    ${path} =   Set Variable    ../../C++/bin/qpp.exe
+    ${path} =   Set Variable    ../C++/bin/qpp.exe
     ${cipher} =   Set Variable    081f66d85a5e739b3142e2c2f487a6f0\n
     ${result} =   encryptionAesTest    ${path}    ${text}    ${key}
     BuiltIn.Log To Console    ${result}
