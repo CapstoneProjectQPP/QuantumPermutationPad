@@ -76,9 +76,14 @@ namespace QPP {
 
     void AES::mixColumns() {
         StateArray temp;
+        std::array<uint8_t, size> col;
         for (int i = 0; i < size; i++) {
-
+            col = stateArray.galoisVectorMix(stateArray.getColumn(i));
+            for (int j = 0; j < size; j++) {
+                temp.setValueAt(i, j, col[j]);
+            }
         }
+        stateArray = temp;
     }
 
     //pasring the key into a 4x4 matrix
