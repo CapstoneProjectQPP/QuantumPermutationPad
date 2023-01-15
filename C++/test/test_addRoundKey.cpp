@@ -1,15 +1,23 @@
 #include "../include/catch2/catch_amalgamated.hpp"
 #include "../include/cryptography/AES.h"
+#include <iostream>
 
 class AES_mock : QPP::AES { 
 
     public:
+        void init(QPP::StateArray testStateArray) {
+            stateArray = testStateArray;
+        }
+
         bool begin_test(QPP::StateArray testKeyArray, QPP::StateArray expected) {
             keySchedule.push_back(testKeyArray);
             addRoundKey(0);
+            keySchedule.pop_back();
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    if(stateArray.getValueAt(i, j) != expected.getValueAt(i, j)) {
+                    int val1 = stateArray.getValueAt(i,j);
+                    int val2 = expected.getValueAt(i, j);
+                    if(val1 != val2) {
                         return false;
                     }
                 }
@@ -40,7 +48,7 @@ TEST_CASE( "addRoundKey functionality tested", "[addRoundKey]" ) {
 
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
-            testKeyArray1.setValueAt(i, j, j%2);
+            testKeyArray1.setValueAt(i, j, (j%2));
         }
     }
 
@@ -69,9 +77,14 @@ TEST_CASE( "addRoundKey functionality tested", "[addRoundKey]" ) {
     bool result;
     AES_mock mockObject;
     
+    mockObject.init(testStateArray);
+
     // Test 1 - all values should be equal to one
     result = mockObject.begin_test(testKeyArray1, expectedResult1);
     REQUIRE( result == true );
+    
+    
+    mockObject.init(testStateArray);
 
     // Test 2 - all values should be equal to zero
     result = mockObject.begin_test(testKeyArray2, expectedResult2);
