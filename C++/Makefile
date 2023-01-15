@@ -11,6 +11,8 @@ PRJNAME := qpp.exe
 CC	:= g++
 SRCDIR	:= src
 BLDDIR	:= build
+TESTDIR	:= test
+BLDDIR_T:= build_test
 TARGET	:= bin/$(PRJNAME)
 
 
@@ -19,7 +21,7 @@ TARGET	:= bin/$(PRJNAME)
 # Do not remove -MP -MD flags. These are necessary for generating *.d files,
 # which contains rules for headers.
 # Change optimization flag (-OX) here. Add/Remove debug flag (-g) here.
-CFLAGS := -std=c++11 -MP -MD -pthread -pipe -fopenmp
+CFLAGS := -std=c++14 -MP -MD -pthread -pipe -fopenmp
 DEBUG := $(CFLAGS) -Wall -O0 -g -D_GLIBCXX_DEBUG -DDEBUG_MODE
 RELEASE := $(CFLAGS) -w -O3 -march=native
 EXTREME := $(CFLAGS) -Ofast -frename-registers -fopenmp -D_GLIBCXX_PARALLEL -march=native # Don't even think about it
@@ -39,11 +41,14 @@ MODE := $(DEBUG)
 #=============================================================================
 
 
-SRC	:= $(shell find $(SRCDIR) -type f -name *.cpp)
+SRC		:= $(shell find $(SRCDIR) -type f -name *.cpp)
 OBJS	:= $(patsubst $(SRCDIR)/%, $(BLDDIR)/%, $(SRC:.cpp=.o))
+SRC_T	:= $(shell find $(TESTDIR) -type f -name *.cpp)
+OBJS_T  := $(patsubst $(TESTDIR)/%, $(BLDDIR_T)/%, $(SRC_T:.cpp=.o))
 INCLUDE	:= -I include
 
-.PHONY: all clean
+.PHONY: all clean test
+
 
 all: $(TARGET)
 
@@ -62,10 +67,27 @@ $(BLDDIR)/%.o: $(SRCDIR)/%.cpp
 	@$(CC) $(INCLUDE) $(MODE) -c -o $@ $< || (echo "Compilation failed"; exit 10)
 
 
+test: bin/unit_test.exe
+
+bin/unit_test.exe: $(OBJS_T)
+	@echo "\n##__Linking test objs"
+	@echo "Total process spawned for compilation: $(NPROCS)"
+	@echo $(OBJS_T)
+	$(CC) $(MODE) -o $@ $^ || (echo "Linking failed"; exit 20)
+-include $(BLDDIR_T)/*.d
+
+$(BLDDIR_T)/%.o: $(TESTDIR)/%.cpp
+	mkdir -p $(BLDDIR_T)
+	$(shell rsync -a --include='*/' --exclude='*' $(TESTDIR)/ $(BLDDIR_T))
+	echo "\n##__Compiling test unit" $@
+	$(CC) $(INCLUDE) $(MODE) -c -o $@ $< || (echo "Compilation failed"; exit 10)
+
+
 clean:
 	rm -fr $(BLDDIR)
 	rm -fr bin/*.exe
 	rm -rf $(PRJNAME)
+	rm -rf $(BLDDIR_T)
 
 
 
