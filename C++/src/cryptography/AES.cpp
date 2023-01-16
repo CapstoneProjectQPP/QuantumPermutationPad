@@ -3,17 +3,37 @@
 
 namespace QPP {
     std::string AES::encrypt(std::string& plain_text, std::string& key, int key_size) {
-
         this->plain_text = &plain_text;
         this->key = &key;
         this->key_size = key_size;
-        parseKey();
-        keyExpansion();
+
+        // Copy plain text to the state array
         parse();
+
+        // Copy key to the key array
+        parseKey();
+
+        // Generate keys needed for each round
+        keyExpansion();
+
+        // Add round 0 key
+        addRoundKey(0);
+
+        // Compute rounds 1 to Nr-1
+        for(int i = 1; i < num_rounds-1; i++) {
+            subBytes();
+            shiftRows();
+            mixColumns();
+            addRoundKey(i);
+        }
+
+        // Compute round Nr - the final round does not use mixColumns
         subBytes();
         shiftRows();
-
-        return "";
+        addRoundKey(num_rounds);
+        
+        // Return the encrypted cipher text
+        return getResult();
     }
 
     std::string AES::decrypt(std::string& plain_text, std::string& key, int key_size) {
@@ -82,6 +102,19 @@ namespace QPP {
         }
         stateArray = temp;
     }
+
+    //Adds the round key to the state array using
+    //bitwise xor.
+    void AES::addRoundKey(int i) {
+        StateArray roundKey = keySchedule[i];
+        for(int j = 0; j < size; j++) {
+            for(int k = 0; k < size; k++) {
+                uint8_t value = stateArray.getValueAt(j, k) ^ roundKey.getValueAt(j, k);
+                stateArray.setValueAt(j, k, value);
+            }
+        }
+    }
+
 
     //pasring the key into a 4x4 matrix
     //similar to the parse method for the state array
@@ -176,4 +209,14 @@ namespace QPP {
         }
     }
 
+    // Creates a string containing encrypted ciphertext
+    std::string AES::getResult() {
+        std::string result;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                result.append(std::to_string(stateArray.getValueAt(i,j)));
+            }
+        }
+        return result;
+    }
 }
