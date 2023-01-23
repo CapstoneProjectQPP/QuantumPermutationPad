@@ -21,7 +21,7 @@ namespace QPP {
         addRoundKey(0);
 
         // Compute rounds 1 to Nr-1
-        for(int i = 1; i < num_rounds-1; i++) {
+        for(int i = 1; i <= num_rounds; i++) {
             subBytes();
             shiftRows();
             mixColumns();
@@ -31,7 +31,7 @@ namespace QPP {
         // Compute round Nr - the final round does not use mixColumns
         subBytes();
         shiftRows();
-        addRoundKey(num_rounds);
+        addRoundKey(num_rounds+1);
         
         // Return the encrypted cipher text
         return getResult();
@@ -98,7 +98,7 @@ namespace QPP {
         for (int i = 0; i < size; i++) {
             col = stateArray.galoisVectorMix(stateArray.getColumn(i));
             for (int j = 0; j < size; j++) {
-                temp.setValueAt(j, i, col[j]);//changed here !!!!!!!!!
+                temp.setValueAt(j, i, col[j]);
             }
         }
         stateArray = temp;
@@ -198,11 +198,14 @@ namespace QPP {
             }
 
             //now we need to generate the rest of the columns
-            for (int i = 0; i < size; i++) {
-                for (int j = 1; j < size; j++) {
-                    generatedKeyArray.setValueAt(i,j, tempArray.getValueAt(i, j) ^ generatedKeyArray.getValueAt(i-1,j));
+            int col_num = 1;
+            for (int i = 1; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+                    generatedKeyArray.setValueAt(j,col_num, tempArray.getValueAt(j,col_num) ^ generatedKeyArray.getValueAt(j,col_num-1));
                 }
+                col_num++;
             }
+            
 
 
             //now we need to add the generated key to the key schedule
@@ -213,12 +216,11 @@ namespace QPP {
 
     // Creates a string containing encrypted ciphertext
     std::string AES::getResult() {
-        std::string result;
+        std::string result = "";
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 uint8_t value = stateArray.getValueAt(i,j);
                 size_t s = sizeof(value);
-                std::cout << value << std::endl;
                 result.append(uint8_to_hex_string(&value, s));
             }
         }
