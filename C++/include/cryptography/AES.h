@@ -3,7 +3,8 @@
 #include <PCH.h>
 
 #include "StateArray.h"
-
+#include <iomanip>
+#include <sstream>
 static const int num_rounds = 10;
 
 namespace QPP {
@@ -41,6 +42,8 @@ namespace QPP {
         StateArray stateArray;
         StateArray keyArray;
         std::vector<StateArray> keySchedule;
+        std::string uint8_to_hex_string(const uint8_t *v, const size_t s);
+        
     };
 }
 

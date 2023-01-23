@@ -1,6 +1,7 @@
 #include "cryptography/AES.h"
 
 
+
 namespace QPP {
     std::string AES::encrypt(std::string& plain_text, std::string& key, int key_size) {
         this->plain_text = &plain_text;
@@ -214,9 +215,25 @@ namespace QPP {
         std::string result;
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                result.append(std::to_string(stateArray.getValueAt(i,j)));
+                uint8_t value = stateArray.getValueAt(i,j);
+                size_t s = sizeof(value);
+                std::cout << value << std::endl;
+                result.append(uint8_to_hex_string(&value, s));
             }
         }
         return result;
+    }
+
+
+    std::string AES::uint8_to_hex_string(const uint8_t *v, const size_t s) {
+        std::stringstream ss;
+
+        ss << std::hex << std::setfill('0');
+
+        for (int i = 0; i < s; i++) {
+            ss << std::hex << std::setw(2) << static_cast<int>(v[i]);
+        }
+
+        return ss.str();
     }
 }
