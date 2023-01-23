@@ -57,11 +57,11 @@ namespace QPP {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (n < plain_text->size()) {
-                    stateArray.setValueAt(i, j, plain_text->at(n));
+                    stateArray.setValueAt(j,i, plain_text->at(n));
                     n++;
                 }
                 else {
-                    stateArray.setValueAt(i, j, 0x00);
+                    stateArray.setValueAt(j,i, 0x00);
                 }
             }
         }
@@ -98,7 +98,7 @@ namespace QPP {
         for (int i = 0; i < size; i++) {
             col = stateArray.galoisVectorMix(stateArray.getColumn(i));
             for (int j = 0; j < size; j++) {
-                temp.setValueAt(i, j, col[j]);
+                temp.setValueAt(j, i, col[j]);//changed here !!!!!!!!!
             }
         }
         stateArray = temp;
@@ -124,11 +124,11 @@ namespace QPP {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (n < key->size()) {
-                    keyArray.setValueAt(i, j, key->at(n));
+                    keyArray.setValueAt(j,i, key->at(n));
                     n++;
                 }
                 else {
-                    keyArray.setValueAt(i, j, 0x00);
+                    keyArray.setValueAt(j,i, 0x00);
                 }
             }
         }
@@ -197,11 +197,18 @@ namespace QPP {
                 generatedKeyArray.setValueAt(0, j, col1[j]);
             }
 
-            //now we need to generate the rest of the columns
-            for (int i = 1; i < size; i++) {
-                for (int j = 0; j < size; j++) {
-                    generatedKeyArray.setValueAt(i, j, tempArray.getValueAt(i, j) ^ generatedKeyArray.getValueAt(i - 1, j));
+            // //now we need to generate the rest of the columns
+            // for (int i = 0; i < size; i++) {
+            //     for (int j = 1; j < size; j++) {
+            //         generatedKeyArray.setValueAt(j,i, tempArray.getValueAt(i, j) ^ generatedKeyArray.getValueAt(j-1,i));
+            //     }
+            // }
+
+            for (int j = 1; j < size; j++){
+                for (int k = 0; k < size; k++) {
+                    generatedKeyArray.setValueAt(k,j, tempArray.getValueAt(k, j) ^ generatedKeyArray.getValueAt(k,j-1));
                 }
+
             }
 
             //now we need to add the generated key to the key schedule
