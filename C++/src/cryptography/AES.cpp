@@ -174,40 +174,45 @@ namespace QPP {
                     [4f]        [3c]
                     [3c]        [09]
             */
-            for (int i = 0; i < size; i++) {
-                col1[i] = col1[(((i - 1) % size) + size) % size];
-            }
+
+//            int index = (((i - 1) % size) + size) % size;
+//                col1[i] = col1[index];
+            std::array<uint8_t, size> temp = col1;
+            col1[3] = temp[0];
+            col1[0] = temp[1];
+            col1[1] = temp[2];
+            col1[2] = temp[3];
+
+
+
             //now go through the S-box
             for (int j = 0; j < size; j++) {
                 col1[j] = SubstitutionBox[(col1[j] & 0b11110000) >> 4][col1[j] & 0b00001111];
             }
 
-            //now xor with the rcon
-            for (int j = 0; j < size; j++) {
-                col1[j] = col1[j] ^ Rcon[round][j];
-            }
-
             //now xor with the first col
             for (int j = 0; j < size; j++) {
-                col1[j] = col1[j] ^ tempArray.getValueAt(0, j);
+                col1[j] = col1[j] ^ tempArray.getColumn(0)[j];
             }
+
+            //now xor with the rcon
+            for (int j = 0; j < size; j++) {
+                col1[j] = col1[j] ^ Rcon[j][round];
+            }
+
 
             //now we need to add the new column to the key schedule
             for (int j = 0; j < size; j++) {
-                generatedKeyArray.setValueAt(0, j, col1[j]);
+                generatedKeyArray.setValueAt(j, 0, col1[j]);
             }
 
             //now we need to generate the rest of the columns
-            int col_num = 1;
             for (int i = 1; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    generatedKeyArray.setValueAt(j,col_num, tempArray.getValueAt(j,col_num) ^ generatedKeyArray.getValueAt(j,col_num-1));
+                    generatedKeyArray.setValueAt(j,i, tempArray.getColumn(i)[j] ^ generatedKeyArray.getColumn(i-1)[j]);
                 }
-                col_num++;
             }
             
-
-
             //now we need to add the generated key to the key schedule
             keySchedule.push_back(generatedKeyArray);
             tempArray = generatedKeyArray;
