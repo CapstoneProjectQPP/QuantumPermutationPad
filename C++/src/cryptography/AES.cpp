@@ -21,7 +21,7 @@ namespace QPP {
         addRoundKey(0);
 
         // Compute rounds 1 to Nr-1
-        for(int i = 1; i <= num_rounds; i++) {
+        for(int i = 1; i <= num_rounds-1; i++) {
             subBytes();
             shiftRows();
             mixColumns();
@@ -31,7 +31,7 @@ namespace QPP {
         // Compute round Nr - the final round does not use mixColumns
         subBytes();
         shiftRows();
-        addRoundKey(num_rounds+1);
+        addRoundKey(num_rounds);
         
         // Return the encrypted cipher text
         return getResult();
@@ -57,11 +57,12 @@ namespace QPP {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (n < plain_text->size()) {
-                    stateArray.setValueAt(i,j, plain_text->at(n));
+                    stateArray.setValueAt(j,i, plain_text->at(n));
+//                    std::cout<<plain_text->at(n)<<std::endl;
                     n++;
                 }
                 else {
-                    stateArray.setValueAt(i,j, 0x00);
+                    stateArray.setValueAt(j,i, 0x00);
                 }
             }
         }
@@ -83,10 +84,32 @@ namespace QPP {
     void AES::shiftRows() {
 
         // Rotate 0 row 1
-        StateArray temp;
+        StateArray temp = stateArray;
+        // for (int i = 0; i < size; i++) {
+        //     for (int j = 0; j < size; j++) {
+        //         int index = (size + ((j - i) % size)) % size;
+        //         temp.setValueAt(i,index , stateArray.getValueAt(i, j));
+        //     }
+        // }
+
+        // Rotate row 1 by one bit
         for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                temp.setValueAt(i, (size + ((j - i) % size)) % size, stateArray.getValueAt(i, j));
+            if (i == 0){
+                continue;
+            }
+            else{
+                for (int j = 0; j < i; j++) {
+                    
+                    for (int k = 0; k < size; k++) {
+                        if (k == size - 1) {
+                            temp.setValueAt(i, k, stateArray.getValueAt(i, 0));
+                        }
+                        else {
+                            temp.setValueAt(i, k, stateArray.getValueAt(i, k+1));
+                        }
+                    }
+                    stateArray = temp;
+                }
             }
         }
         stateArray = temp;
@@ -124,11 +147,11 @@ namespace QPP {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (n < key->size()) {
-                    keyArray.setValueAt(i,j, key->at(n));
+                    keyArray.setValueAt(j,i, key->at(n));
                     n++;
                 }
                 else {
-                    keyArray.setValueAt(i,j, 0x00);
+                    keyArray.setValueAt(j,i, 0x00);
                 }
             }
         }
