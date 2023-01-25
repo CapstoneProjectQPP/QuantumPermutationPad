@@ -84,12 +84,6 @@ namespace QPP {
 
         // Rotate 0 row 1
         StateArray temp = stateArray;
-        // for (int i = 0; i < size; i++) {
-        //     for (int j = 0; j < size; j++) {
-        //         int index = (size + ((j - i) % size)) % size;
-        //         temp.setValueAt(i,index , stateArray.getValueAt(i, j));
-        //     }
-        // }
 
         // Rotate row 1 by one bit
         for (int i = 0; i < size; i++) {
@@ -200,11 +194,15 @@ namespace QPP {
 //            int index = (((i - 1) % size) + size) % size;
 //                col1[i] = col1[index];
             std::array<uint8_t, size> temp = col1;
-            col1[3] = temp[0];
-            col1[0] = temp[1];
-            col1[1] = temp[2];
-            col1[2] = temp[3];
 
+            for (int i = 0; i < size; i++) {
+                if (i == 3){
+                    col1[i] = temp[0];
+                }
+                else {
+                    col1[i] = temp[i+1];
+                }
+            }
 
 
             //now go through the S-box
