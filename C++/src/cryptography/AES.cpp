@@ -58,7 +58,6 @@ namespace QPP {
             for (int j = 0; j < size; j++) {
                 if (n < plain_text->size()) {
                     stateArray.setValueAt(j,i, plain_text->at(n));
-//                    std::cout<<plain_text->at(n)<<std::endl;
                     n++;
                 }
                 else {
@@ -247,13 +246,15 @@ namespace QPP {
         std::string result = "";
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                uint8_t value = stateArray.getValueAt(i,j);
+                uint8_t value = stateArray.getValueAt(j,i);
                 size_t s = sizeof(value);
                 result.append(uint8_to_hex_string(&value, s));
             }
         }
         return result;
     }
+
+
 
 
     std::string AES::uint8_to_hex_string(const uint8_t *v, const size_t s) {
