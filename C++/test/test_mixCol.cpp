@@ -2,7 +2,7 @@
 #include "../include/cryptography/AES.h"
 #include <iostream>
 
-class AES_mock : QPP::AES { 
+class AES_mock_mixCol : QPP::AES { 
 
     public:
         void init(QPP::StateArray testStateArray) {
@@ -65,7 +65,7 @@ TEST_CASE( "mixCol", "[mixCol]" ) {
     }
 
     bool result;
-    AES_mock mockObject;
+    AES_mock_mixCol mockObject;
     
     mockObject.init(initialArray);
 
