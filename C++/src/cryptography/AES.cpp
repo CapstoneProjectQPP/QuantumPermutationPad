@@ -1,6 +1,7 @@
 #include "cryptography/AES.h"
 
 
+
 namespace QPP {
     std::string AES::encrypt(std::string& plain_text, std::string& key, int key_size) {
         this->plain_text = &plain_text;
@@ -20,7 +21,7 @@ namespace QPP {
         addRoundKey(0);
 
         // Compute rounds 1 to Nr-1
-        for(int i = 1; i < num_rounds-1; i++) {
+        for(int i = 1; i <= num_rounds-1; i++) {
             subBytes();
             shiftRows();
             mixColumns();
@@ -56,11 +57,11 @@ namespace QPP {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (n < plain_text->size()) {
-                    stateArray.setValueAt(i, j, plain_text->at(n));
+                    stateArray.setValueAt(j,i, plain_text->at(n));
                     n++;
                 }
                 else {
-                    stateArray.setValueAt(i, j, 0x00);
+                    stateArray.setValueAt(j,i, 0x00);
                 }
             }
         }
@@ -82,10 +83,26 @@ namespace QPP {
     void AES::shiftRows() {
 
         // Rotate 0 row 1
-        StateArray temp;
+        StateArray temp = stateArray;
+
+        // Rotate row 1 by one bit
         for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                temp.setValueAt(i, (size + ((j - i) % size)) % size, stateArray.getValueAt(i, j));
+            if (i == 0){
+                continue;
+            }
+            else{
+                for (int j = 0; j < i; j++) {
+                    
+                    for (int k = 0; k < size; k++) {
+                        if (k == size - 1) {
+                            temp.setValueAt(i, k, stateArray.getValueAt(i, 0));
+                        }
+                        else {
+                            temp.setValueAt(i, k, stateArray.getValueAt(i, k+1));
+                        }
+                    }
+                    stateArray = temp;
+                }
             }
         }
         stateArray = temp;
@@ -97,7 +114,7 @@ namespace QPP {
         for (int i = 0; i < size; i++) {
             col = stateArray.galoisVectorMix(stateArray.getColumn(i));
             for (int j = 0; j < size; j++) {
-                temp.setValueAt(i, j, col[j]);
+                temp.setValueAt(j, i, col[j]);
             }
         }
         stateArray = temp;
@@ -123,11 +140,11 @@ namespace QPP {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (n < key->size()) {
-                    keyArray.setValueAt(i, j, key->at(n));
+                    keyArray.setValueAt(j,i, key->at(n));
                     n++;
                 }
                 else {
-                    keyArray.setValueAt(i, j, 0x00);
+                    keyArray.setValueAt(j,i, 0x00);
                 }
             }
         }
@@ -173,36 +190,49 @@ namespace QPP {
                     [4f]        [3c]
                     [3c]        [09]
             */
+
+//            int index = (((i - 1) % size) + size) % size;
+//                col1[i] = col1[index];
+            std::array<uint8_t, size> temp = col1;
+
             for (int i = 0; i < size; i++) {
-                col1[i] = col1[(((i - 1) % size) + size) % size];
+                if (i == 3){
+                    col1[i] = temp[0];
+                }
+                else {
+                    col1[i] = temp[i+1];
+                }
             }
+
+
             //now go through the S-box
             for (int j = 0; j < size; j++) {
                 col1[j] = SubstitutionBox[(col1[j] & 0b11110000) >> 4][col1[j] & 0b00001111];
             }
 
-            //now xor with the rcon
-            for (int j = 0; j < size; j++) {
-                col1[j] = col1[j] ^ Rcon[round][j];
-            }
-
             //now xor with the first col
             for (int j = 0; j < size; j++) {
-                col1[j] = col1[j] ^ tempArray.getValueAt(0, j);
+                col1[j] = col1[j] ^ tempArray.getColumn(0)[j];
             }
+
+            //now xor with the rcon
+            for (int j = 0; j < size; j++) {
+                col1[j] = col1[j] ^ Rcon[j][round];
+            }
+
 
             //now we need to add the new column to the key schedule
             for (int j = 0; j < size; j++) {
-                generatedKeyArray.setValueAt(0, j, col1[j]);
+                generatedKeyArray.setValueAt(j, 0, col1[j]);
             }
 
             //now we need to generate the rest of the columns
             for (int i = 1; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    generatedKeyArray.setValueAt(i, j, tempArray.getValueAt(i, j) ^ generatedKeyArray.getValueAt(i - 1, j));
+                    generatedKeyArray.setValueAt(j,i, tempArray.getColumn(i)[j] ^ generatedKeyArray.getColumn(i-1)[j]);
                 }
             }
-
+            
             //now we need to add the generated key to the key schedule
             keySchedule.push_back(generatedKeyArray);
             tempArray = generatedKeyArray;
@@ -211,12 +241,29 @@ namespace QPP {
 
     // Creates a string containing encrypted ciphertext
     std::string AES::getResult() {
-        std::string result;
+        std::string result = "";
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                result.append(std::to_string(stateArray.getValueAt(i,j)));
+                uint8_t value = stateArray.getValueAt(j,i);
+                size_t s = sizeof(value);
+                result.append(uint8_to_hex_string(&value, s));
             }
         }
         return result;
+    }
+
+
+
+
+    std::string AES::uint8_to_hex_string(const uint8_t *v, const size_t s) {
+        std::stringstream ss;
+
+        ss << std::hex << std::setfill('0');
+
+        for (int i = 0; i < s; i++) {
+            ss << std::hex << std::setw(2) << static_cast<int>(v[i]);
+        }
+
+        return ss.str();
     }
 }

@@ -9,12 +9,12 @@ int main() {
 
     QPP::AES aes;
 
-    std::string input = "something";
+    std::string input = "Hello Wrorld";
     std::string key = "abcdefghijklmnop";
-    aes.encrypt(input, key, 128);
     std::cin >> input;
     std::cin >> key;
-    std::cout << "081f66d85a5e739b3142e2c2f487a6f0"<< std::endl;
+    std::string result = aes.encrypt(input, key, 128);
+    std::cout << result << std::endl;
     return 0;
 }
 

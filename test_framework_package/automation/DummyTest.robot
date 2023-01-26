@@ -34,10 +34,10 @@ CompareStrings
     Should Be True    ${result} 
     
 TestEncryptionAes
-    ${text} =   Set Variable    "Hello World"
+    ${text} =   Set Variable    1234567812345678
     ${key} =   Set Variable    abcdefghijklmnop
     ${path} =   Set Variable    ../C++/bin/qpp.exe
-    ${cipher} =   Set Variable    081f66d85a5e739b3142e2c2f487a6f0\n
+    ${cipher} =   Set Variable    4615b6c2e1c3ce4bb2a8d86234fc8d8c\n
     ${result} =   encryptionAesTest    ${path}    ${text}    ${key}
     BuiltIn.Log To Console    ${result}
     ${result2} =   CompareStrings     ${result}     ${cipher}
