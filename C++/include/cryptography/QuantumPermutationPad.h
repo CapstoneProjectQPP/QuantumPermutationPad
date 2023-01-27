@@ -3,14 +3,15 @@
 #include <PCH.h>
 #include "StateArray.h"
 
+
+static const int n = 8;
+static const int M = 64;
+
 namespace QPP {
     class QuantumPermutationPad {
         public:
             
             QuantumPermutationPad(std::string seed);
-
-
-            void changeSeed(std::string seed);
 
             /**
             * Encrypt a string called plain text using a string key.
@@ -38,6 +39,7 @@ namespace QPP {
             void fisherYatesShuffle();
             void prng();
             void dispatch();
+            void QuantumPermutationPad::generateVector(std::string plain_text);
             std::string getResult();
 
 
@@ -45,8 +47,6 @@ namespace QPP {
 
             std::string plain_text;
             std::string seed;
-            int n = 8;
-            int M = 64;
             std::vector<StateArray> permuationGates;
             StateArray keyArray;
     };
