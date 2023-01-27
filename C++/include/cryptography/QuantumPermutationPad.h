@@ -39,7 +39,7 @@ namespace QPP {
             void fisherYatesShuffle();
             void prng();
             void dispatch();
-            void QuantumPermutationPad::generateVector(std::string plain_text);
+            void generateVector(std::string plain_text);
             std::string getResult();
 
 

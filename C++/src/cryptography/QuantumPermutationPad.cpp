@@ -9,12 +9,12 @@ namespace QPP {
 
     // Encrypt plain text into cipher text uinsg protected functions
     std::string QuantumPermutationPad::encrypt(std::string& plain_text) {
-
+        return "";
     }
             
     // Decrypt cipher text into plain text uinsg protected functions
     std::string QuantumPermutationPad::decrypt(std::string& cipher_text) {
-
+        return "";
     }
 
     // Generate M permutation matrices using the seed (shared secret key)
@@ -42,7 +42,7 @@ namespace QPP {
 
     
     std::string QuantumPermutationPad::getResult() {
-        
+        return "";
     }
 
 }
