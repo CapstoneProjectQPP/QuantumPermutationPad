@@ -1,18 +1,35 @@
 #include "cryptography/QuantumPermutationPad.h"
 
 namespace QPP {
+    
+    QuantumPermutationPad::QuantumPermutationPad(std::string seed) {
+        this->seed = seed;
+    }
 
-    QuantumPermutationPad::decrypt() {
+    std::string QuantumPermutationPad::encrypt(std::string& plain_text) {
+
+    }
+            
+    std::string QuantumPermutationPad::decrypt(std::string& cipher_text) {
 
     }
 
-std::string encrypt();
-            std::string decrypt();
 
-            /* TODO - move to protected*/
-            void FisherYatesShuffle();
-            void PRNG();
-            void Dispatch();
-            std::string getResult();
+    void QuantumPermutationPad::fisherYatesShuffle() {
+        
+    }
+    
+    void QuantumPermutationPad::prng() {
+        
+    }
+    
+    // 
+    void QuantumPermutationPad::dispatch() {
+        
+    }
+    
+    std::string QuantumPermutationPad::getResult() {
+        
+    }
 
 }
