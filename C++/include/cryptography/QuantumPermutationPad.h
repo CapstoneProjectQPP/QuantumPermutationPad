@@ -11,7 +11,7 @@ namespace QPP {
     class QuantumPermutationPad {
         public:
             
-            QuantumPermutationPad(std::string seed);
+            QuantumPermutationPad(std::vector<int> seed);
 
             /**
             * Encrypt a string called plain text using a string key.
@@ -20,7 +20,7 @@ namespace QPP {
             * @param key
             * @param key_size
             * @return
-            */
+            */  
             std::string encrypt(std::string& plain_text);
 
             /**
@@ -44,9 +44,9 @@ namespace QPP {
 
 
         private:
-
+            std::array<int, n> rng_output;
             std::string plain_text;
-            std::string seed;
+            std::vector<int> seed;
             std::vector<StateArray> permuationGates;
             StateArray keyArray;
     };

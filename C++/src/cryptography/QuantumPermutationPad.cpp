@@ -3,7 +3,7 @@
 namespace QPP {
     
     // The seed should be of size M*n*2^n
-    QuantumPermutationPad::QuantumPermutationPad(std::string seed) {
+    QuantumPermutationPad::QuantumPermutationPad(std::vector<int> seed) {
         this->seed = seed;
     }
 
