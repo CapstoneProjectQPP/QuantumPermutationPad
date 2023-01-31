@@ -20,7 +20,33 @@ namespace QPP {
     // Generate M permutation matrices using the seed (shared secret key)
     // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
     void QuantumPermutationPad::fisherYatesShuffle() {
-        
+        int size = 2 << n;
+        int a[size];
+        a[0] = 1;
+        for(int i = 1; i < size; i++) {
+            a[i] = 0;
+        }
+
+        int tmp_arr[size];
+        // Create M permutation matrices
+        for(int i = 0; i < M; i++) {
+            std::copy(a, a+size, tmp_arr);
+            for(int j = 0; j < size) {
+                int x;
+                for(int k = size-1; k == 0; k--) {
+                    // Find random number between 0 and i
+                    x = prng(0, k);
+                    // Swap a[x] and a[k]
+                    int tmp = tmp_arr[k];
+                    tmp_arr[k] = tmp_arr[x];
+                    tmp_arr[x] = temp;
+                }
+                for(int k = 0; k < size; k++) {
+                    this.permutationGates[i].setValueAt(j, k, tmp_arr[k]);
+                }
+            }
+        }
+
     }
     
     // Generate a random number using LSFR with the seed

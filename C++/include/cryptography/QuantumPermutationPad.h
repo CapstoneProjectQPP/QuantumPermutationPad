@@ -2,9 +2,11 @@
 
 #include <PCH.h>
 #include "StateArray.h"
+#include "cryptography/PermutationMatrix.h"
 
 
 static const int n = 8;
+static const int size = 2 << n;
 static const int M = 64;
 
 namespace QPP {
@@ -47,7 +49,7 @@ namespace QPP {
             std::array<int, n> rng_output;
             std::string plain_text;
             std::vector<int> seed;
-            std::vector<StateArray> permuationGates;
+            std::array<PermutationMatrix, size> permuationGates;
             StateArray keyArray;
     };
 }
