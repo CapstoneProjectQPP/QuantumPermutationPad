@@ -1,13 +1,13 @@
 #pragma once
 
 #include <PCH.h>
-#include "StateArray.h"
-#include "cryptography/PermutationMatrix.h"
+#include "PermutationMatrix.h"
+
+#define n 8
+#define M 64
+#define size (2 << n)
 
 
-static const int n = 8;
-static const int size = 2 << n;
-static const int M = 64;
 
 namespace QPP {
     class QuantumPermutationPad {
@@ -40,6 +40,7 @@ namespace QPP {
             /* TODO - move to protected*/
             void fisherYatesShuffle();
             void prng();
+            int prng(int lo, int hi);
             void dispatch();
             void generateVector(std::string plain_text);
             std::string getResult();
@@ -49,7 +50,6 @@ namespace QPP {
             std::array<int, n> rng_output;
             std::string plain_text;
             std::vector<int> seed;
-            std::array<PermutationMatrix, size> permuationGates;
-            StateArray keyArray;
+            std::array<PermutationMatrix, size> permutationGates;
     };
 }

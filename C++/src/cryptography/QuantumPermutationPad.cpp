@@ -20,7 +20,6 @@ namespace QPP {
     // Generate M permutation matrices using the seed (shared secret key)
     // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
     void QuantumPermutationPad::fisherYatesShuffle() {
-        int size = 2 << n;
         int a[size];
         a[0] = 1;
         for(int i = 1; i < size; i++) {
@@ -31,7 +30,7 @@ namespace QPP {
         // Create M permutation matrices
         for(int i = 0; i < M; i++) {
             std::copy(a, a+size, tmp_arr);
-            for(int j = 0; j < size) {
+            for(int j = 0; j < size; j++) {
                 int x;
                 for(int k = size-1; k == 0; k--) {
                     // Find random number between 0 and i
@@ -39,10 +38,10 @@ namespace QPP {
                     // Swap a[x] and a[k]
                     int tmp = tmp_arr[k];
                     tmp_arr[k] = tmp_arr[x];
-                    tmp_arr[x] = temp;
+                    tmp_arr[x] = tmp;
                 }
                 for(int k = 0; k < size; k++) {
-                    this.permutationGates[i].setValueAt(j, k, tmp_arr[k]);
+                    this->permutationGates[i].setValueAt(j, k, tmp_arr[k]);
                 }
             }
         }
@@ -52,6 +51,10 @@ namespace QPP {
     // Generate a random number using LSFR with the seed
     void QuantumPermutationPad::prng() {
         
+    }
+
+    int QuantumPermutationPad::prng(int lo, int hi) {
+        return 0;
     }
     
     // Select one permutation matrix to multiply with plain text vector

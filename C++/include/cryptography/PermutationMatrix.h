@@ -1,14 +1,15 @@
 #pragma once
 
 #include <PCH.h>
+#define n 8
+#define M 64
+#define size (2 << n)
 
-static const int n = 8;
-static const int size = 2 << n;
+
 
 namespace QPP {
     class PermutationMatrix {
     public:
-        PermutationMatrix();
 
         uint8_t getValueAt(int row, int col);
         void setValueAt(int row, int col, int value);

@@ -7,6 +7,6 @@ namespace QPP {
             return 0;
         }
         void PermutationMatrix::setValueAt(int row, int col, int value){
-            this.matrix[row][col] = value;
+            this->matrix[row][col] = value;
         }
 }
