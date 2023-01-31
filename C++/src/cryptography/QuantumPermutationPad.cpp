@@ -18,6 +18,7 @@ namespace QPP {
     }
 
     // Generate M permutation matrices using the seed (shared secret key)
+    // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
     void QuantumPermutationPad::fisherYatesShuffle() {
         
     }
