@@ -11,7 +11,7 @@
 namespace QPP {
     class PermutationMatrix {
     public:
-
+        PermutationMatrix();
         uint8_t getValueAt(int row, int col);
         void setValueAt(int row, int col, int value);
 
