@@ -3,12 +3,6 @@
 #include <PCH.h>
 #include "PermutationMatrix.h"
 
-#define n                   8
-#define M                   64
-#define mat_len             (2 << n)
-#define mat_size            (mat_len * mat_len)
-
-
 
 namespace QPP {
     class QuantumPermutationPad {
@@ -48,9 +42,9 @@ namespace QPP {
 
 
         private:
-            std::array<int, n> rng_output;
+            std::array<int, params::n> rng_output;
             std::string plain_text;
             std::vector<int> seed;
-            std::array<PermutationMatrix, mat_len> permutationGates;
+            std::array<PermutationMatrix, params::mat_len> permutationGates;
     };
 }

@@ -1,14 +1,20 @@
 #pragma once
 
 #include <PCH.h>
-#define n                   8
-#define M                   64
-#define mat_len             (2 << n)
-#define mat_size            (mat_len * mat_len)
+
+
 
 
 
 namespace QPP {
+
+    namespace params {
+        static const int n =                  8;
+        static const int M =                  64;
+        static const int mat_len =            (2 << n);
+        static const int mat_size =           (mat_len * mat_len);
+    }
+    
     class PermutationMatrix {
     public:
         PermutationMatrix();
@@ -16,6 +22,9 @@ namespace QPP {
         void setValueAt(int row, int col, int value);
 
     private:
-        std::array<std::array<uint8_t, mat_size>, mat_size> matrix;
+        
+        std::array<std::array<uint8_t, params::mat_size>, params::mat_size> matrix;
+
+
     };
 }
