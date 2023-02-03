@@ -7,3 +7,6 @@
 .DS_Store
 
 /test_framework_package/.idea
+
+# UI test folder
+/UI/examples

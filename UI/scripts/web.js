@@ -15,9 +15,8 @@ myImage.onclick = () => {
   }
 };
 
-
 myHeading.textContent = "This is a webpage";
-multiply(10,15);
+multiply(10, 15);
 
 document.querySelector("html").addEventListener("click", () => {
   //alert("Ouch! Stop poking me!");
