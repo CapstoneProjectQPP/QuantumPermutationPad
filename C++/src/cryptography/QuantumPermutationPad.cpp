@@ -4,7 +4,16 @@ namespace QPP {
     
     // The seed should be of size M*n*2^n
     QuantumPermutationPad::QuantumPermutationPad(std::vector<int> seed) {
+
+        if(seed.size() != (M * n * mat_len)) {
+            exit(1);
+        }
         this->seed = seed;
+
+        // Create M permutation matrices
+        for(int i = 0; i < M; i++) {
+            generateMatrix(i);
+        }
     }
 
     // Encrypt plain text into cipher text uinsg protected functions
@@ -19,31 +28,23 @@ namespace QPP {
 
     // Generate M permutation matrices using the seed (shared secret key)
     // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
-    void QuantumPermutationPad::fisherYatesShuffle() {
-        int a[size];
-        a[0] = 1;
-        for(int i = 1; i < size; i++) {
-            a[i] = 0;
-        }
+    void QuantumPermutationPad::generateMatrix(uint8_t key_index) {
+        uint8_t S[mat_size];
 
-        int tmp_arr[size];
-        // Create M permutation matrices
-        for(int i = 0; i < M; i++) {
-            std::copy(a, a+size, tmp_arr);
-            for(int j = 0; j < size; j++) {
-                int x;
-                for(int k = size-1; k == 0; k--) {
-                    // Find random number between 0 and i
-                    x = prng(0, k);
-                    // Swap a[x] and a[k]
-                    int tmp = tmp_arr[k];
-                    tmp_arr[k] = tmp_arr[x];
-                    tmp_arr[x] = tmp;
-                }
-                for(int k = 0; k < size; k++) {
-                    this->permutationGates[i].setValueAt(j, k, tmp_arr[k]);
-                }
-            }
+        for(int i = 0; i < mat_size; i++) {
+            S[i] = i;
+        }
+        uint8_t offset = key_index * mat_size;
+        for(int i = mat_size - 1; i == 1; i--) {
+            uint8_t j = this->seed[offset+i];
+
+            uint8_t tmp = S[j];
+            S[j] = S[i];
+            S[i] = tmp;
+
+        }
+        for(int i = 0; i < mat_size; i++) {
+            this->permutationGates[key_index].setValueAt(i, S[i], 1);
         }
 
     }

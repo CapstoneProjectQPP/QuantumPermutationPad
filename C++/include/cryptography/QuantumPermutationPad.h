@@ -3,9 +3,10 @@
 #include <PCH.h>
 #include "PermutationMatrix.h"
 
-#define n 8
-#define M 64
-#define size (2 << n)
+#define n                   8
+#define M                   64
+#define mat_len             (2 << n)
+#define mat_size            (mat_len * mat_len)
 
 
 
@@ -38,7 +39,7 @@ namespace QPP {
             
 
             /* TODO - move to protected*/
-            void fisherYatesShuffle();
+            void generateMatrix(uint8_t key_index);
             void prng();
             int prng(int lo, int hi);
             void dispatch();
@@ -50,6 +51,6 @@ namespace QPP {
             std::array<int, n> rng_output;
             std::string plain_text;
             std::vector<int> seed;
-            std::array<PermutationMatrix, size> permutationGates;
+            std::array<PermutationMatrix, mat_len> permutationGates;
     };
 }

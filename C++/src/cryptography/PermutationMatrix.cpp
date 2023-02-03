@@ -3,6 +3,14 @@
 
 namespace QPP {
 
+        PermutationMatrix::PermutationMatrix() {
+            for(int i = 0; i < mat_len; i++) {
+                for(int j = 0; j < mat_len; j++) {
+                    this->matrix[i][j] = 0;
+                }
+            }
+        }
+
         uint8_t PermutationMatrix::getValueAt(int row, int col){
             return 0;
         }
