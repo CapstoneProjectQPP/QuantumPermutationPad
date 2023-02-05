@@ -86,13 +86,17 @@
   --vt-c-purple-lighter: #f616f8;
   --vt-c-purple-dark: #823c83;
   --vt-c-purple-darker: #602960;
-  --header-purple: #7410f5;
-  --header-green: #91F510;
+  --header-purple: #4c0ca0;
+  --header-green: #053f05;
+  --text-header: #ff88ff;
 }
 
+
 html {
-  color-scheme: dark;
+   color-scheme: dark;
+   color: var(--vt-c-gray-light-5);
 }
+
 
 * {
   box-sizing: border-box;
@@ -100,7 +104,6 @@ html {
 }
 
 nav {
-  min-width:fit-content;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -116,7 +119,6 @@ body {
   line-height: 24px;
   font-size: 16px;
   font-weight: 400;
-  color: var(--vt-c-gray-light-5);
   direction: ltr;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -129,6 +131,7 @@ body {
   justify-content: flex-end;
   align-items: baseline;
   list-style-type: none;
+  flex-grow: 1;
   gap: 12px;
   padding-right: 40px;
 }
@@ -139,7 +142,8 @@ body {
 }
 
 header {
-  background-color: var(--header-purple);
+  background-color: var(--header-green);
+  color: var(--text-header);
   border: 0px;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -148,7 +152,7 @@ header {
   min-height: 300px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   flex: 1;
 }
 
@@ -159,14 +163,19 @@ header div {
   flex:1;
 }
 
+#hero {
+  align-items: center;
+}
+
 .hero-text {
   flex-direction: column;
   justify-content: flex-start;
+  align-self: flex-start;
   flex: 1;
 }
 
 .hero-image {
-  background-color: var(--header-green);
+  background-color: var(--header-purple);
   height: 200px;
   width: 200px;
   margin-right: 40px;
@@ -175,4 +184,13 @@ header div {
   flex-direction: column;
   justify-content: center;
   flex: 1;
+  max-width:100%;
+}
+
+.hero-text button {
+  align-self: flex-start;
+}
+
+article {
+  padding: 20px;
 }
