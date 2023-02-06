@@ -67,6 +67,10 @@ namespace QPP {
         result = result*15485863;
         rng_output_int =  (result*result*result)%2038074743;
     }
+
+    int QuantumPermutationPad::prng(int lo, int hi) {
+        return 0;
+    }
     
     // Select one permutation matrix to multiply with plain text vector
     void QuantumPermutationPad::dispatch() {

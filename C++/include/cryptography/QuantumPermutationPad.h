@@ -45,8 +45,8 @@ namespace QPP {
             std::array<int, params::n> rng_output;
             std::string plain_text;
             std::vector<int> seed;
-            std::vector<StateArray> permuationGates;
-            StateArray keyArray;
+            std::array<PermutationMatrix, params::mat_len> permutationGates;
             long long int rng_output_int;
+
     };
 }
