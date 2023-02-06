@@ -182,7 +182,7 @@ header {
 header div {
   margin-bottom: 20px;
   display: flex;
-  flex:1;
+  flex: 1;
 }
 
 #hero {
@@ -202,7 +202,7 @@ header div {
 }
 
 h1 {
-  font-size: 5vw ;
+  font-size: 5vw;
 }
 
 p {
@@ -219,7 +219,7 @@ p {
   justify-content: center;
   border: 1px solid #000;
   flex: 1;
-  max-width:100%;
+  max-width: 100%;
 }
 
 .hero-text button {
