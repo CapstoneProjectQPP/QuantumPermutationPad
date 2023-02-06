@@ -24,7 +24,21 @@ namespace QPP {
     
     // Generate a random number using LSFR with the seed
     void QuantumPermutationPad::prng() {
+        //convert seed to int
         
+        int result = 0;
+        for (auto d : seed)  
+        {
+            result = result * 10 + d;
+        }
+        //generate pseudo random number based on seed
+        if (result < 0) {
+            result = -result;
+        }
+
+        result++;
+        result = result*15485863;
+        rng_output_int =  (result*result*result)%2038074743;
     }
     
     // Select one permutation matrix to multiply with plain text vector
