@@ -127,6 +127,10 @@ body {
   margin: 0px;
   font-family: var(--vt-font-family-base);
   letter-spacing: 0.2px;
+<<<<<<< HEAD
+=======
+  line-height: 24px;
+>>>>>>> 8cf1338 (renamed UI folder to docs for github pages)
   font-size: 16px;
   font-weight: 400;
   direction: ltr;
