@@ -4,18 +4,68 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <link href="../styles/main.css" rel="stylesheet" />
+    
     <title>QPP Connection</title>
   </head>
-
+  <header>
+    <!-- Navigation menu -->
+    <nav>
+      <ul class="header-list">
+        <li class="header-logo">
+          <a href="../index.html"> Header Logo </a>
+        </li>
+        <li class="header-link">
+          <a href="../pages/api.html"> API </a>
+        </li>
+        <li class="header-link">
+          <a href="../pages/research.html"> Research </a>
+        </li>
+        <li class="header-link">
+          <a href="../pages/demo.html"> Demo </a>
+        </li>
+        <li class="button">
+          <a href="../pages/cal.html"> Get Started </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- Header Block -->
+    <div id="hero" class="api">
+      <div class="hero-text">
+        <h1 class="hero-title" style="align-self: center">
+          Interactive Testbed
+        </h1>
+      </div>
+      <div class="api-filter">
+        <label for="algo-select"> Algorithim </label>
+        <select name="algo-select" id="algo-select" placeholder="Select Algorithim">
+          <option value="aes">AES</option>
+          <option value="qpp">QPP</option>
+          <option value="both">AES & QPP</option>
+        </select>
+      </div>
+    </div>
+  </header>
   <body>
-    <a href="../index.html">-></a>
-    <h1>Encryption & Decryption</h1>
     <h2>QPP</h2>
-    <button>Encrypt</button>
+    
+    <div class="api-filter">
+      <label for="api-filter"> Plain-text Input </label>
+      <input id="api-filter" type="search" placeholder="Enter keyword"/>
+    </div>
+    
+    <div class="api-filter">
+      <label for="api-filter"> Plain-text Input </label>
+      <input id="api-filter" type="search" placeholder="Enter keyword" />
+    </div>
+
+    <div class="api-filter">
+      <label for="api-filter"> Plain-text Input </label>
+      <input id="api-filter" type="search" placeholder="Enter keyword" />
+    </div>
 
     <h2>AES</h2>
     <!-- <button>Encrypt</button> -->
 
-    <script src="../scripts/cal.js"></script>
+    <!-- <script src="../scripts/cal.js"></script> -->
   </body>
 </html>
