@@ -74,7 +74,8 @@ namespace QPP {
     
     // Select one permutation matrix to multiply with plain text vector
     void QuantumPermutationPad::dispatch() {
-        
+        int d = rng_output_int % params::M;
+        this->permutationGates[d].multiply(this->rng_output);
     }
     
     // Generate a plain text messsage column vector. This involves an XOR with
