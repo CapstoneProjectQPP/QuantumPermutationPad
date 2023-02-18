@@ -66,6 +66,11 @@ namespace QPP {
         result++;
         result = result*15485863;
         rng_output_int =  (result*result*result)%2038074743;
+        //store into rng_output array
+        for(int i = 0; i < params::n; i++) {
+            this->rng_output[i] = (rng_output_int >> i) & 1;
+        }
+
     }
 
     int QuantumPermutationPad::prng(int lo, int hi) {
@@ -75,14 +80,18 @@ namespace QPP {
     // Select one permutation matrix to multiply with plain text vector
     void QuantumPermutationPad::dispatch() {
         int d = rng_output_int % params::M;
-        // this->permutationGates[d].multiply(this->rng_output);
+        PermutationMatrix gate = this->permutationGates[d];
+        this->plain_text_vector = gate.multiply(this->plain_text_vector);
     }
     
     // Generate a plain text messsage column vector. This involves an XOR with
     // n plaintext bits with n random bits from the prng. The result should be
     // mapped to one column vector from the computational basis.
     void QuantumPermutationPad::generateVector(std::string plain_text) {
-
+        for(int i = 0; i < params::n; i++) {
+            
+            this->plain_text_vector[i] = (plain_text[i] - '0') ^ this->rng_output[i];
+        }
 
     }
 
