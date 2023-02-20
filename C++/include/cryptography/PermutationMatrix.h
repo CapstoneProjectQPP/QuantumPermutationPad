@@ -11,7 +11,7 @@ namespace QPP {
     namespace params {
         static const int n =                  8;
         static const int M =                  64;
-        static const int mat_len =            (2 << n);
+        static const int mat_len =            (1 << n);
         static const int mat_size =           (mat_len * mat_len);
     }
     
