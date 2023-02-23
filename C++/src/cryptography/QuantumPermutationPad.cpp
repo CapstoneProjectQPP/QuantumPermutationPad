@@ -84,7 +84,7 @@ namespace QPP {
             result = result * 10 + d;
         }
         //generate pseudo random number based on seed
-        
+
         if (result < 0) {
             result = -result;
         }
@@ -112,7 +112,7 @@ namespace QPP {
             {
                 d = d * 10 + bit;
             }
-            int d = d % params::M;
+            d = d % params::M;
             PermutationMatrix gate = this->permutationGates[d];
             this->cipher_text_vector.push_back(gate.multiply(each));
         }

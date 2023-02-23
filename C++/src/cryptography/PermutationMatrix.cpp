@@ -19,8 +19,8 @@ namespace QPP {
         void PermutationMatrix::setValueAt(int row, int col, int value){
             this->matrix[row][col] = value;
         }
-        std::array<uint8_t, params::mat_size> PermutationMatrix::multiply (std::array<uint8_t, params::mat_size> vector){
-            std::array<uint8_t, params::mat_size> result;
+        std::array<uint8_t, params::mat_len> PermutationMatrix::multiply (std::array<uint8_t, params::mat_len> vector){
+            std::array<uint8_t, params::mat_len> result;
             for(int i = 0; i < params::mat_len; i++) {
                 for(int j = 0; j < params::mat_len; j++) {
                     result[i] += this->matrix[i][j] * vector[j];
