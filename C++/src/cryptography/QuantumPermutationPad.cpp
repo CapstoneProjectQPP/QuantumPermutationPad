@@ -139,7 +139,7 @@ namespace QPP {
                     else{
                         this->prng(this->rng_output_vector.back());
                     }
-                    //xor with prng
+                    //xor with prng, -'0' to convert char to int, ASCII
                     tmp[j] = (plain_text[j] - '0') ^ this->rng_output_vector.back()[j];
                 }
                 //push to the plain text vector
