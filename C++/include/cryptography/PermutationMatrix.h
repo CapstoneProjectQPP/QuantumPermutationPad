@@ -20,11 +20,11 @@ namespace QPP {
         PermutationMatrix();
         uint8_t getValueAt(int row, int col);
         void setValueAt(int row, int col, int value);
-        std::array<uint8_t, params::mat_size> multiply (std::array<uint8_t, params::mat_size> vector);
+        std::array<uint8_t, params::mat_len> multiply (std::array<uint8_t, params::mat_len> vector);
 
     private:
         
-        std::array<std::array<uint8_t, params::mat_size>, params::mat_size> matrix;
+        std::array<std::array<uint8_t, params::mat_len>, params::mat_len> matrix;
 
 
     };

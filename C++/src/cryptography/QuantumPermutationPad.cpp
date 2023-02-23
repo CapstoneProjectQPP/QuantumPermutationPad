@@ -67,31 +67,87 @@ namespace QPP {
         result = result*15485863;
         rng_output_int =  (result*result*result)%2038074743;
         //store into rng_output array
-        for(int i = 0; i < params::n; i++) {
-            this->rng_output[i] = (rng_output_int >> i) & 1;
+        std::array<int, params::mat_len> rng_output;
+        for(int i = 0; i < params::mat_len; i++) {
+            rng_output[i] = (rng_output_int >> i) & 1;
         }
+        //push into rng_output_vector
+        this->rng_output_vector.push_back(rng_output);
 
     }
 
-    int QuantumPermutationPad::prng(int lo, int hi) {
-        return 0;
+    void QuantumPermutationPad::prng(std::array<int, params::mat_len> seed) {
+        //generate pseudo random number based on previous generated random number result
+        int result = 0;
+        for (auto d : seed)  
+        {
+            result = result * 10 + d;
+        }
+        //generate pseudo random number based on seed
+        
+        if (result < 0) {
+            result = -result;
+        }
+
+        result++;
+        result = result*15485863;
+        rng_output_int =  (result*result*result)%2038074743;
+        //store into rng_output array
+        std::array<int, params::mat_len> rng_output;
+        for(int i = 0; i < params::mat_len; i++) {
+            rng_output[i] = (rng_output_int >> i) & 1;
+        }
+        //push into rng_output_vector
+        this->rng_output_vector.push_back(rng_output);
     }
     
     // Select one permutation matrix to multiply with plain text vector
     void QuantumPermutationPad::dispatch() {
-        int d = rng_output_int % params::M;
-        PermutationMatrix gate = this->permutationGates[d];
-        this->plain_text_vector = gate.multiply(this->plain_text_vector);
+        //for each of the plaintext vector, select a random permutation matrix
+        //to multiply with, and then push to cipher text vector
+        int index = 0;
+        for (auto each : this->plain_text_vector) {
+            int d = 0;
+            for (auto bit : rng_output_vector[index])  
+            {
+                d = d * 10 + bit;
+            }
+            int d = d % params::M;
+            PermutationMatrix gate = this->permutationGates[d];
+            this->cipher_text_vector.push_back(gate.multiply(each));
+        }
+        
     }
     
     // Generate a plain text messsage column vector. This involves an XOR with
     // n plaintext bits with n random bits from the prng. The result should be
     // mapped to one column vector from the computational basis.
     void QuantumPermutationPad::generateVector(std::string plain_text) {
-        for(int i = 0; i < params::n; i++) {
-            
-            this->plain_text_vector[i] = (plain_text[i] - '0') ^ this->rng_output[i];
+        for (int i = 0; i < sizeof(plain_text); i+=params::mat_len) {
+            if (plain_text[i] == '\n' || plain_text[i] == '\0'){
+                //need some sort of padding here
+                break;
+            }
+            //assume we have plain text just right to be a multiple of n
+            else{
+                std::array<uint8_t, params::mat_len> tmp;
+                for(int j = i; j < params::mat_len; j++) {
+                    //generate a new random number
+                    if (j == 0) {
+                        this->prng();
+                    }
+                    else{
+                        this->prng(this->rng_output_vector.back());
+                    }
+                    //xor with prng
+                    tmp[j] = (plain_text[j] - '0') ^ this->rng_output_vector.back()[j];
+                }
+                //push to the plain text vector
+                this->plain_text_vector.push_back(tmp);
+            }
+
         }
+      
 
     }
 
