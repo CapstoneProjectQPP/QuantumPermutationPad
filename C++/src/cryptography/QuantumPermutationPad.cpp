@@ -77,7 +77,7 @@ namespace QPP {
     }
 
     void QuantumPermutationPad::prng(std::array<int, params::mat_len> seed) {
-        //generate pseudo random number based on previous generated random number result
+        //generate pseudo random number based on previous generated random number as a seed
         int result = 0;
         for (auto d : seed)  
         {
@@ -112,6 +112,7 @@ namespace QPP {
             {
                 d = d * 10 + bit;
             }
+            index++;//index to the next random number
             d = d % params::M;
             PermutationMatrix gate = this->permutationGates[d];
             this->cipher_text_vector.push_back(gate.multiply(each));
