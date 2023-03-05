@@ -18,7 +18,21 @@ namespace QPP {
 
     // Encrypt plain text into cipher text uinsg protected functions
     std::string QuantumPermutationPad::encrypt(std::string& plain_text) {
-        return "";
+        //Current, the plain text should be a multiple of n, with no padding
+        //the M permutatition matrix is genereated by the constructor usiong the seed
+        //generate a vector of plain text
+        this->generateVector(plain_text);
+        //dispatch the plain text vector to the permutation matrix
+        this->dispatch();
+        //convert the cipher text vector to a string
+        std::string cipher_text;
+        for (auto each : this->cipher_text_vector) {
+            for (auto bit : each)  
+            {
+                cipher_text += bit;
+            }
+        }
+        return cipher_text;
     }
             
     // Decrypt cipher text into plain text uinsg protected functions
