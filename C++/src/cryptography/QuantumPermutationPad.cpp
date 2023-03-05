@@ -62,6 +62,7 @@ namespace QPP {
 
     }
 
+    //for decryption use
     void QuantumPermutationPad::TransposeMatrix() {
         //transpose the permutation matrix and save it to permutationGates_transposed
         for(int i = 0; i < params::M; i++) {
