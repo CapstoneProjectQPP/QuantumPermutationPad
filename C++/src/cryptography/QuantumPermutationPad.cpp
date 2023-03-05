@@ -5,15 +5,14 @@ namespace QPP {
     // The seed should be of size M*n*2^n
     QuantumPermutationPad::QuantumPermutationPad(std::vector<int> seed) {
 
-        if(seed.size() != (params::M * params::n * params::mat_len)) {
-            exit(1);
-        }
-        this->seed = seed;
-
-        // Create M permutation matrices
-        for(int i = 0; i < params::M; i++) {
-            generateMatrix(i);
-        }
+       if(seed.size() != (params::M * params::n * params::mat_len)) {
+           exit(1);
+       }
+       this->seed = seed;
+       // Create M permutation matrices
+       for(int i = 0; i < params::M; i++) {
+           generateMatrix(i);
+       }
     }
 
     // Encrypt plain text into cipher text uinsg protected functions
@@ -61,6 +60,17 @@ namespace QPP {
             this->permutationGates[key_index].setValueAt(i, S[i], 1);
         }
 
+    }
+
+    void QuantumPermutationPad::TransposeMatrix() {
+        //transpose the permutation matrix and save it to permutationGates_transposed
+        for(int i = 0; i < params::M; i++) {
+            for(int j = 0; j < params::mat_size; j++) {
+                for(int k = 0; k < params::mat_size; k++) {
+                    this->permutationGates_transposed[i].setValueAt(j, k, this->permutationGates[i].getValueAt(k, j));
+                }
+            }
+        }
     }
     
     // Generate a random number using LSFR with the seed
