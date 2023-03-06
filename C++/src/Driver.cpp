@@ -18,11 +18,15 @@ int main() {
 
     // AES_test();
 
-    std::vector<int> seed = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
-    QPP::QuantumPermutationPad qpp(seed);
+    // std::vector<int> seed{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
+    // QPP::QuantumPermutationPad qpp(seed);
 //     std::string plain_text = "Hello World";
 //     std::string cipher_text = qpp.encrypt(plain_text);
 //     std::cout << cipher_text << std::endl;
+    std::string input = "Hello Wrorld";
+    std::string key = "abcdefghijklmnop";
+    std::cout<< input.size() << std::endl;
+    std::cout<< sizeof(input) << std::endl;
 
     return 0;
 }

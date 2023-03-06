@@ -42,13 +42,13 @@ namespace QPP {
     // Generate M permutation matrices using the seed (shared secret key)
     // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
     void QuantumPermutationPad::generateMatrix(uint8_t key_index) {
-        uint8_t S[params::mat_size];
+        uint8_t S[params::mat_len];
 
-        for(int i = 0; i < params::mat_size; i++) {
+        for(int i = 0; i < params::mat_len; i++) {
             S[i] = i;
         }
-        uint8_t offset = key_index * params::mat_size;
-        for(int i = params::mat_size - 1; i == 1; i--) {
+        uint8_t offset = key_index * params::mat_len;
+        for(int i = params::mat_len - 1; i == 1; i--) {
             uint8_t j = this->seed[offset+i];
 
             uint8_t tmp = S[j];
@@ -56,7 +56,7 @@ namespace QPP {
             S[i] = tmp;
 
         }
-        for(int i = 0; i < params::mat_size; i++) {
+        for(int i = 0; i < params::mat_len; i++) {
             this->permutationGates[key_index].setValueAt(i, S[i], 1);
         }
 
