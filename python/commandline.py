@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 # importing the required modules
 import os
 import argparse, logging
@@ -83,23 +84,23 @@ class QPP_parser:
 
         self.parser.add_argument(
             "-e",
-            "--encryption-only",
+            "--encryption",
             action="store_true",
-            help="Only run an encryption test",
+            help="Run an encryption test",
         )
 
         self.parser.add_argument(
             "-d",
-            "--decryption_only",
+            "--decryption",
             action="store_true",
-            help="Only run a decryption test, using ciphertexts with .aes or .qpp file extensions",
+            help="Run a decryption test, using ciphertexts with .aes or .qpp file extensions",
         )
 
         self.parser.add_argument(
             "-c",
             "--cipher-text",
             action="store_true",
-            help="Keep all generated cipher-texts in directory after encryption test",
+            help="Generate cipher-texts in directory",
         )
 
         self.parser.add_argument(
@@ -125,6 +126,9 @@ class QPP_parser:
             default=(150, 200),
             help="Specifiy number of elements and number of vectors",
         )
+        
+        
+        
         self.logger = None
         return
 
