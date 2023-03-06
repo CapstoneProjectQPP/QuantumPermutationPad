@@ -16,7 +16,7 @@ int main() {
 
     // std::cout << "Hello World" << std::endl;
 
-    // AES_test();
+    AES_test();
 
     //init a seed, size n*M*mat length = 131072
     std::vector<int> *seed = new std::vector<int>();
