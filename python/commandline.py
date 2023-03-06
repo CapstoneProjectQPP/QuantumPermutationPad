@@ -38,7 +38,12 @@ class QPP_commands:
     @classmethod
     def test_vector_gen(cls, args, logger):
         logger.debug("The vector length is {} and the number of vectors is {}".format(args[0],args[1]))
-        return
+        return [100, 100]
+    
+    @classmethod
+    def cipher_text_gen(cls, args, logger):
+        logger.debug("The vector length is {} and the number of vectors is {}".format(args[0],args[1]))
+        return [100, 100]
 
     @classmethod
     def qpp_encrypt(cls, args):
@@ -77,7 +82,7 @@ class QPP_parser:
         # by default, don't run and compare QPP with AES
         self.parser.add_argument(
             "-aes",
-            "--run-AES",
+            "--AES",
             action="store_true",
             help="Run test with AES in addition to QPP",
         )
@@ -157,7 +162,33 @@ class QPP_parser:
         logger.error("ERROR_IN_PROGRAM")
         logger.critical("CRITICAL_IN_PROGRAM")
 
-        QPP_commands.test_vector_gen(args.vector, logger)
+        logger.info("Begin test vector generation")
+        test_vectors = QPP_commands.test_vector_gen(args.vector, logger)
+        logger.info("Finished test vector generation")
+        
+        if args.encryption:
+            logger.info("Begin QPP encryption")
+            qpp_cipher = QPP_commands.qpp_encrypt(test_vectors)
+            logger.info("Finsihed QPP encryption")
+            if args.AES:
+                logger.info("Begin AES encryption")
+                aes_cipher = QPP_commands.aes_encrypt(test_vectors)
+                logger.info("Finished AES encryption")
+                
+        
+        if args.cipher_text:
+            logger.info("Begin Ciphertext generation")
+            QPP_commands.cipher_text_gen(test_vectors)
+            logger.info("Finished Ciphertext generation")
+        
+        if args.decryption:
+            logger.info("Begin QPP encryption")
+            qpp_results = QPP_commands.qpp_decrypt(qpp_cipher)
+            logger.info("Finsihed QPP encryption")
+            if args.AES:
+                logger.info("Begin AES encryption")
+                aes_results = QPP_commands.aes_decrypt(aes_cipher)
+                logger.info("Finished AES encryption")
 
 
 if __name__ == "__main__":
