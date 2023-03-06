@@ -35,8 +35,7 @@ class Logger:
 
 class QPP_commands:
     @classmethod
-    def test_vector_gen(cls, args):
-        logger = Logger.init(None, logging.DEBUG)
+    def test_vector_gen(cls, args, logger):
         logger.debug("The vector length is {} and the number of vectors is {}".format(args[0],args[1]))
         return
 
@@ -97,7 +96,7 @@ class QPP_parser:
         )
 
         self.parser.add_argument(
-            "-ct",
+            "-c",
             "--cipher-text",
             action="store_true",
             help="Keep all generated cipher-texts in directory after encryption test",
@@ -123,8 +122,10 @@ class QPP_parser:
             type=int,
             nargs=2,
             metavar=("test_len", "test_num"),
+            default=(150, 200),
             help="Specifiy number of elements and number of vectors",
         )
+        self.logger = None
         return
 
     def UserInput(self) -> bool:
@@ -152,7 +153,7 @@ class QPP_parser:
         logger.error("ERROR_IN_PROGRAM")
         logger.critical("CRITICAL_IN_PROGRAM")
 
-        QPP_commands.test_vector_gen(args.vector)
+        QPP_commands.test_vector_gen(args.vector, logger)
 
 
 if __name__ == "__main__":
