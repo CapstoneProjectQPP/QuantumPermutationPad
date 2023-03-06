@@ -178,7 +178,7 @@ class QPP_parser:
         
         if args.cipher_text:
             logger.info("Begin Ciphertext generation")
-            QPP_commands.cipher_text_gen(test_vectors)
+            QPP_commands.cipher_text_gen(test_vectors, logger)
             logger.info("Finished Ciphertext generation")
         
         if args.decryption:
