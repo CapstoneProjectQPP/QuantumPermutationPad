@@ -5,7 +5,7 @@ import argparse, logging
 LOG_FILE = "test.log"
 
 class Logger():
-    def init(self, level, file, log) -> None:
+    def init(file, level) -> None:
         # create logger
         log = logging.getLogger(__name__)
         
@@ -17,12 +17,13 @@ class Logger():
             formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(name)s : %(message)s')
             file_handler.setFormatter(formatter)
             log.addHandler(file_handler)
+        
+        return log
 
 class QPP_commands():
     
     @classmethod
     def test_vector_gen(cls, args):
-        print(args)
         return
     
     @classmethod
@@ -115,24 +116,38 @@ class QPP_parser():
 
     def UserInput(self) -> bool:
         
+        log_file = None
+        
         # parse the arguments from standard input
         args = self.parser.parse_args()
-
         print(args)
 
-        # configure logging to user preference
+        if args.verbose:
+            log_level = logging.DEBUG
+        else:
+            log_level = logging.ERROR
         
+        if args.logging:
+            log_file = LOG_FILE
+        else:
+            log_file = None    
+        
+        # configure logging to user preference
+        logger = Logger.init(log_file, log_level)
         
         # logging.debug("These are the arguments {}".format(args))
         # logging.info("These are the arguments {}".format(args))
         
-        self.logger.debug("These are the arguments {}".format(args))
-        self.logger.info("These are the arguments {}".format(args))
+        logger.debug("DEBUG_IN_PROGRAM")
+        logger.info("INFO_IN_PROGRAM")
+        logger.warning("WARNING_IN_PROGRAM")
+        logger.error("ERROR_IN_PROGRAM")
+        logger.critical("CRITICAL_IN_PROGRAM")
         
         QPP_commands.test_vector_gen(args.vector)
 
 
-if __name__ == "__main__":    
+if __name__ == "__main__":
     parser = QPP_parser()
     parser.UserInput()
     
