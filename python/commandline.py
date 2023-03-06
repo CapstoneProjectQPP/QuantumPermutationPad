@@ -2,53 +2,65 @@
 import os
 import argparse, logging
 
+
+
 LOG_FILE = "test.log"
 
-class Logger():
+
+class Logger:
     def init(file, level) -> None:
-        # create logger
+
+        # to format the log messages that are printed to terminal
+        logging.basicConfig(
+            format="%(levelname)s : %(name)s : %(funcName)s[line %(lineno)s] : %(message)s"
+        )
+
+        # create logger instance
         log = logging.getLogger(__name__)
-        
+
         # set log level
         log.setLevel(level)
-        
+
+        # format the .log file messages
         if file != None:
             file_handler = logging.FileHandler(file)
-            formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(name)s : %(message)s')
+            formatter = logging.Formatter(
+                "%(asctime)s : %(levelname)s : Module %(module)s : %(funcName)s[line %(lineno)s] : %(name)s : %(message)s"
+            )
             file_handler.setFormatter(formatter)
             log.addHandler(file_handler)
-        
+
         return log
 
-class QPP_commands():
-    
+
+class QPP_commands:
     @classmethod
     def test_vector_gen(cls, args):
         return
-    
+
     @classmethod
     def qpp_encrypt(cls, args):
         return
-    
+
     @classmethod
     def qpp_decrypt(cls, args):
         return
-    
+
     @classmethod
     def aes_encrypt(cls, args):
         return
-    
+
     @classmethod
     def aes_decrypt(cls, args):
         return
 
-        
 
-class QPP_parser():
-
+class QPP_parser:
     def __init__(self) -> None:
-        self.parser = argparse.ArgumentParser(description="QPP testbed Commandline Interface")
-             
+        self.parser = argparse.ArgumentParser(
+            description="QPP testbed Commandline Interface"
+        )
+
         # Creating arguments for commandline parser
 
         # parser.add_argument(
@@ -102,52 +114,47 @@ class QPP_parser():
             action="store_true",
             help="Show Debug messages in logs",
         )
-        
+
         self.parser.add_argument(
             "--vector",
             type=int,
             nargs=2,
-            metavar=("test_len","test_num"),
+            metavar=("test_len", "test_num"),
             help="Specifiy number of elements and number of vectors",
         )
-        
-        
         return
 
     def UserInput(self) -> bool:
-        
-        log_file = None
+        global LOG_FILE 
         
         # parse the arguments from standard input
         args = self.parser.parse_args()
+        
         print(args)
 
         if args.verbose:
             log_level = logging.DEBUG
         else:
             log_level = logging.ERROR
-        
-        if args.logging:
-            log_file = LOG_FILE
-        else:
-            log_file = None    
-        
+
+        if not args.logging:
+            LOG_FILE = None
+
         # configure logging to user preference
-        logger = Logger.init(log_file, log_level)
-        
+        logger = Logger.init(LOG_FILE, log_level)
+
         # logging.debug("These are the arguments {}".format(args))
         # logging.info("These are the arguments {}".format(args))
-        
+
         logger.debug("DEBUG_IN_PROGRAM")
         logger.info("INFO_IN_PROGRAM")
         logger.warning("WARNING_IN_PROGRAM")
         logger.error("ERROR_IN_PROGRAM")
         logger.critical("CRITICAL_IN_PROGRAM")
-        
+
         QPP_commands.test_vector_gen(args.vector)
 
 
 if __name__ == "__main__":
     parser = QPP_parser()
     parser.UserInput()
-    
