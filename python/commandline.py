@@ -5,17 +5,18 @@ import argparse, logging
 LOG_FILE = "test.log"
 
 class Logger():
-    def __init__(self, level, file) -> None:
+    def init(self, level, file, log) -> None:
         # create logger
-        self.log = logging.getLogger(__name__)
+        log = logging.getLogger(__name__)
         
         # set log level
-        self.log.setLevel(level)
+        log.setLevel(level)
         
         if file != None:
             file_handler = logging.FileHandler(file)
             formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(name)s : %(message)s')
-        return
+            file_handler.setFormatter(formatter)
+            log.addHandler(file_handler)
 
 class QPP_commands():
     
