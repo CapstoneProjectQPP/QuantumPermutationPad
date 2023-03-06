@@ -36,6 +36,8 @@ class Logger:
 class QPP_commands:
     @classmethod
     def test_vector_gen(cls, args):
+        logger = Logger.init(None, logging.DEBUG)
+        logger.debug("The vector length is {} and the number of vectors is {}".format(args[0],args[1]))
         return
 
     @classmethod
@@ -116,6 +118,7 @@ class QPP_parser:
         )
 
         self.parser.add_argument(
+            "-p",
             "--vector",
             type=int,
             nargs=2,
@@ -142,9 +145,6 @@ class QPP_parser:
 
         # configure logging to user preference
         logger = Logger.init(LOG_FILE, log_level)
-
-        # logging.debug("These are the arguments {}".format(args))
-        # logging.info("These are the arguments {}".format(args))
 
         logger.debug("DEBUG_IN_PROGRAM")
         logger.info("INFO_IN_PROGRAM")
