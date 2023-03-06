@@ -1,0 +1,3 @@
+[submodule "Xceed"]
+	path = Xceed
+	url = https://github.com/danny-cpp/Xceed.git
