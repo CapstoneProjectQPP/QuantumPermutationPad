@@ -6,6 +6,7 @@ namespace QPP {
     QuantumPermutationPad::QuantumPermutationPad(std::vector<int> seed) {
 
        if(seed.size() != (params::M * params::n * params::mat_len)) {
+           perror("seed size wrong");
            exit(1);
        }
        this->seed = seed;
@@ -149,7 +150,7 @@ namespace QPP {
     // n plaintext bits with n random bits from the prng. The result should be
     // mapped to one column vector from the computational basis.
     void QuantumPermutationPad::generateVector(std::string plain_text) {
-        for (int i = 0; i < sizeof(plain_text); i+=params::mat_len) {
+        for (int i = 0; i < plain_text.size(); i+=params::mat_len) {
             if (plain_text[i] == '\n' || plain_text[i] == '\0'){
                 //need some sort of padding here
                 break;

@@ -14,19 +14,23 @@ void AES_test() {
 }
 int main() {
 
-    std::cout << "Hello World" << std::endl;
+    // std::cout << "Hello World" << std::endl;
 
     // AES_test();
 
-    // std::vector<int> seed{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
-    // QPP::QuantumPermutationPad qpp(seed);
-//     std::string plain_text = "Hello World";
-//     std::string cipher_text = qpp.encrypt(plain_text);
-//     std::cout << cipher_text << std::endl;
-    std::string input = "Hello Wrorld";
-    std::string key = "abcdefghijklmnop";
-    std::cout<< input.size() << std::endl;
-    std::cout<< sizeof(input) << std::endl;
+    //init a seed, size n*M*mat length = 131072
+    std::vector<int> *seed = new std::vector<int>();
+    for (int i = 0; i < 131072; i++) {
+        (*seed).push_back(i);
+    }
+    QPP::QuantumPermutationPad *qpp = new QPP::QuantumPermutationPad(*seed);
+    std::string plain_text = "HHHHHHHH";
+    std::string cipher_text = (*qpp).encrypt(plain_text);
+    std::cout << cipher_text << std::endl;
+    // std::string input = "Hello Wrorld";
+    // std::string key = "abcdefghijklmnop";
+    // std::cout<< input.size() << std::endl;
+    // std::cout<< sizeof(input) << std::endl;
 
     return 0;
 }
