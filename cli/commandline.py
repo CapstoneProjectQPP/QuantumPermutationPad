@@ -2,7 +2,7 @@
 # importing the required modules
 import os
 import argparse, logging
-
+import random
 
 LOG_FILE = "test.log"
 
@@ -56,13 +56,31 @@ class Commands:
         self.logger = logger
         return
 
+    @staticmethod
+    def random_string(len):
+        MAX_LIMIT = 255
+        random_string = ""
+        for ii in range(len):
+            random_int = random.randint(0, MAX_LIMIT)
+            random_string += chr(random_int)
+        return random_string
+
     def test_vector_gen(self, args):
         self.logger.info("Being Testvector generation")
+        vec_len = args[0]
+        vec_num = args[1]
+        test_list = [""] * vec_num
+
+        for ii in range(vec_num):
+            test_list[ii] = Commands.random_string(vec_len)
+
         self.logger.debug(
             "The vector length is {} and the number of vectors is {}".format(
                 args[0], args[1]
             )
         )
+        self.logger.debug("Test vectors {}".format(test_list))
+        
         self.logger.info("Finished Testvector generation")
         return [100, 100]
 
@@ -87,7 +105,7 @@ class Commands:
 
         self.logger.info("Finished {} Decryption".format(type))
         return
-    
+
     def compare_results(self, results, tests):
         self.logger.info("Begin comparison between decrypted results and plaintext")
 
@@ -197,9 +215,10 @@ class QPP_parser:
             qpp_results = QPP_commands.decrypt(qpp_cipher, "QPP")
             if args.AES:
                 aes_results = QPP_commands.decrypt(aes_cipher, "AES")
-        
+
         QPP_commands.compare_results(qpp_results, test_vectors)
         QPP_commands.compare_results(aes_results, test_vectors)
+
 
 if __name__ == "__main__":
     parser = QPP_parser()
