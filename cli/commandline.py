@@ -33,39 +33,65 @@ class Logger:
         return log
 
 
-class QPP_commands:
-    @classmethod
-    def test_vector_gen(cls, args, logger):
-        logger.debug(
+class GI:
+    @staticmethod
+    def Encrypt():
+        return
+
+    @staticmethod
+    def ReceivedEncrypt():
+        return
+
+    @staticmethod
+    def Decrypt():
+        return
+
+    @staticmethod
+    def ReceivedDecrypt():
+        return
+
+
+class Commands:
+    def __init__(self, logger) -> None:
+        self.logger = logger
+        return
+
+    def test_vector_gen(self, args):
+        self.logger.info("Being Testvector generation")
+        self.logger.debug(
             "The vector length is {} and the number of vectors is {}".format(
                 args[0], args[1]
             )
         )
+        self.logger.info("Finished Testvector generation")
         return [100, 100]
 
-    @classmethod
-    def cipher_text_gen(cls, args, logger):
-        logger.debug(
+    def cipher_text_gen(self, args):
+        self.logger.info("Being Ciphertext generation")
+        self.logger.debug(
             "The vector length is {} and the number of vectors is {}".format(
                 args[0], args[1]
             )
         )
+        self.logger.info("Finished Ciphertext generation")
         return [100, 100]
 
-    @classmethod
-    def qpp_encrypt(cls, args):
+    def encrypt(self, args, type="QPP"):
+        self.logger.info("Begin {} Encryption".format(type))
+
+        self.logger.info("Finished {} Encryption".format(type))
         return
 
-    @classmethod
-    def qpp_decrypt(cls, args):
-        return
+    def decrypt(self, args, type="QPP"):
+        self.logger.info("Begin {} Deryption".format(type))
 
-    @classmethod
-    def aes_encrypt(cls, args):
+        self.logger.info("Finished {} Decryption".format(type))
         return
+    
+    def compare_results(self, results, tests):
+        self.logger.info("Begin comparison between decrypted results and plaintext")
 
-    @classmethod
-    def aes_decrypt(cls, args):
+        self.logger.info("Finished comparison between decrypted results and plaintext")
         return
 
 
@@ -76,17 +102,6 @@ class QPP_parser:
         )
 
         # Creating arguments for commandline parser
-
-        # parser.add_argument(
-        #     "-t",
-        #     "--test-type",
-        #     tyoe=str,
-        #     nargs=1,
-        #     metavar="test_type",
-        #     help="Specifiy type of test to run",
-        # )
-
-        # by default, don't run and compare QPP with AES
         self.parser.add_argument(
             "-aes",
             "--AES",
@@ -139,7 +154,6 @@ class QPP_parser:
             help="Specifiy number of elements and number of vectors",
         )
 
-        self.logger = None
         return
 
     def UserInput(self) -> bool:
@@ -167,33 +181,25 @@ class QPP_parser:
         logger.error("ERROR_IN_PROGRAM")
         logger.critical("CRITICAL_IN_PROGRAM")
 
-        logger.info("Begin test vector generation")
-        test_vectors = QPP_commands.test_vector_gen(args.vector, logger)
-        logger.info("Finished test vector generation")
+        QPP_commands = Commands(logger)
+
+        test_vectors = QPP_commands.test_vector_gen(args.vector)
 
         if args.encryption:
-            logger.info("Begin QPP encryption")
-            qpp_cipher = QPP_commands.qpp_encrypt(test_vectors)
-            logger.info("Finsihed QPP encryption")
+            qpp_cipher = QPP_commands.encrypt(test_vectors, "QPP")
             if args.AES:
-                logger.info("Begin AES encryption")
-                aes_cipher = QPP_commands.aes_encrypt(test_vectors)
-                logger.info("Finished AES encryption")
+                aes_cipher = QPP_commands.encrypt(test_vectors, "AES")
 
         if args.cipher_text:
-            logger.info("Begin Ciphertext generation")
-            QPP_commands.cipher_text_gen(test_vectors, logger)
-            logger.info("Finished Ciphertext generation")
+            QPP_commands.cipher_text_gen(test_vectors)
 
         if args.decryption:
-            logger.info("Begin QPP decryption")
-            qpp_results = QPP_commands.qpp_decrypt(qpp_cipher)
-            logger.info("Finsihed QPP encryption")
+            qpp_results = QPP_commands.decrypt(qpp_cipher, "QPP")
             if args.AES:
-                logger.info("Begin AES decryption")
-                aes_results = QPP_commands.aes_decrypt(aes_cipher)
-                logger.info("Finished AES decryption")
-
+                aes_results = QPP_commands.decrypt(aes_cipher, "AES")
+        
+        QPP_commands.compare_results(qpp_results, test_vectors)
+        QPP_commands.compare_results(aes_results, test_vectors)
 
 if __name__ == "__main__":
     parser = QPP_parser()
