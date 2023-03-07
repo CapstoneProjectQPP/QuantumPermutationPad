@@ -56,14 +56,16 @@ class Commands:
         self.logger = logger
         return
 
+
     @staticmethod
     def random_string(len):
         MAX_LIMIT = 255
         random_string = ""
         for ii in range(len):
-            random_int = random.randint(0, MAX_LIMIT)
+            random_int = random.randint(97, 97 + 26 -1)
             random_string += chr(random_int)
         return random_string
+
 
     def test_vector_gen(self, args):
         self.logger.info("Being Testvector generation")
@@ -84,8 +86,11 @@ class Commands:
         self.logger.info("Finished Testvector generation")
         return [100, 100]
 
+
     def cipher_text_gen(self, args):
         self.logger.info("Being Ciphertext generation")
+        
+        
         self.logger.debug(
             "The vector length is {} and the number of vectors is {}".format(
                 args[0], args[1]
@@ -94,17 +99,20 @@ class Commands:
         self.logger.info("Finished Ciphertext generation")
         return [100, 100]
 
+
     def encrypt(self, args, type="QPP"):
         self.logger.info("Begin {} Encryption".format(type))
 
         self.logger.info("Finished {} Encryption".format(type))
         return
 
+
     def decrypt(self, args, type="QPP"):
         self.logger.info("Begin {} Deryption".format(type))
 
         self.logger.info("Finished {} Decryption".format(type))
         return
+
 
     def compare_results(self, results, tests):
         self.logger.info("Begin comparison between decrypted results and plaintext")
