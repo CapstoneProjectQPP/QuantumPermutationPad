@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # importing the required modules
-import os
-import argparse, logging
+import argparse
+import logging
 import random
 
 LOG_FILE = "test.log"
@@ -12,7 +12,8 @@ class Logger:
 
         # to format the log messages that are printed to terminal
         logging.basicConfig(
-            format="%(levelname)s : %(name)s : %(funcName)s[line %(lineno)s] : %(message)s"
+            format="%(levelname)s : %(name)s : %(funcName)s[line %(lineno)s]"
+            + ": %(message)s"
         )
 
         # create logger instance
@@ -22,10 +23,11 @@ class Logger:
         log.setLevel(level)
 
         # format the .log file messages
-        if file != None:
+        if file is not None:
             file_handler = logging.FileHandler(file)
             formatter = logging.Formatter(
-                "%(asctime)s : %(levelname)s : Module %(module)s : %(funcName)s[line %(lineno)s] : %(name)s : %(message)s"
+                "%(asctime)s : %(levelname)s : Module %(module)s"
+                + ": %(funcName)s[line %(lineno)s] : %(name)s : %(message)s"
             )
             file_handler.setFormatter(formatter)
             log.addHandler(file_handler)
@@ -56,16 +58,13 @@ class Commands:
         self.logger = logger
         return
 
-
     @staticmethod
     def random_string(len):
-        MAX_LIMIT = 255
         random_string = ""
         for ii in range(len):
-            random_int = random.randint(97, 97 + 26 -1)
+            random_int = random.randint(33, 126)
             random_string += chr(random_int)
         return random_string
-
 
     def test_vector_gen(self, args):
         self.logger.info("Being Testvector generation")
@@ -82,15 +81,11 @@ class Commands:
             )
         )
         self.logger.debug("Test vectors {}".format(test_list))
-        
         self.logger.info("Finished Testvector generation")
         return [100, 100]
 
-
     def cipher_text_gen(self, args):
         self.logger.info("Being Ciphertext generation")
-        
-        
         self.logger.debug(
             "The vector length is {} and the number of vectors is {}".format(
                 args[0], args[1]
@@ -99,13 +94,11 @@ class Commands:
         self.logger.info("Finished Ciphertext generation")
         return [100, 100]
 
-
     def encrypt(self, args, type="QPP"):
         self.logger.info("Begin {} Encryption".format(type))
 
         self.logger.info("Finished {} Encryption".format(type))
         return
-
 
     def decrypt(self, args, type="QPP"):
         self.logger.info("Begin {} Deryption".format(type))
@@ -113,11 +106,10 @@ class Commands:
         self.logger.info("Finished {} Decryption".format(type))
         return
 
-
     def compare_results(self, results, tests):
-        self.logger.info("Begin comparison between decrypted results and plaintext")
+        self.logger.info("Begin comparison between results and plaintext")
 
-        self.logger.info("Finished comparison between decrypted results and plaintext")
+        self.logger.info("Finished comparison between results and plaintext")
         return
 
 
