@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<!--
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <h1>Hello World!</h1>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
+-->
+<html>
+  <style type="text/css">
+    /* Background */
+    .bg {
+      color: #b0c4de;
+      background-color: #282c34;
+    }
+    /* PreWrapper */
+    .chroma {
+      color: #b0c4de;
+      background-color: #282c34;
+    }
+    /* LineLink */
+    .chroma .lnlinks {
+      outline: none;
+      text-decoration: none;
+      color: inherit;
+    }
+    /* LineTableTD */
+    .chroma .lntd {
+      vertical-align: top;
+      padding: 0;
+      margin: 0;
+      border: 0;
+    }
+    /* LineTable */
+    .chroma .lntable {
+      border-spacing: 0;
+      padding: 0;
+      margin: 0;
+      border: 0;
+    }
+    /* LineHighlight */
+    .chroma .hl {
+      background-color: #3d4148;
+    }
+    /* LineNumbersTable */
+    .chroma .lnt {
+      white-space: pre;
+      -webkit-user-select: none;
+      user-select: none;
+      margin-right: 0.4em;
+      padding: 0 0.4em 0 0.4em;
+      color: #58626f;
+    }
+    /* LineNumbers */
+    .chroma .ln {
+      white-space: pre;
+      -webkit-user-select: none;
+      user-select: none;
+      margin-right: 0.4em;
+      padding: 0 0.4em 0 0.4em;
+      color: #58626f;
+    }
+    /* Line */
+    .chroma .line {
+      display: flex;
+    }
+    /* Keyword */
+    .chroma .k {
+      color: #c678dd;
+    }
+    /* KeywordConstant */
+    .chroma .kc {
+      color: #b756ff;
+      font-weight: bold;
+    }
+    /* KeywordDeclaration */
+    .chroma .kd {
+      color: #c678dd;
+    }
+    /* KeywordNamespace */
+    .chroma .kn {
+      color: #c678dd;
+    }
+    /* KeywordPseudo */
+    .chroma .kp {
+      color: #c678dd;
+    }
+    /* KeywordReserved */
+    .chroma .kr {
+      color: #c678dd;
+    }
+    /* KeywordType */
+    .chroma .kt {
+      color: #ef8383;
+    }
+    /* Name */
+    .chroma .n {
+      color: #c1abea;
+    }
+    /* NameAttribute */
+    .chroma .na {
+      color: #b3d23c;
+    }
+    /* NameBuiltin */
+    .chroma .nb {
+      color: #ef8383;
+    }
+    /* NameBuiltinPseudo */
+    .chroma .bp {
+      color: #c1abea;
+    }
+    /* NameClass */
+    .chroma .nc {
+      color: #76a9f9;
+    }
+    /* NameConstant */
+    .chroma .no {
+      color: #b756ff;
+      font-weight: bold;
+    }
+    /* NameDecorator */
+    .chroma .nd {
+      color: #e5c07b;
+    }
+    /* NameEntity */
+    .chroma .ni {
+      color: #bda26f;
+    }
+    /* NameException */
+    .chroma .ne {
+      color: #fd7474;
+      font-weight: bold;
+    }
+    /* NameFunction */
+    .chroma .nf {
+      color: #00b1f7;
+    }
+    /* NameFunctionMagic */
+    .chroma .fm {
+      color: #c1abea;
+    }
+    /* NameLabel */
+    .chroma .nl {
+      color: #f5a40d;
+    }
+    /* NameNamespace */
+    .chroma .nn {
+      color: #76a9f9;
+    }
+    /* NameOther */
+    .chroma .nx {
+      color: #c1abea;
+    }
+    /* NameProperty */
+    .chroma .py {
+      color: #cebc3a;
+    }
+    /* NameTag */
+    .chroma .nt {
+      color: #e06c75;
+    }
+    /* NameVariable */
+    .chroma .nv {
+      color: #dcaeea;
+    }
+    /* NameVariableClass */
+    .chroma .vc {
+      color: #c1abea;
+    }
+    /* NameVariableGlobal */
+    .chroma .vg {
+      color: #dcaeea;
+      font-weight: bold;
+    }
+    /* NameVariableInstance */
+    .chroma .vi {
+      color: #e06c75;
+    }
+    /* NameVariableMagic */
+    .chroma .vm {
+      color: #c1abea;
+    }
+    /* Literal */
+    .chroma .l {
+      color: #98c379;
+    }
+    /* LiteralDate */
+    .chroma .ld {
+      color: #98c379;
+    }
+    /* LiteralString */
+    .chroma .s {
+      color: #98c379;
+    }
+    /* LiteralStringAffix */
+    .chroma .sa {
+      color: #98c379;
+    }
+    /* LiteralStringBacktick */
+    .chroma .sb {
+      color: #98c379;
+    }
+    /* LiteralStringChar */
+    .chroma .sc {
+      color: #98c379;
+    }
+    /* LiteralStringDelimiter */
+    .chroma .dl {
+      color: #98c379;
+    }
+    /* LiteralStringDoc */
+    .chroma .sd {
+      color: #7e97c3;
+    }
+    /* LiteralStringDouble */
+    .chroma .s2 {
+      color: #63c381;
+    }
+    /* LiteralStringEscape */
+    .chroma .se {
+      color: #d26464;
+      font-weight: bold;
+    }
+    /* LiteralStringHeredoc */
+    .chroma .sh {
+      color: #98c379;
+    }
+    /* LiteralStringInterpol */
+    .chroma .si {
+      color: #98c379;
+    }
+    /* LiteralStringOther */
+    .chroma .sx {
+      color: #70b33f;
+    }
+    /* LiteralStringRegex */
+    .chroma .sr {
+      color: #56b6c2;
+    }
+    /* LiteralStringSingle */
+    .chroma .s1 {
+      color: #98c379;
+    }
+    /* LiteralStringSymbol */
+    .chroma .ss {
+      color: #56b6c2;
+    }
+    /* LiteralNumber */
+    .chroma .m {
+      color: #d19a66;
+    }
+    /* LiteralNumberBin */
+    .chroma .mb {
+      color: #d19a66;
+    }
+    /* LiteralNumberFloat */
+    .chroma .mf {
+      color: #d19a66;
+    }
+    /* LiteralNumberHex */
+    .chroma .mh {
+      color: #d19a66;
+    }
+    /* LiteralNumberInteger */
+    .chroma .mi {
+      color: #d19a66;
+    }
+    /* LiteralNumberIntegerLong */
+    .chroma .il {
+      color: #d19a66;
+    }
+    /* LiteralNumberOct */
+    .chroma .mo {
+      color: #d19a66;
+    }
+    /* Operator */
+    .chroma .o {
+      color: #c7bf54;
+    }
+    /* OperatorWord */
+    .chroma .ow {
+      color: #b756ff;
+      font-weight: bold;
+    }
+    /* Comment */
+    .chroma .c {
+      color: #8a93a5;
+      font-style: italic;
+    }
+    /* CommentHashbang */
+    .chroma .ch {
+      color: #8a93a5;
+      font-weight: bold;
+      font-style: italic;
+    }
+    /* CommentMultiline */
+    .chroma .cm {
+      color: #8a93a5;
+      font-style: italic;
+    }
+    /* CommentSingle */
+    .chroma .c1 {
+      color: #8a93a5;
+      font-style: italic;
+    }
+    /* CommentSpecial */
+    .chroma .cs {
+      color: #8a93a5;
+      font-style: italic;
+    }
+    /* CommentPreproc */
+    .chroma .cp {
+      color: #8a93a5;
+      font-style: italic;
+    }
+    /* CommentPreprocFile */
+    .chroma .cpf {
+      color: #8a93a5;
+      font-style: italic;
+    }
+    /* GenericEmph */
+    .chroma .ge {
+      font-style: italic;
+    }
+    /* GenericHeading */
+    .chroma .gh {
+      color: #a2cbff;
+      font-weight: bold;
+    }
+    /* GenericInserted */
+    .chroma .gi {
+      color: #a6e22e;
+    }
+    /* GenericOutput */
+    .chroma .go {
+      color: #a6e22e;
+    }
+    /* GenericPrompt */
+    .chroma .gp {
+      color: #a6e22e;
+    }
+    /* GenericStrong */
+    .chroma .gs {
+      font-weight: bold;
+    }
+    /* GenericSubheading */
+    .chroma .gu {
+      color: #a2cbff;
+    }
+    /* GenericTraceback */
+    .chroma .gt {
+      color: #a2cbff;
+    }
+    /* GenericUnderline */
+    .chroma .gl {
+      text-decoration: underline;
+    }
+    body {
+      color: #b0c4de;
+      background-color: #282c34;
+    }
+  </style>
+  <body class="bg">
+    <pre
+      class="chroma"
+    ><code><span class="line"><span class="cl"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en-US&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#34;utf-8&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;X-UA-Compatible&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;IE=edge&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;viewport&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;width=device-width&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;</span><span class="nt">link</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;styles/main.css&#34;</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Quantum Permutation Pad Landing Page<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;./pages/cal.html&#34;</span><span class="p">&gt;</span>-&gt;<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>Header<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"> &#34;Moloch the incomprehensible prison! Moloch the crossbone soulless
+</span></span><span class="line"><span class="cl"> jailhouse and Congress of sorrows! Moloch whose buildings are judgment!
+</span></span><span class="line"><span class="cl"> Moloch the vast stone of war! Moloch the stunned governments! Moloch whose
+</span></span><span class="line"><span class="cl"> mind is pure machinery! Moloch whose blood is running money! Moloch whose
+</span></span><span class="line"><span class="cl"> fingers are ten armies! Moloch whose breast is a cannibal dynamo! Moloch
+</span></span><span class="line"><span class="cl"> whose ear is a smoking tomb! Moloch whose eyes are a thousand blind
+</span></span><span class="line"><span class="cl"> windows! Moloch whose skyscrapers stand in the long streets like endless
+</span></span><span class="line"><span class="cl"> Jehovahs! Moloch whose factories dream and croak in the fog! Moloch whose
+</span></span><span class="line"><span class="cl"> smoke-stacks and antennae crown the cities!&#34;
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>- Allen Ginsberg, <span class="p">&lt;</span><span class="nt">b</span><span class="p">&gt;</span>Howl<span class="p">&lt;/</span><span class="nt">b</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;images/pic.webp&#34;</span> <span class="na">alt</span><span class="o">=</span><span class="s">&#34;Simulation and Simulacra&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;scripts/web.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span></code></pre>
+  </body>
+</html>

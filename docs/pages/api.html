@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../styles/main.css" rel="stylesheet" />
+    <title>QPP API</title>
+  </head>
+  <body class="api">
+    <header>
+      <!-- Navigation menu -->
+      <nav>
+        <ul class="header-list">
+          <li class="header-logo">
+            <a href="../index.html"> Header Logo </a>
+          </li>
+          <li class="header-link">
+            <a href="../pages/api.html"> API </a>
+          </li>
+          <li class="header-link">
+            <a href="../pages/research.html"> Research </a>
+          </li>
+          <li class="header-link">
+            <a href="../pages/demo.html"> Demo </a>
+          </li>
+          <li class="button">
+            <a href="../pages/cal.html"> Get Started </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- Header Block -->
+      <div id="hero" class="api">
+        <div class="hero-text">
+          <h1 class="hero-title" style="align-self: center">
+            API Documentation
+          </h1>
+        </div>
+        <div class="api-filter">
+          <label for="api-filter"> Filter </label>
+          <input id="api-filter" type="search" placeholder="Enter keyword" />
+        </div>
+      </div>
+    </header>
+
+    <article class="api-section">
+      <h1>Global API</h1>
+      <div class="api-section-body">
+        <div class="api-group">
+          <h1>CC -> nodeE</h1>
+          <ul>
+            <li>RequestHandshake()</li>
+            <li>ReceivedID()</li>
+            <li>SetApprovedToCommunicate()</li>
+            <li>SetSeed()</li>
+            <li>Encrypt()</li>
+            <li>Decrypt()</li>
+          </ul>
+        </div>
+        <div class="api-group">
+          <h1>nodeE -> CC</h1>
+          <ul>
+            <li>SendID()</li>
+            <li>HSComplete()</li>
+            <li>SendEncrypted()</li>
+            <li>SendDecrypted()</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+  </body>
+</html>
