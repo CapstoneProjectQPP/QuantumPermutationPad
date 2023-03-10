@@ -1,3 +1,6 @@
 [submodule "Xceed"]
 	path = Xceed
 	url = https://github.com/danny-cpp/Xceed.git
+[submodule "nodeE-Zybo-Z20"]
+	path = nodeE-Zybo-Z20
+	url = https://github.com/CapstoneProjectQPP/nodeE-Zybo-Z20.git
