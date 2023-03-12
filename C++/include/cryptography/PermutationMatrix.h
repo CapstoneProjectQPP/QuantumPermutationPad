@@ -21,6 +21,9 @@ namespace QPP {
         uint8_t getValueAt(int row, int col);
         void setValueAt(int row, int col, int value);
         std::array<uint8_t, params::mat_len> multiply (std::array<uint8_t, params::mat_len> vector);
+        //transpose the permutation matrix and return a new one
+        PermutationMatrix transpose();
+
 
     private:
         

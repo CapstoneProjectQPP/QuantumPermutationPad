@@ -28,6 +28,16 @@ namespace QPP {
             }
             return result;
         }
+        //transpose the permutation matrix and return a new one
+        PermutationMatrix PermutationMatrix::transpose(){
+            PermutationMatrix result;
+            for(int i = 0; i < params::mat_len; i++) {
+                for(int j = 0; j < params::mat_len; j++) {
+                    result.setValueAt(i, j, this->matrix[j][i]);
+                }
+            }
+            return result;
+        }
 
         
 
