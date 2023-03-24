@@ -4,6 +4,7 @@ import argparse
 import logging
 import random
 from Client import *
+import json
 from threading import Thread
 LOG_FILE = "test.log"
 
@@ -114,6 +115,7 @@ class Commands:
         return
 
 
+
 class QPP_parser:
     def __init__(self) -> None:
         self.parser = argparse.ArgumentParser(
@@ -176,8 +178,9 @@ class QPP_parser:
         return
 
     def UserInput(self) -> bool:
+        task_id = 0
         global LOG_FILE
-
+        #setup connection to Core Complex
         client = Client(64999,'127.0.0.1','CLI')
         client.connection_setup()
 
@@ -187,51 +190,59 @@ class QPP_parser:
             args = self.parser.parse_args([userinput])
             print(args)
 
-        print(args)
+            if args.verbose:
+                log_level = logging.DEBUG
+            else:
+                log_level = logging.ERROR
 
-        if args.verbose:
-            log_level = logging.DEBUG
-        else:
-            log_level = logging.ERROR
+            if not args.logging:
+                LOG_FILE = None
 
-        if not args.logging:
-            LOG_FILE = None
+            # configure logging to user preference
+            logger = Logger.init(LOG_FILE, log_level)
 
-        # configure logging to user preference
-        # logger = Logger.init(LOG_FILE, log_level)
-        #
-        # logger.debug("DEBUG_IN_PROGRAM")
-        # logger.info("INFO_IN_PROGRAM")
-        # logger.warning("WARNING_IN_PROGRAM")
-        # logger.error("ERROR_IN_PROGRAM")
-        # logger.critical("CRITICAL_IN_PROGRAM")
-        #
-        # QPP_commands = Commands(logger)
+            logger.debug("DEBUG_IN_PROGRAM")
+            logger.info("INFO_IN_PROGRAM")
+            logger.warning("WARNING_IN_PROGRAM")
+            logger.error("ERROR_IN_PROGRAM")
+            logger.critical("CRITICAL_IN_PROGRAM")
 
-        # test_vectors = QPP_commands.test_vector_gen(args.vector)
+            commands = Commands(logger)
 
-        #setup connection to Core Complex
-        #spwan thread for receving message
-        # t1 = Thread()
-        # t1.start_new_thread(client.connection_recv())
-        # t1.
+            # test_vectors = QPP_commands.test_vector_gen(args.vector)
 
-        if args.encryption:
-            # qpp_cipher = QPP_commands.encrypt(test_vectors, "QPP")
-            # if args.AES:
-            #     aes_cipher = QPP_commands.encrypt(test_vectors, "AES")
-            print("Hello")
-            client.connection_send("encryption api json format")
-            #send the encryption data to the CoreComplex
 
-        elif args.cipher_text:
-            print("Hi")
 
-        elif args.decryption:
-            print("Decryption")
+            if args.encryption:
+                # qpp_cipher = QPP_commands.encrypt(test_vectors, "QPP")
+                # if args.AES:
+                #     aes_cipher = QPP_commands.encrypt(test_vectors, "AES")
+                print("Send encryption")
+                #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
+                task_id += 1
+                msg = client.string_to_json("ENCRYPT", str(task_id), "GC", "0", "0", "0", "0", "Hello World")
+                client.connection_send(msg)
+                client.connection_send('\n')
+                #send the encryption data to the CoreComplex
 
-        # QPP_commands.compare_results(qpp_results, test_vectors)
-        # QPP_commands.compare_results(aes_results, test_vectors)
+            elif args.cipher_text:
+                print("Hi")
+
+            elif args.decryption:
+                print("Decryption")
+
+
+                #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
+                task_id += 1
+                msg = client.string_to_json("DECRYPT", str(task_id), "GC", "0", "0", "0", "0", "Hello World")
+
+                client.connection_send(msg)
+                client.connection_send('\n')
+
+                #recieve the decryption data from the CoreComplex
+
+            # QPP_commands.compare_results(qpp_results, test_vectors)
+            # QPP_commands.compare_results(aes_results, test_vectors)
 
 
 if __name__ == "__main__":
