@@ -178,8 +178,14 @@ class QPP_parser:
     def UserInput(self) -> bool:
         global LOG_FILE
 
+        client = Client(64999,'127.0.0.1','CLI')
+        client.connection_setup()
+
         # parse the arguments from standard input
-        args = self.parser.parse_args()
+        while True:
+            userinput = input("-> ")
+            args = self.parser.parse_args([userinput])
+            print(args)
 
         print(args)
 
@@ -205,8 +211,6 @@ class QPP_parser:
         # test_vectors = QPP_commands.test_vector_gen(args.vector)
 
         #setup connection to Core Complex
-        client = Client(64999,'127.0.0.1','CLI')
-        client.connection_setup()
         #spwan thread for receving message
         # t1 = Thread()
         # t1.start_new_thread(client.connection_recv())
