@@ -1,5 +1,6 @@
 import socket
 import queue
+import json
 from threading import Lock
 """
 Steps:
@@ -25,10 +26,11 @@ class Client:
         self.s.connect((self.host, self.port))
 
         # SEND the handshake
-        self.connection_send()
+        msg = self.string_to_json("REQUEST_HANDSHAKE", "0")
+        self.connection_send(msg)
+        self.connection_send('\n')
 
-    def connection_send(self,
-                        message='{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n'):
+    def connection_send(self, message):
         print(message)
         if message != 'q':
             self.s.send(message.encode('ascii'))
@@ -38,7 +40,7 @@ class Client:
         while True:
             s = self.s.recv(1024)
             self.mutex.acquire()
-            self.recv_buffer.put(s)
+            self.recv_queue.put(s)
             self.mutex.release()
             print("Received from server: "+s)
 
@@ -52,7 +54,20 @@ class Client:
         else:
             self.mutex.release()
             return 'Empty Queue'
-        
 
+
+    @staticmethod
+    def string_to_json(api_call, task_id, interface_type = "GC", sender_id = "0", payload_total_fragments = "0",
+                       payload_fragment_number = "0", payload_size = "0", payload_content = "Hello World"):
+        msg = {"api_call":api_call,
+               "task_id":task_id,
+               "interface_type":interface_type,
+               "sender_id":sender_id,
+               "payload_total_fragments": payload_total_fragments,
+               "payload_fragment_number": payload_fragment_number,
+               "payload_size": payload_size,
+               "payload_content": payload_content}
+
+        return json.dumps(msg)
 
 
