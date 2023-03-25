@@ -9,4 +9,11 @@
 /test_framework_package/.idea
 
 # UI test folder
-/UI/examples
+/docs/examples
+
+# flask venv and pycache
+/docs/flask/venv/
+/docs/flask/__pycache__/
+
+# ccls language server cache
+/.ccls-cache/
