@@ -22,8 +22,8 @@ class Client:
         self.name = name
         self.recv_queue = queue.Queue()
         self.send_queue = queue.Queue()
-        self.mutex = Lock()
-        self.outgoing_mutex = Lock()
+        # self.mutex = Lock()
+        # self.outgoing_mutex = Lock()
 
     def connection_setup(self):
         self.s.connect((self.host, self.port))
@@ -37,43 +37,39 @@ class Client:
 
     def connection_send(self):
         while True: 
-            self.outgoing_mutex.acquire()
-            if not self.send_queue.empty():
-                message = self.send_queue.get()
-                self.outgoing_mutex.release()
-                print(message)
-                self.s.send(message.encode('ascii'))
-                print("sent")
-            else:
-                self.outgoing_mutex.release()
-                print("CONECT_SEND: SLEEPING")
-                time.sleep(1)
-
+            # self.outgoing_mutex.acquire()
+           
+            message = self.send_queue.get()
+            # self.outgoing_mutex.release()
+            print(message)
+            self.s.send(message.encode('ascii'))
+            print("sent")
+            
     def to_outgoing_queue(self, message):
-        self.outgoing_mutex.acquire()
+        # self.outgoing_mutex.acquire()
         self.send_queue.put(message)
         print("OUTGOING QUEUE {}".format(message))
-        self.outgoing_mutex.release()
+        # self.outgoing_mutex.release()
 
 
 
     def connection_recv(self):
         while True:
             msg = self.s.recv(4096)
-            self.mutex.acquire()
+            # self.mutex.acquire()
             self.recv_queue.put(msg)
-            self.mutex.release()
+            # self.mutex.release()
             print("Received from server: " + msg.decode('ascii'))
 
     def print_outgoing_queue(self):
-        self.mutex.acquire()
+        # self.mutex.acquire()
         if not self.recv_queue.empty():
             data = self.recv_queue.get()
-            self.mutex.release()
+            # self.mutex.release()
             return data
 
         else:
-            self.mutex.release()
+            # self.mutex.release()
             return None
 
 
