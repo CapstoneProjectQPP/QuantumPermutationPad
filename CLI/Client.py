@@ -3,6 +3,7 @@ import queue
 import json
 import threading
 from threading import Lock
+import time
 """
 Steps:
 Get the user interaction
@@ -22,20 +23,39 @@ class Client:
         self.recv_queue = queue.Queue()
         self.send_queue = queue.Queue()
         self.mutex = Lock()
+        self.outgoing_mutex = Lock()
 
     def connection_setup(self):
         self.s.connect((self.host, self.port))
 
         # SEND the handshake
-        msg = self.string_to_json("REQUEST_HANDSHAKE", "0")
-        self.connection_send(msg)
-        self.connection_send('\n')
+        # msg = self.string_to_json("REQUEST_HANDSHAKE", "0")
+        # self.send_queue.put(msg)
+        # self.send_queue.put('\n')
+        # # self.connection_send(msg)
+        # self.connection_send('\n')
 
-    def connection_send(self, message):
-        print(message)
-        if message != 'q':
-            self.s.send(message.encode('ascii'))
-            print("sent")
+    def connection_send(self):
+        while True: 
+            self.outgoing_mutex.acquire()
+            if not self.send_queue.empty():
+                message = self.send_queue.get()
+                self.outgoing_mutex.release()
+                print(message)
+                self.s.send(message.encode('ascii'))
+                print("sent")
+            else:
+                self.outgoing_mutex.release()
+                print("CONECT_SEND: SLEEPING")
+                time.sleep(1)
+
+    def to_outgoing_queue(self, message):
+        self.outgoing_mutex.acquire()
+        self.send_queue.put(message)
+        print("OUTGOING QUEUE {}".format(message))
+        self.outgoing_mutex.release()
+
+
 
     def connection_recv(self):
         while True:
@@ -43,9 +63,9 @@ class Client:
             self.mutex.acquire()
             self.recv_queue.put(msg)
             self.mutex.release()
-            print("Received from server: "+ msg)
+            print("Received from server: " + msg.decode('ascii'))
 
-    def get_recv_message(self):
+    def print_outgoing_queue(self):
         self.mutex.acquire()
         if not self.recv_queue.empty():
             data = self.recv_queue.get()

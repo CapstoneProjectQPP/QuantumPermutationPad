@@ -182,13 +182,29 @@ class QPP_parser:
         task_id = 0
         global LOG_FILE
         #setup connection to Core Complex
+        print("CLIENT")
+        
         client = Client(64999,'127.0.0.1','CLI')
         client.connection_setup()
         
+        print("THREAD CREATE")
+        
         # multithreading
-        producer_t = threading.Thread(target=client.connection_recv())
-        producer_t.start()
+        incoming_t = threading.Thread(target=client.connection_recv, args=())
+        print("THREAD OUT")
+        outgoing_t = threading.Thread(target=client.connection_send, args=())
+        print("THREAD MSG")
+        print_msg_t = threading.Thread(target=client.print_outgoing_queue, args=())
+        
+        print("THREAD INCOME")
+        
+        incoming_t.start()
+        print("THREAD OUTGO")
+        outgoing_t.start()
+        print("THREAD START")
+        print_msg_t.start()
 
+        print("THREAD START")
         # parse the arguments from standard input
         while True:
             userinput = input("-> ")
@@ -226,15 +242,17 @@ class QPP_parser:
                 #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
                 task_id += 1
                 msg = client.string_to_json("ENCRYPT", str(task_id), "GC", "0", "0", "0", "0", "Hello World")
-                client.connection_send(msg)
-                client.connection_send('\n')
+                # client.connection_send(msg)
+                # client.connection_send('\n')
                 
-                recv = client.get_recv_message()
-                while recv == None:
-                    recv = client.get_recv_message()
-                    continue
-                print(recv)
+                # recv = client.get_recv_message()
+                # while recv == None:
+                #     recv = client.get_recv_message()
+                #     continue
+                # print(recv)
                 #send the encryption data to the CoreComplex
+                
+                client.to_outgoing_queue(msg)
 
             elif args.cipher_text:
                 print("Hi")
