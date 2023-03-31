@@ -1,6 +1,7 @@
 import socket
 import queue
 import json
+import threading
 from threading import Lock
 """
 Steps:
@@ -38,11 +39,11 @@ class Client:
 
     def connection_recv(self):
         while True:
-            s = self.s.recv(1024)
+            msg = self.s.recv(1024)
             self.mutex.acquire()
-            self.recv_queue.put(s)
+            self.recv_queue.put(msg)
             self.mutex.release()
-            print("Received from server: "+s)
+            print("Received from server: "+ msg)
 
     def get_recv_message(self):
         self.mutex.acquire()
@@ -53,7 +54,7 @@ class Client:
 
         else:
             self.mutex.release()
-            return 'Empty Queue'
+            return None
 
 
     @staticmethod

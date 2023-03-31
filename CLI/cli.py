@@ -5,9 +5,10 @@ import logging
 import random
 from Client import *
 import json
-from threading import Thread
+import threading
 LOG_FILE = "test.log"
 
+cv = threading.Condition()
 
 class Logger:
     def init(file, level) -> None:
@@ -183,6 +184,10 @@ class QPP_parser:
         #setup connection to Core Complex
         client = Client(64999,'127.0.0.1','CLI')
         client.connection_setup()
+        
+        # multithreading
+        producer_t = threading.Thread(target=client.connection_recv())
+        producer_t.start()
 
         # parse the arguments from standard input
         while True:
@@ -223,6 +228,12 @@ class QPP_parser:
                 msg = client.string_to_json("ENCRYPT", str(task_id), "GC", "0", "0", "0", "0", "Hello World")
                 client.connection_send(msg)
                 client.connection_send('\n')
+                
+                recv = client.get_recv_message()
+                while recv == None:
+                    recv = client.get_recv_message()
+                    continue
+                print(recv)
                 #send the encryption data to the CoreComplex
 
             elif args.cipher_text:
@@ -243,6 +254,8 @@ class QPP_parser:
 
             # QPP_commands.compare_results(qpp_results, test_vectors)
             # QPP_commands.compare_results(aes_results, test_vectors)
+            
+        producer_t.join()
 
 
 if __name__ == "__main__":
