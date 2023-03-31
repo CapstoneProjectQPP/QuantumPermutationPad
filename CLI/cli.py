@@ -4,9 +4,11 @@ import argparse
 import logging
 import random
 from Client import *
-from threading import Thread
+import json
+import threading
 LOG_FILE = "test.log"
 
+cv = threading.Condition()
 
 class Logger:
     def init(file, level) -> None:
@@ -114,6 +116,7 @@ class Commands:
         return
 
 
+
 class QPP_parser:
     def __init__(self) -> None:
         self.parser = argparse.ArgumentParser(
@@ -176,58 +179,114 @@ class QPP_parser:
         return
 
     def UserInput(self) -> bool:
+        task_id = 0
         global LOG_FILE
+        #setup connection to Core Complex
+        print("CLIENT")
+        
+        client = Client(64999,'127.0.0.1','CLI')
+        client.connection_setup()
+        
+        print("THREAD CREATE")
+        
+        # multithreading
+        incoming_t = threading.Thread(target=client.connection_recv, args=())
+        print("THREAD OUT")
+        outgoing_t = threading.Thread(target=client.connection_send, args=())
+        print("THREAD MSG")
+        print_msg_t = threading.Thread(target=client.print_outgoing_queue, args=())
+        
+        print("THREAD INCOME")
+        
+        incoming_t.start()
+        print("THREAD OUTGO")
+        outgoing_t.start()
+        print("THREAD START")
+        print_msg_t.start()
 
+        print("THREAD START")
         # parse the arguments from standard input
-        args = self.parser.parse_args()
+        while True:
+            userinput = input("-> ")
+            args = self.parser.parse_args([userinput])
+            print(args)
 
-        print(args)
+            if args.verbose:
+                log_level = logging.DEBUG
+            else:
+                log_level = logging.ERROR
+
+<<<<<<< Updated upstream
+            if not args.logging:
+                LOG_FILE = None
+=======
+        json = \
+        {
+            "task_id": 1,
+            "sender_id": 1
+        }
 
         if args.verbose:
             log_level = logging.DEBUG
         else:
             log_level = logging.ERROR
+>>>>>>> Stashed changes
 
-        if not args.logging:
-            LOG_FILE = None
+            # configure logging to user preference
+            logger = Logger.init(LOG_FILE, log_level)
 
-        # configure logging to user preference
-        # logger = Logger.init(LOG_FILE, log_level)
-        #
-        # logger.debug("DEBUG_IN_PROGRAM")
-        # logger.info("INFO_IN_PROGRAM")
-        # logger.warning("WARNING_IN_PROGRAM")
-        # logger.error("ERROR_IN_PROGRAM")
-        # logger.critical("CRITICAL_IN_PROGRAM")
-        #
-        # QPP_commands = Commands(logger)
+            logger.debug("DEBUG_IN_PROGRAM")
+            logger.info("INFO_IN_PROGRAM")
+            logger.warning("WARNING_IN_PROGRAM")
+            logger.error("ERROR_IN_PROGRAM")
+            logger.critical("CRITICAL_IN_PROGRAM")
 
-        # test_vectors = QPP_commands.test_vector_gen(args.vector)
+            commands = Commands(logger)
 
-        #setup connection to Core Complex
-        client = Client(64999,'127.0.0.1','CLI')
-        client.connection_setup()
-        #spwan thread for receving message
-        # t1 = Thread()
-        # t1.start_new_thread(client.connection_recv())
-        # t1.
+            # test_vectors = QPP_commands.test_vector_gen(args.vector)
 
-        if args.encryption:
-            # qpp_cipher = QPP_commands.encrypt(test_vectors, "QPP")
-            # if args.AES:
-            #     aes_cipher = QPP_commands.encrypt(test_vectors, "AES")
-            print("Hello")
-            client.connection_send("encryption api json format")
-            #send the encryption data to the CoreComplex
 
-        elif args.cipher_text:
-            print("Hi")
 
-        elif args.decryption:
-            print("Decryption")
+            if args.encryption:
+                # qpp_cipher = QPP_commands.encrypt(test_vectors, "QPP")
+                # if args.AES:
+                #     aes_cipher = QPP_commands.encrypt(test_vectors, "AES")
+                print("Send encryption")
+                #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
+                task_id += 1
+                msg = client.string_to_json("ENCRYPT", str(task_id), "GC", "0", "0", "0", "0", "Hello World")
+                # client.connection_send(msg)
+                # client.connection_send('\n')
+                
+                # recv = client.get_recv_message()
+                # while recv == None:
+                #     recv = client.get_recv_message()
+                #     continue
+                # print(recv)
+                #send the encryption data to the CoreComplex
+                
+                client.to_outgoing_queue(msg)
 
-        # QPP_commands.compare_results(qpp_results, test_vectors)
-        # QPP_commands.compare_results(aes_results, test_vectors)
+            elif args.cipher_text:
+                print("Hi")
+
+            elif args.decryption:
+                print("Decryption")
+
+
+                #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
+                task_id += 1
+                msg = client.string_to_json("DECRYPT", str(task_id), "GC", "0", "0", "0", "0", "Hello World")
+
+                client.connection_send(msg)
+                client.connection_send('\n')
+
+                #recieve the decryption data from the CoreComplex
+
+            # QPP_commands.compare_results(qpp_results, test_vectors)
+            # QPP_commands.compare_results(aes_results, test_vectors)
+            
+        producer_t.join()
 
 
 if __name__ == "__main__":
