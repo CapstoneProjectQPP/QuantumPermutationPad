@@ -59,7 +59,7 @@ class Client:
 
     def connection_recv(self):
         while True:
-            msg = self.s.recv(1024)
+            msg = self.s.recv(4096)
             self.mutex.acquire()
             self.recv_queue.put(msg)
             self.mutex.release()
