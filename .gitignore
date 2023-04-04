@@ -6,6 +6,10 @@
 # Mac/OSX
 .DS_Store
 
+# flask pycache
+/docs/examples/flask/pycache/
+/docs/examples/flask/venv/
+
 /test_framework_package/.idea
 
 # UI test folder
@@ -21,3 +25,4 @@
 
 # pycache for CLI
 /CLI/__pycache__/
+=======
