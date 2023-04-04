@@ -11,28 +11,71 @@
 
 {% block content %}
 
-<div class="api-filter">
-  <label for="algo-select"> Algorithim </label>
-  <select name="algo-select" id="algo-select" placeholder="Select Algorithim">
-    {% for algo in algo_list %}
-      <option value="{{ algo }}">{{ algo }}</option>
-    {% endfor %}
-  </select>
-</div>
+<form method="POST" action="{{ url_for('calc') }}">
+  {% if vector_select == "True" %}
+  <button type='submit' name="vector_select" value="False"> Automated Test Vectors </button>
+  {% else %}
+  <button type='submit' name="vector_select" value="True"> File Upload </button>
+  {% endif %}
+</form>
 
+{% if vector_select == "True" %}
+  <form method="POST" action="{{ url_for('view') }}"
+    <div class="api-filter">
+      <label for="algo-select"> Algorithim </label>
+      <select name="algo_select" id="algo-select" placeholder="Select Algorithim">
+        {% for algo in algo_list %}
+          <option value="{{ algo }}">{{ algo }}</option>
+        {% endfor %}
+      </select>
+    </div>
 
-<div class="api-filter">
-  <label for="algo-select"> Test Type </label>
-  <select name="algo-select" id="algo-select" placeholder="Select Algorithim">
-    {% for test in test_list %}
-      <option value="{{ test }}">{{ test }}</option>
-    {% endfor %}
-  </select>
-</div>
+    <div class="api-filter">
+      <label for="algo-select"> Test Type </label>
+      <select name="test_select" id="algo-select" placeholder="Select Algorithim">
+        {% for test in test_list %}
+          <option value="{{ test }}">{{ test }}</option>
+        {% endfor %}
+      </select>
+    </div>
 
-<div class="api-filter">
-  <label for="api-filter">Plain-text input</label>
-  <input id="api-filter" type="search" placeholder="Enter keyword"/>
-</div>
+    <div class="api-filter">
+      <label for="api-filter">Test Vector Length</label>
+      <input id="api-filter" type="text" name="vector_len" 
+             placeholder="Number of characters in test string"/>
+    </div>
+
+    <div class="api-filter">
+      <label for="api-filter">Number of Test Vectors</label>
+      <input id="api-filter" type="text" name="vector_num" 
+             placeholder="Number of Test Strings"/>
+    </div>
+    <button type='submit'>Submit</button>
+  </form>
+
+  {% else %}
+  <form method="POST" enctype="multipart/form-data" action="{{ url_for('view') }}">
+    <div class="api-filter">
+      <label for="algo-select"> Algorithim </label>
+      <select name="algo_select" id="algo-select" placeholder="Select Algorithim">
+        {% for algo in algo_list %}
+          <option value="{{ algo }}">{{ algo }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="api-filter">
+      <label for="algo-select"> Test Type </label>
+      <select name="test_select" id="algo-select" placeholder="Select Algorithim">
+        {% for test in test_list %}
+          <option value="{{ test }}">{{ test }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+      File Upload <input type=file name=file>
+      <button type='submit' value='Upload' >Submit</button>
+    </form>
+  {% endif %}
 
 {% endblock %}
