@@ -219,7 +219,6 @@ class QPP_parser:
             if not args.logging:
                 LOG_FILE = None
 
-
             # configure logging to user preference
             logger = Logger.init(LOG_FILE, log_level)
 
