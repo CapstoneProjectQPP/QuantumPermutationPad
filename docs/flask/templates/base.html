@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="{{ url_for('static', filename="style.css") }}" rel="stylesheet" />
+    <title>{% block title %} {% endblock %}</title>
+  </head>
+  <body>
+    <header>
+      <!-- Navigation menu -->
+      <nav>
+        <ul class="header-list">
+          <li class="header-logo">
+            <a href="{{ url_for('index') }}"> Header Logo </a>
+          </li>
+          <li class="header-link">
+            <a href="{{ url_for('api') }}"> API </a>
+          </li>
+          <li class="header-link">
+            <a href="{{ url_for('research') }}"> Research </a>
+          </li>
+          <li class="header-link">
+            <a href="{{ url_for('demo') }}"> Demo </a>
+          </li>
+          <li class="button">
+            <a href="{{ url_for('calc') }}"> Get Started </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- Header Block -->
+      <div id="hero">
+        <div class="hero-text">
+          <h1 class="hero-title">{% block header %} {% endblock %}</h1>
+            {% block header_content %} {% endblock %}
+      </div>
+    </header>
+    {% block content %} {% endblock %}
+  </body>
+</html>
