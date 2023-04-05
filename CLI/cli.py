@@ -216,21 +216,8 @@ class QPP_parser:
             else:
                 log_level = logging.ERROR
 
-<<<<<<< Updated upstream
             if not args.logging:
                 LOG_FILE = None
-=======
-        json = \
-        {
-            "task_id": 1,
-            "sender_id": 1
-        }
-
-        if args.verbose:
-            log_level = logging.DEBUG
-        else:
-            log_level = logging.ERROR
->>>>>>> Stashed changes
 
             # configure logging to user preference
             logger = Logger.init(LOG_FILE, log_level)
