@@ -1,0 +1,105 @@
+from Client import *
+import random
+import logging
+import sys
+import json
+LOG_FILE = "out.log"
+
+
+class Logger:
+    def init(file, level) -> None:
+
+        # to format the log messages that are printed to terminal
+        logging.basicConfig(
+            format="%(levelname)s : %(name)s : %(funcName)s[line %(lineno)s]"
+                   + ": %(message)s"
+        )
+
+        # create logger instance
+        log = logging.getLogger(__name__)
+
+        # set log level
+        log.setLevel(level)
+
+        # format the .log file messages
+        if file is not None:
+            file_handler = logging.FileHandler(file)
+            formatter = logging.Formatter(
+                "%(asctime)s : %(levelname)s : Module %(module)s"
+                + ": %(funcName)s[line %(lineno)s] : %(name)s : %(message)s"
+            )
+            file_handler.setFormatter(formatter)
+            log.addHandler(file_handler)
+
+        return log
+
+
+class Commands:
+    def __init__(self, logger) -> None:
+        self.logger = logger
+        return
+
+    @staticmethod
+    def random_string(len):
+        random_string = ""
+        for ii in range(len):
+            random_int = random.randint(33, 126)
+            random_string += chr(random_int)
+        return random_string
+
+    @staticmethod
+    def test_vector_gen(args):
+        vec_len = args[0]
+        vec_num = args[1]
+        test_list = [""] * vec_num
+        for ii in range(vec_num):
+            test_list[ii] = Commands.random_string(vec_len)
+        return test_list
+
+
+class GI:
+    @staticmethod
+    def Encrypt(task_id, str_list, client):
+#       logger = Logger.init(LOG_FILE, logging.DEBUG)
+        ii = 1
+        for vector in str_list:
+            msg = client.string_to_json("ENCRYPT", str(task_id), "GI", "0", len(str_list), ii, str(sys.getsizeof(str_list)), vector)
+            client.to_outgoing_queue(msg)
+            client.connection_send()
+            ii += 1
+        return
+
+    @staticmethod
+    def ReceivedEncrypt(task_id, client):
+        ii = 1
+        cipher_list = []
+        while True:
+            print("ReceivedEncrypt")
+            client.connection_recv()
+            data = client.print_outgoing_queue()
+            print("data: {}".format(data))
+            recv_msg = data.decode('ascii')
+#            cipher_list.append(recv_msg.decode('ascii'))
+#            print("\nWe got " + cipher_list[ii] + '\n')
+            decoded_msg = json.loads(recv_msg)
+            print(decoded_msg)
+            if decoded_msg.get('payload_total_fragments') != decoded_msg.get('payload_frag_number'):
+                print("What up")
+            ii += 1
+
+        return cipher_list
+
+    @staticmethod
+    def Decrypt(task,):
+        ii = 1
+        for vector in str_list:
+            msg = client.string_to_json("DECRYPT", str(task_id), "GI", "0", len(str_list), ii, str(sys.getsizeof(str_list)), vector)
+            client.to_outgoing_queue(msg)
+            client.connection_send()
+            ii += 1
+        return
+
+    @staticmethod
+    def ReceivedDecrypt():
+        return
+
