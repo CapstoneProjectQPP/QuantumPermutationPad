@@ -203,8 +203,8 @@ class QPP_parser:
         outgoing_t.start()
         print("THREAD START")
         print_msg_t.start()
-
         print("THREAD START")
+
         # parse the arguments from standard input
         while True:
             userinput = input("-> ")
@@ -216,21 +216,9 @@ class QPP_parser:
             else:
                 log_level = logging.ERROR
 
-<<<<<<< Updated upstream
             if not args.logging:
                 LOG_FILE = None
-=======
-        json = \
-        {
-            "task_id": 1,
-            "sender_id": 1
-        }
 
-        if args.verbose:
-            log_level = logging.DEBUG
-        else:
-            log_level = logging.ERROR
->>>>>>> Stashed changes
 
             # configure logging to user preference
             logger = Logger.init(LOG_FILE, log_level)
@@ -244,6 +232,7 @@ class QPP_parser:
             commands = Commands(logger)
 
             # test_vectors = QPP_commands.test_vector_gen(args.vector)
+
 
 
 
