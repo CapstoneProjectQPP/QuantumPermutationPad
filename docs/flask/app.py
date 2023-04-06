@@ -1,6 +1,10 @@
 #! /usr/bin/env python3
 
 import os
+import subprocess
+import time
+import threading
+import socket
 from flask import Flask, flash, render_template, request, redirect, session
 from werkzeug.utils import secure_filename
 from Client import *
@@ -103,12 +107,8 @@ def view():
         GI.Encrypt(task_id, test_vector, client)
         cipherlist = GI.ReceivedEncrypt(task_id, client)
         print("cipherlist".center(40, '_'))
-        if not vector_select:
-            '\n'.join(cipherlist)
-            print(cipherlist)
-        else:
-            for vec in cipherlist:
-                print(vec)
+        '\n'.join(cipherlist)
+        print(cipherlist)
         task_id += 1
 
     return render_template('view.html', test=test_select, algo=algo_select)
@@ -118,6 +118,21 @@ if __name__ == "__main__":
     app.config['DOWNLOAD_FOLDER'] = os.path.abspath(DOWNLOAD_FOLDER)
     app.secret_key = 'secret_key'
     app.config['SESSION_TYPE'] = 'filesystem'
-    client.connection_setup()
-    app.run(debug=False, host=socket.gethostname(), port=4996)
-    client.s.close()
+    try:
+        client.connection_setup()
+    except:
+        command = "nc -l " + str(GI_PORT) + " &"
+        subprocess.call(command, shell=True)
+        time.sleep(2)
+        client.connection_setup()
+    finally:
+        incoming_t = threading.Thread(target=client.connection_recv, args=())
+        outgoing_t = threading.Thread(target=client.connection_send, args=())
+        incoming_t.start()
+        outgoing_t.start()
+
+        app.run(debug=False, host=socket.gethostname(), port=4996)
+
+        incoming_t.join()
+        outgoing_t.join()
+        client.s.close()

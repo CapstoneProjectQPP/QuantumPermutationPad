@@ -78,16 +78,14 @@ class GI:
             data = client.print_outgoing_queue()
             recv_msg = data.decode('ascii')
             decoded_msg = json.loads(recv_msg)
-            print(decoded_msg)
             cipher_list.append(decoded_msg.get('payload_content'))
 
             if decoded_msg.get('payload_total_fragments') == decoded_msg.get('payload_fragment_number'):
                 return cipher_list
-            
             ii += 1
 
     @staticmethod
-    def Decrypt(task,):
+    def Decrypt(task_id, str_list, client):
         ii = 1
         for vector in str_list:
             msg = client.string_to_json("DECRYPT", str(task_id), "GI", "0", len(str_list), ii, str(sys.getsizeof(str_list)), vector)
@@ -97,6 +95,17 @@ class GI:
         return
 
     @staticmethod
-    def ReceivedDecrypt():
-        return
+    def ReceivedDecrypt(task_id, client):
+        ii = 1
+        cipher_list = []
+        while True:
+            client.connection_recv()
+            data = client.print_outgoing_queue()
+            recv_msg = data.decode('ascii')
+            decoded_msg = json.loads(recv_msg)
+            cipher_list.append(decoded_msg.get('payload_content'))
+
+            if decoded_msg.get('payload_total_fragments') == decoded_msg.get('payload_fragment_number'):
+                return cipher_list
+            ii += 1
 
