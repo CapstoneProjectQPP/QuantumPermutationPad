@@ -41,9 +41,7 @@ class Client:
                 self.outgoing_mutex.acquire()
                 message = self.send_queue.get()
                 self.outgoing_mutex.release()
-                # print(message)
                 self.s.send(message.encode('ascii'))
-                # print("sent to port {}".format(self.port))
 
     def send_to_queue(self, message):
         self.outgoing_mutex.acquire()
