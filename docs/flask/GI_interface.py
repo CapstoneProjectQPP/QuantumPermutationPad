@@ -76,7 +76,10 @@ class GI:
         while True:
             data = client.get_queue()
             recv_msg = data.decode('ascii')
-            decoded_msg = json.loads(recv_msg)
+            try:
+                decoded_msg = json.loads(recv_msg)
+            except json.decoder.JSONDecodeError:
+                print('\n' + recv_msg + '\n')
             cipher_list.append(decoded_msg.get('payload_content'))
 
             if decoded_msg.get('payload_total_fragments') == decoded_msg.get('payload_fragment_number'):
@@ -100,7 +103,6 @@ class GI:
         while True:
             while data != None:
                 data = client.get_queue()
-            print("OUT THE WHILE")
             recv_msg = data.decode('ascii')
             decoded_msg = json.loads(recv_msg)
             cipher_list.append(decoded_msg.get('payload_content'))

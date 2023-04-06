@@ -1,18 +1,20 @@
 #! /usr/bin/env python3
 
+import sys
 import os
 import subprocess
 import time
 import threading
 import socket
-from flask import Flask, flash, render_template, request, redirect, session
+import logging
+from flask import Flask, flash, render_template, request, redirect, send_file
 from werkzeug.utils import secure_filename
 from Client import *
 from GI_interface import *
 
 app = Flask(__name__)
 algos = ['AES', 'QPP', 'AES & QPP']
-tests = ['Encryption', 'Decryption',
+tests = ['Encrypt', 'Decrypt',
          'Encrypt & Decrypt', 'M.I.T.M',
          'Brute Force', 'Monte Carlo',
          'Multi-block Message', 'Known Answer'
@@ -26,14 +28,14 @@ vector_select = "True"
 vector_len = 100
 vector_num = 100
 
+logger = Logger.init(None, logging.ERROR)
 client = Client(GI_PORT, socket.gethostname(), "CLI")
 
 task_id = 0
 
 
 def allowed_file(filename):
-    return '.' in filename and \
-        filename.split('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return '.' in filename and filename.split('.', 1)[1].lower() #in ALLOWED_EXTENSIONS
 
 
 @app.route("/")
@@ -61,7 +63,6 @@ def demo():
 def calc():
     global vector_select, algos, tests, vector_num, vector_len
     if request.method == "POST":
-        print("ERROR 1")
         vector_select = request.form['vector_select']
 
     return render_template('calc.html',
@@ -72,28 +73,26 @@ def calc():
 
 @app.route("/view/", methods=['GET', 'POST'])
 def view():
-    global vector_select, algos, tests, vector_num, vector_len, task_id, client
+    global vector_select, algos, tests, logger, \
+           vector_num, vector_len, task_id, client, cipherpath
     test = algo = "ERROR"
     test_vector = []
-
+    client.clear_queue()
     if request.method == 'POST':
         algo_select = request.form.get('algo_select')
         test_select = request.form.get('test_select')
-        print("ERROR 2")
-        print("{}, {}".format(algo_select, test_select))
+        logger.info("{}, {}".format(algo_select, test_select))
         if vector_select == "True":
-            print("ERROR 3")
             vector_len = request.form["vector_len"]
             vector_num = request.form["vector_num"]
-            print("{} vectors of size {}".format(vector_num, vector_len))
+            logger.info("{} vectors of size {}".format(vector_num, vector_len))
             test_vector = Commands.test_vector_gen([int(vector_len), int(vector_num)])
         else:
-            print("ERROR 4")
             if 'file' not in request.files:
-                flash("No File Uploaded")
+                logger.error("FILE NOT UPLOADED")
             file = request.files['file']
             if file.filename == '':
-                flash("No File Selected")
+                logger.error("FILE NOT VALID")
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['DOWNLOAD_FOLDER'], filename))
@@ -103,28 +102,49 @@ def view():
                         if not line:
                             break
                         test_vector.append(line)
-                print("{}, contents:\n{}".format(filename, test_vector))
+        logger.info("plainlist".center(40, '_'))
+        logger.info(test_vector)
+
         GI.Encrypt(task_id, test_vector, client)
         cipherlist = GI.ReceivedEncrypt(task_id, client)
-        print("cipherlist".center(40, '_'))
-        '\n'.join(cipherlist)
-        print(cipherlist)
+
+        ciphertext = '\n'.join(cipherlist)
+        logger.info("cipherlist".center(40, '_'))
+        logger.info(cipherlist)
+        cipherpath = str(os.path.abspath(UPLOAD_FOLDER)) + '/' + \
+                     str(task_id) + '-ciphertext.txt'
+
+        with open(cipherpath, 'w') as fd:
+            fd.write(ciphertext)
         task_id += 1
 
-    return render_template('view.html', test=test_select, algo=algo_select)
+    return render_template('view.html', ciphertext=ciphertext,
+                                        test=test_select,
+                                        algo=algo_select
+                                        )
+                                        
+
+@app.route("/download/")
+def download_cipher():
+    return send_file(cipherpath, as_attachment=True)
 
 
 if __name__ == "__main__":
+    global GI_interface
     app.config['DOWNLOAD_FOLDER'] = os.path.abspath(DOWNLOAD_FOLDER)
     app.secret_key = 'secret_key'
     app.config['SESSION_TYPE'] = 'filesystem'
+    GI_interface = sys.argv[1]
+
     try:
         client.connection_setup()
+
     except:
         command = "nc -l " + str(GI_PORT) + " &"
         subprocess.call(command, shell=True)
-        time.sleep(2)
+        time.sleep(5)
         client.connection_setup()
+
     finally:
         incoming_t = threading.Thread(target=client.connection_recv, args=())
         outgoing_t = threading.Thread(target=client.connection_send, args=())
