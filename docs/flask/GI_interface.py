@@ -78,9 +78,8 @@ class GI:
         cipher_list = []
         while True:
             data = client.get_queue()
-            recv_msg = data.decode('ascii')
             try:
-                decoded_msg = json.loads(recv_msg)
+                decoded_msg = json.loads(data)
             except json.decoder.JSONDecodeError:
                 delim ='.(?={"api_call": "ENCRYPT", "task_id": "\d", "interface_type": "GI", "sender_id": "0",)'
                 recv_msg = re.split(delim, recv_msg)

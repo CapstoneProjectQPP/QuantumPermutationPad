@@ -28,7 +28,7 @@ vector_select = "True"
 vector_len = 100
 vector_num = 100
 
-logger = Logger.init(None, logging.ERROR)
+logger = Logger.init(None, logging.INFO)
 client = Client(GI_PORT, socket.gethostname(), "CLI")
 
 task_id = 0
@@ -36,6 +36,19 @@ task_id = 0
 
 def allowed_file(filename):
     return '.' in filename and filename.split('.', 1)[1].lower() #in ALLOWED_EXTENSIONS
+
+
+def check_equals(a, b):
+    splitA = set(a.split("\n"))
+    splitB = set(b.split("\n"))
+    diff = splitB.difference(splitA)
+    diff = ", ".join(diff)
+    result = a==b
+    logger.info("it is {} that the plain and cipher match".format(a == b))
+    if not result:
+        logger.error(a)
+        logger.error(b)
+    return result
 
 
 @app.route("/")
@@ -109,8 +122,11 @@ def view():
         cipherlist = GI.ReceivedEncrypt(task_id, client)
 
         ciphertext = '\n'.join(cipherlist)
+        plaintext = '\n'.join(test_vector)
         logger.info("cipherlist".center(40, '_'))
         logger.info(cipherlist)
+        check_equals(plaintext, ciphertext)
+
         cipherpath = str(os.path.abspath(UPLOAD_FOLDER)) + '/' + \
                      str(task_id) + '-ciphertext.txt'
 
