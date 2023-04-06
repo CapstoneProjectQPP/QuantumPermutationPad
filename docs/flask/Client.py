@@ -48,7 +48,7 @@ class Client:
 
 
     def connection_recv(self):
-        msg = self.s.recv(1)
+        msg = self.s.recv(4096)
         self.recv_queue.put(msg)
         print("Received from server: " + msg.decode('ascii'))
 

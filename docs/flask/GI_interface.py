@@ -74,20 +74,17 @@ class GI:
         ii = 1
         cipher_list = []
         while True:
-            print("ReceivedEncrypt")
             client.connection_recv()
             data = client.print_outgoing_queue()
-            print("data: {}".format(data))
             recv_msg = data.decode('ascii')
-#            cipher_list.append(recv_msg.decode('ascii'))
-#            print("\nWe got " + cipher_list[ii] + '\n')
             decoded_msg = json.loads(recv_msg)
             print(decoded_msg)
-            if decoded_msg.get('payload_total_fragments') != decoded_msg.get('payload_frag_number'):
-                print("What up")
-            ii += 1
+            cipher_list.append(decoded_msg.get('payload_content'))
 
-        return cipher_list
+            if decoded_msg.get('payload_total_fragments') == decoded_msg.get('payload_fragment_number'):
+                return cipher_list
+            
+            ii += 1
 
     @staticmethod
     def Decrypt(task,):
