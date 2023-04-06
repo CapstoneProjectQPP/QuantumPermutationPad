@@ -26,10 +26,11 @@ class Client:
         # self.outgoing_mutex = Lock()
 
     def connection_setup(self):
+        print("socket:{}\n host:{}\n port:{}\n".format(self.s, self.host, self.port))
         self.s.connect((self.host, self.port))
         # SEND the handshake
-        self.to_outgoing_queue(str(self.port))
-        self.connection_send()
+        # self.to_outgoing_queue(str(self.port))
+        # self.connection_send()
 
     def connection_send(self):
         message = self.send_queue.get()

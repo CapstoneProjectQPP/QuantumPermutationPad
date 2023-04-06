@@ -22,8 +22,8 @@ vector_select = "True"
 vector_len = 100
 vector_num = 100
 
-client = Client(GI_PORT, "", "CLI")
-client.connection_setup()
+client = Client(GI_PORT, socket.gethostname(), "CLI")
+
 task_id = 0
 
 
@@ -94,12 +94,15 @@ def view():
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['DOWNLOAD_FOLDER'], filename))
                 with open(os.path.abspath(DOWNLOAD_FOLDER + filename), 'r') as fd:
-                    file_contents = fd.read()
-                print("{}, contents:\n{}".format(filename, file_contents))
-                test_vector = [file_contents]
+                    while True:
+                        line = fd.readline()
+                        if not line:
+                            break
+                        test_vector.append(line)
+                print("{}, contents:\n{}".format(filename, test_vector))
         GI.Encrypt(task_id, test_vector, client)
         print("Going into Recieve")
-        client.to_outgoing_queue("Please Help")
+        client.to_outgoing_queue("Please Help\n")
         client.connection_send()
         cipherlist = GI.ReceivedEncrypt(task_id, client)
         print("cipherlist: \n" + cipherlist)
@@ -112,4 +115,6 @@ if __name__ == "__main__":
     app.config['DOWNLOAD_FOLDER'] = os.path.abspath(DOWNLOAD_FOLDER)
     app.secret_key = 'secret_key'
     app.config['SESSION_TYPE'] = 'filesystem'
-    app.run(debug=True, host="127.0.0.1", port=4996)
+    client.connection_setup()
+    app.run(debug=False, host=socket.gethostname(), port=4996)
+    client.s.close()

@@ -19,6 +19,7 @@
 /docs/flask/venv/
 /docs/flask/__pycache__/
 /docs/flask/downloads/
+/docs/flask/uploads/
 
 # ccls language server cache
 /.ccls-cache/
