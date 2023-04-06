@@ -3,6 +3,7 @@ import random
 import logging
 import sys
 import json
+import time
 LOG_FILE = "out.log"
 
 
@@ -64,8 +65,7 @@ class GI:
         ii = 1
         for vector in str_list:
             msg = client.string_to_json("ENCRYPT", str(task_id), "GI", "0", len(str_list), ii, str(sys.getsizeof(str_list)), vector)
-            client.to_outgoing_queue(msg)
-            client.connection_send()
+            client.send_to_queue(msg)
             ii += 1
         return
 
@@ -74,8 +74,7 @@ class GI:
         ii = 1
         cipher_list = []
         while True:
-            client.connection_recv()
-            data = client.print_outgoing_queue()
+            data = client.get_queue()
             recv_msg = data.decode('ascii')
             decoded_msg = json.loads(recv_msg)
             cipher_list.append(decoded_msg.get('payload_content'))
@@ -89,8 +88,7 @@ class GI:
         ii = 1
         for vector in str_list:
             msg = client.string_to_json("DECRYPT", str(task_id), "GI", "0", len(str_list), ii, str(sys.getsizeof(str_list)), vector)
-            client.to_outgoing_queue(msg)
-            client.connection_send()
+            client.send_to_queue(msg)
             ii += 1
         return
 
@@ -98,9 +96,11 @@ class GI:
     def ReceivedDecrypt(task_id, client):
         ii = 1
         cipher_list = []
+        data = None
         while True:
-            client.connection_recv()
-            data = client.print_outgoing_queue()
+            while data != None:
+                data = client.get_queue()
+            print("OUT THE WHILE")
             recv_msg = data.decode('ascii')
             decoded_msg = json.loads(recv_msg)
             cipher_list.append(decoded_msg.get('payload_content'))

@@ -33,37 +33,27 @@ class Client:
         # self.connection_send()
 
     def connection_send(self):
-        message = self.send_queue.get()
-        print(message)
-        self.s.send(message.encode('ascii'))
-        print("sent to port {}".format(self.port))
-           
-            
-    def to_outgoing_queue(self, message):
-        # self.outgoing_mutex.acquire()
+        while True:
+            message = self.send_queue.get()
+            print(message)
+            self.s.send(message.encode('ascii'))
+            print("sent to port {}".format(self.port))
+
+    def send_to_queue(self, message):
         self.send_queue.put(message)
         print("OUTGOING QUEUE {}".format(message))
-        # self.outgoing_mutex.release()
-
-
 
     def connection_recv(self):
-        msg = self.s.recv(4096)
-        self.recv_queue.put(msg)
-        print("Received from server: " + msg.decode('ascii'))
+        while True:
+            msg = self.s.recv(4096)
+            self.recv_queue.put(msg)
+            print("Received from server: " + msg.decode('ascii'))
 
-    def print_outgoing_queue(self):
-        # self.mutex.acquire()
-        if not self.recv_queue.empty():
-            data = self.recv_queue.get()
-            # self.mutex.release()
-            return data
-
-        else:
-            # self.mutex.release()
-            return None
-
-
+    def get_queue(self):
+        while True:
+            if not self.recv_queue.empty():
+                data = self.recv_queue.get()
+                return data
     @staticmethod
     def string_to_json(api_call, task_id, interface_type="GC", sender_id="0",
                        payload_total_fragments="0", payload_fragment_number="0",
