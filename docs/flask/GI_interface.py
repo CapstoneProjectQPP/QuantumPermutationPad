@@ -82,18 +82,12 @@ class GI:
             try:
                 decoded_msg = json.loads(recv_msg)
             except json.decoder.JSONDecodeError:
-                print('recv msg'.center(40, '_') + '\n' + recv_msg + '\n')
                 delim ='.(?={"api_call": "ENCRYPT", "task_id": "\d", "interface_type": "GI", "sender_id": "0",)'
-                print('delim'.center(40,'_') + '\n' + delim + '\n')
-
                 recv_msg = re.split(delim, recv_msg)
-                print('last_msg'.center(40, '_') + '\n')
                 last_msg = recv_msg[-1]
-                print(recv_msg)
                 for msg in recv_msg:
                     if msg != last_msg:
                         msg = msg + "}"
-                    print('msg'.center(40, '_') + '\n' + msg + '\n')
                     decoded_msg = json.loads(msg)
                     cipher_list.append(decoded_msg.get('payload_content'))
             else:
@@ -125,18 +119,12 @@ class GI:
             try:
                 decoded_msg = json.loads(recv_msg)
             except json.decoder.JSONDecodeError:
-                print('recv msg'.center(40, '_') + '\n' + recv_msg + '\n')
                 delim ='.(?={"api_call": "DECRYPT", "task_id": "\d", "interface_type": "GI", "sender_id": "0",)'
-                print('delim'.center(40,'_') + '\n' + delim + '\n')
-
                 recv_msg = re.split(delim, recv_msg)
-                print('last_msg'.center(40, '_') + '\n')
                 last_msg = recv_msg[-1]
-                print(recv_msg)
                 for msg in recv_msg:
                     if msg != last_msg:
                         msg = msg + "}"
-                    print('msg'.center(40, '_') + '\n' + msg + '\n')
                     decoded_msg = json.loads(msg)
                     cipher_list.append(decoded_msg.get('payload_content'))
             else:

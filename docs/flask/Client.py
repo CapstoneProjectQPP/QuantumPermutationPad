@@ -1,11 +1,17 @@
 import socket
+import re
 import queue
 import json
 import threading
-from threading import Lock
 import time
+import logging 
 
+from threading import Lock
+from GI_interface import Logger
+
+logger = Logger.init(None, logging.DEBUG)
 PAYLOAD = 4096
+delim ='.(?={"api_call": "ENCRYPT", "task_id": "\d", "interface_type": "GI", "sender_id": "0",)'
 
 """
 Steps:
@@ -30,7 +36,7 @@ class Client:
 
     def connection_setup(self):
         self.s.connect((self.host, self.port))
-        print("socket:{}\n host:{}\n port:{}\n".format(self.s, self.host, self.port))
+        logger.debug("socket:{}\n host:{}\n port:{}\n".format(self.s, self.host, self.port))
         # SEND the handshake
         # self.to_outgoing_queue(str(self.port))
         # self.connection_send()
@@ -38,42 +44,64 @@ class Client:
     def connection_send(self):
         while True:
             if not self.send_queue.empty():
-                self.outgoing_mutex.acquire()
+                # self.outgoing_mutex.acquire()
                 message = self.send_queue.get()
-                self.outgoing_mutex.release()
+                # self.outgoing_mutex.release()
                 self.s.send(message.encode('ascii'))
 
     def send_to_queue(self, message):
-        self.outgoing_mutex.acquire()
+        # self.outgoing_mutex.acquire()
         self.send_queue.put(message)
-        self.outgoing_mutex.release()
-        # print("OUTGOING QUEUE {}".format(message))
+        # self.outgoing_mutex.release()
+        # logger.debug("OUTGOING QUEUE {}".format(message))
 
     def connection_recv(self):
+        decoded_msg = None
+        data = b''
         while True:
-            msg = self.s.recv(PAYLOAD)
-            self.mutex.acquire()
-            self.recv_queue.put(msg)
-            self.mutex.release()
-            # print("Received from server: " + msg.decode('ascii'))
+            data  += self.s.recv(PAYLOAD)
+            recv_msg = data.decode('ascii')
+            try:
+                decoded_msg = json.loads(recv_msg)
+            except json.decoder.JSONDecodeError:
+                logger.debug('recv msg'.center(40, '_') + '\n' + recv_msg + '\n')
+                delim ='.(?={"api_call": "ENCRYPT", "task_id": "\d", "interface_type": "GI", "sender_id": "0",)'
+                logger.debug('delim'.center(40,'_') + '\n' + delim + '\n')
+
+                recv_msg = re.split(delim, recv_msg)
+                logger.debug('last_msg'.center(40, '_') + '\n')
+                last_msg = recv_msg[-1]
+                logger.debug(recv_msg)
+                for msg in recv_msg:
+                    if msg != last_msg:
+                        msg = msg + "}"
+                    logger.debug('msg'.center(40, '_') + '\n' + msg + '\n')
+                    try:
+                        decoded_msg = json.loads(msg)
+                    except json.decoder.JSONDecodeError:
+                       data = msg.encode('ascii')
+                    else:
+                        self.recv_queue.put(msg.encode('ascii'))
+                        data = b''
+            else:
+                self.recv_queue.put(recv_msg.encode('ascii'))
+                data = b''
 
     def get_queue(self):
         while True:
             if not self.recv_queue.empty():
-                self.mutex.acquire()
+                # self.mutex.acquire()
                 data = self.recv_queue.get()
-                self.mutex.release()
+                # self.mutex.release()
                 return data
 
     def clear_queue(self):
-        self.mutex.acquire()
-        self.outgoing_mutex.acquire()
-
+        # self.mutex.acquire()
+        # self.outgoing_mutex.acquire()
         self.send_queue.queue.clear()
         self.recv_queue.queue.clear()
-
-        self.mutex.release()
-        self.outgoing_mutex.release()
+        # self.mutex.release()
+        # self.outgoing_mutex.release()
         return
 
     @staticmethod
