@@ -28,7 +28,7 @@ vector_select = "True"
 vector_len = 100
 vector_num = 100
 
-logger = Logger.init(None, logging.INFO)
+logger = Logger.init(None, logging.DEBUG)
 client = Client(GI_PORT, socket.gethostname(), "CLI")
 
 task_id = 0
@@ -100,6 +100,11 @@ def view():
             vector_num = request.form["vector_num"]
             logger.info("{} vectors of size {}".format(vector_num, vector_len))
             test_vector = Commands.test_vector_gen([int(vector_len), int(vector_num)])
+            logger.info("vectors".center(40, '_'))
+            print(test_vector)
+            test_vector = [base64.b64encode(bytes(item, 'utf-8')).decode('ascii') for item in test_vector]
+            filename = "test-vectors-" + vector_len + "-" + vector_num
+            file_extension = "txt"
         else:
             if 'file' not in request.files:
                 logger.error("FILE NOT UPLOADED")
@@ -126,10 +131,11 @@ def view():
             if test_select.find('Decrypt') != -1:
                 logger.info("Decryption Begins")
                 GI.Decrypt(task_id, cipherlist, client)
+                logger.info("Decrypt sent")
                 plainlist = GI.ReceivedDecrypt(task_id, client)
+                logger.info("Decryption Ends")
                 logger.info("ciphertext".center(40, '_'))
                 logger.info('\n'.join(plainlist))
-                logger.info("Decryption Ends")
 
         ciphertext = '\n'.join(cipherlist)
         plaintext = '\n'.join(test_vector)

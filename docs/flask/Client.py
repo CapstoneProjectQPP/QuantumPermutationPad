@@ -66,7 +66,7 @@ class Client:
                 decoded_msg = json.loads(recv_msg)
             except json.decoder.JSONDecodeError:
                 logger.debug('recv msg'.center(40, '_') + '\n' + recv_msg + '\n')
-                delim ='.(?={"api_call": "ENCRYPT", "task_id": "\d", "interface_type": "GI", "sender_id": "0",)'
+                delim ='.(?={"api_call": ".*?", "task_id": "\d", "interface_type": "GI", "sender_id": "0",)'
                 logger.debug('delim'.center(40,'_') + '\n' + delim + '\n')
 
                 recv_msg = re.split(delim, recv_msg)
