@@ -28,7 +28,7 @@ vector_select = "True"
 vector_len = 100
 vector_num = 100
 
-logger = Logger.init(None, logging.DEBUG)
+logger = Logger.init(None, logging.ERROR)
 client = Client(GI_PORT, socket.gethostname(), "CLI")
 
 task_id = 0
@@ -90,6 +90,7 @@ def view():
            vector_num, vector_len, task_id, client, cipherpath, plainpath
     test = algo = "ERROR"
     test_vector = []
+    plaintext = None
     client.clear_queue()
     if request.method == 'POST':
         algo_select = request.form.get('algo_select')
@@ -100,8 +101,8 @@ def view():
             vector_num = request.form["vector_num"]
             logger.info("{} vectors of size {}".format(vector_num, vector_len))
             test_vector = Commands.test_vector_gen([int(vector_len), int(vector_num)])
-            logger.info("vectors".center(40, '_'))
-            print(test_vector)
+            logger.debug("vectors".center(40, '_'))
+            logger.debug(test_vector)
             test_vector = [base64.b64encode(bytes(item, 'utf-8')).decode('ascii') for item in test_vector]
             filename = "test-vectors-" + vector_len + "-" + vector_num
             file_extension = "txt"
@@ -121,49 +122,69 @@ def view():
         logger.debug("plainlist".center(40, '_'))
         logger.debug(test_vector)
 
+        decrypt_time = encrypt_time = None
+
         if test_select.find('Encrypt') != -1:
             logger.info("Encryption Begins")
+
+            pre_encrypt_time = time.time()
             GI.Encrypt(task_id, test_vector, client)
-            cipherlist = GI.ReceivedEncrypt(task_id, client)
+            cipherlist, post_encrypt_time = GI.ReceivedEncrypt(task_id, client)
+            encrypt_time = post_encrypt_time - pre_encrypt_time
+
             logger.info("plaintext".center(40, '_'))
             logger.info('\n'.join(cipherlist))
             logger.info("Encryption Ends")
             if test_select.find('Decrypt') != -1:
                 logger.info("Decryption Begins")
+
+                pre_decrypt_time = time.time()
                 GI.Decrypt(task_id, cipherlist, client)
                 logger.info("Decrypt sent")
-                plainlist = GI.ReceivedDecrypt(task_id, client)
-                logger.info("Decryption Ends")
-                logger.info("ciphertext".center(40, '_'))
-                logger.info('\n'.join(plainlist))
 
-        ciphertext = '\n'.join(cipherlist)
-        plaintext = '\n'.join(test_vector)
-        logger.debug("cipherlist".center(40, '_'))
-        logger.debug(cipherlist)
-        check_equals(plaintext, ciphertext)
-        
-        ciphertext = base64.b64decode(ciphertext)
-        plaintext = base64.b64decode(plaintext)
+                plainlist, post_decrypt_time = GI.ReceivedDecrypt(task_id, client)
+                decrypt_time = post_decrypt_time - pre_decrypt_time
+                plainpath = str(os.path.abspath(UPLOAD_FOLDER)) + '/' + \
+                    str(task_id) + filename.split('.')[0] + '-plaintext.' + file_extension
+
+                if len(plainlist) != 1:
+                    plainlist = [ base64.b64decode(cipher).decode('utf-8') for cipher in plainlist ]
+                    plaintext = '\n'.join(plainlist)
+                    with open(plainpath, 'wb') as fd:
+                        fd.write(bytes(plaintext,'utf-8'))
+                else:
+                    plainlist = [ base64.b64decode(cipher) for cipher in plainlist ]
+                    plaintext = plainlist[0]
+                    with open(plainpath, 'wb') as fd:
+                        fd.write(plaintext)
+                    
         cipherpath = str(os.path.abspath(UPLOAD_FOLDER)) + '/' + \
-                     str(task_id) + filename.split('.')[0] + '-ciphertext.' + file_extension
+            str(task_id) + filename.split('.')[0] + '-ciphertext.' + file_extension
 
-        plainpath = str(os.path.abspath(UPLOAD_FOLDER)) + '/' + \
-            str(task_id) + filename.split('.')[0] + '-plaintext.' + file_extension
-
-        with open(cipherpath, 'wb') as fd:
-            fd.write(ciphertext)
-
-        with open(plainpath, 'wb') as fd:
-            fd.write(plaintext)
+        if len(cipherlist) != 1:
+            cipherlist = [ base64.b64decode(cipher).decode('utf-8') for cipher in cipherlist ]
+            ciphertext = '\n'.join(cipherlist)
+            with open(cipherpath, 'wb') as fd:
+                fd.write(bytes(ciphertext, 'utf-8'))
+        else:
+            cipherlist = [ base64.b64decode(cipher) for cipher in cipherlist ]
+            ciphertext = cipherlist[0]
+            with open(cipherpath, 'wb') as fd:
+                fd.write(ciphertext)
+        
 
         task_id += 1
 
     return render_template('view.html', ciphertext=ciphertext,
-                                        plaintext=plaintext,
-                                        test=test_select,
-                                        algo=algo_select
-                                        )
+                           plaintext=plaintext,
+                           test=test_select,
+                           algo=algo_select,
+                           encrypt_time=encrypt_time,
+                           decrypt_time=decrypt_time
+                           )
+
+
+
                                         
 
 @app.route("/download/cipher/")

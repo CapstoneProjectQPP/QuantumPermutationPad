@@ -17,15 +17,19 @@
       CipherText
     </a>
   </p>
+  {% if plaintext != None %}
   <p> 
     <a href="{{ url_for('download_plain') }}">
     Plaintext 
     </a>
   </p>
+  {% endif %}
   <p>Test:        {{ test }}</p>
   <p>Algorithim:  {{ algo }}</p>
-  <p>Time:        {{ time }}</p>
-
+  <p>Encrypt Time: {{ encrypt_time }} (s)</p>
+  {% if decrypt_time != None %}
+  <p>Decrypt Time: {{ decrypt_time }} (s)</p>
+  {% endif %}
 </form>
 
 {% endblock %}

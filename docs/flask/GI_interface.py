@@ -65,9 +65,9 @@ class GI:
 #       logger = Logger.init(LOG_FILE, logging.DEBUG)
         ii = 1
         for vector in str_list:
-            msg = client.string_to_json("ENCRYPT", str(task_id), "GI", "0",
-                                        len(str_list), ii,
-                                        str(sys.getsizeof(str_list)), vector)
+            msg = client.string_to_json("ENCRYPT", task_id, "GI",
+                                        0, len(str_list), ii,
+                                        len(vector), vector)
             client.send_to_queue(msg)
             ii += 1
         return
@@ -76,13 +76,14 @@ class GI:
     def ReceivedEncrypt(task_id, client):
         ii = 1
         cipher_list = []
+        data = client.get_queue()
+        recv_time = time.time()
         while True:
-            data = client.get_queue()
-            recv_msg = data.decode(encoding)
+            recv_msg = data.decode(encoding).rstrip()
             try:
                 decoded_msg = json.loads(recv_msg)
             except json.decoder.JSONDecodeError:
-                delim ='.(?={"api_call": "ENCRYPT", "task_id": "\d", "interface_type": "GI", "sender_id": "0",)'
+                delim ='.(?={"api_call": "ENCRYPT", "task_id": \d, "interface_type": "GI", "sender_id": \d, )'
                 recv_msg = re.split(delim, recv_msg)
                 last_msg = recv_msg[-1]
                 for msg in recv_msg:
@@ -94,17 +95,18 @@ class GI:
                 cipher_list.append(decoded_msg.get('payload_content'))
 
             if decoded_msg.get('payload_total_fragments') == \
-               decoded_msg.get('payload_fragment_number'):
-                return cipher_list
+               decoded_msg.get('payload_frag_number'):
+                return cipher_list, recv_time
             ii += 1
+            data = client.get_queue()
 
     @staticmethod
     def Decrypt(task_id, str_list, client):
         ii = 1
         for vector in str_list:
-            msg = client.string_to_json("DECRYPT", str(task_id), "GI", "0",
-                                        len(str_list), ii,
-                                        str(sys.getsizeof(str_list)), vector)
+            msg = client.string_to_json("DECRYPT", task_id, "GI",
+                                        0, len(str_list), ii,
+                                        len(vector), vector)
             client.send_to_queue(msg)
             ii += 1
         return
@@ -113,15 +115,14 @@ class GI:
     def ReceivedDecrypt(task_id, client):
         ii = 1
         cipher_list = []
+        data = client.get_queue()
+        recv_time = time.time()
         while True:
-            data = client.get_queue()
-            print("data".center(40, "_"))
-            print(data)
-            recv_msg = data.decode(encoding)
+            recv_msg = data.decode(encoding).rstrip()
             try:
                 decoded_msg = json.loads(recv_msg)
             except json.decoder.JSONDecodeError:
-                delim ='.(?={"api_call": "DECRYPT", "task_id": "\d", "interface_type": "GI", "sender_id": "0", )'
+                delim ='.(?={"api_call": "DECRYPT", "task_id": \d, "interface_type": "GI", "sender_id": \d, )'
                 recv_msg = re.split(delim, recv_msg)
                 last_msg = recv_msg[-1]
                 for msg in recv_msg:
@@ -133,7 +134,7 @@ class GI:
                 cipher_list.append(decoded_msg.get('payload_content'))
 
             if decoded_msg.get('payload_total_fragments') == \
-               decoded_msg.get('payload_fragment_number'):
-                return cipher_list
+               decoded_msg.get('payload_frag_number'):
+                return cipher_list, recv_time
             ii += 1
-
+            data = client.get_queue()

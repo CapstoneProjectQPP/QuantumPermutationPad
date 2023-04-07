@@ -49,7 +49,7 @@ class Client:
                 message = self.send_queue.get()
                 self.outgoing_mutex.release()
                 self.s.send(message.encode(encoding))
-
+                self.s.send('\n'.encode(encoding))
     def send_to_queue(self, message):
         # self.outgoing_mutex.acquire()
         self.send_queue.put(message)
@@ -66,7 +66,7 @@ class Client:
                 decoded_msg = json.loads(recv_msg)
             except json.decoder.JSONDecodeError:
                 logger.debug('recv msg'.center(40, '_') + '\n' + recv_msg + '\n')
-                delim ='.(?={"api_call": ".*?", "task_id": "\d", "interface_type": "GI", "sender_id": "0",)'
+                delim ='.\n(?={"api_call": ".*?", "task_id": \d, "interface_type": "GI", "sender_id": 0,)'
                 logger.debug('delim'.center(40,'_') + '\n' + delim + '\n')
 
                 recv_msg = re.split(delim, recv_msg)
@@ -114,7 +114,7 @@ class Client:
                "interface_type":interface_type,
                "sender_id":sender_id,
                "payload_total_fragments": payload_total_fragments,
-               "payload_fragment_number": payload_fragment_number,
+               "payload_frag_number": payload_fragment_number,
                "payload_size": payload_size,
                "payload_content": payload_content}
 
