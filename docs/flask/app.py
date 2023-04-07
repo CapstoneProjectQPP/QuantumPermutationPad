@@ -7,6 +7,7 @@ import time
 import threading
 import socket
 import logging
+import base64
 from flask import Flask, flash, render_template, request, redirect, send_file
 from werkzeug.utils import secure_filename
 from Client import *
@@ -14,8 +15,7 @@ from GI_interface import *
 
 app = Flask(__name__)
 algos = ['AES', 'QPP', 'AES & QPP']
-tests = ['Encrypt', 'Decrypt',
-         'Encrypt & Decrypt', 'M.I.T.M',
+tests = ['Encrypt', 'Encrypt & Decrypt', 'M.I.T.M',
          'Brute Force', 'Monte Carlo',
          'Multi-block Message', 'Known Answer'
          ]
@@ -87,7 +87,7 @@ def calc():
 @app.route("/view/", methods=['GET', 'POST'])
 def view():
     global vector_select, algos, tests, logger, \
-           vector_num, vector_len, task_id, client, cipherpath
+           vector_num, vector_len, task_id, client, cipherpath, plainpath
     test = algo = "ERROR"
     test_vector = []
     client.clear_queue()
@@ -106,43 +106,68 @@ def view():
             file = request.files['file']
             if file.filename == '':
                 logger.error("FILE NOT VALID")
-            if file and allowed_file(file.filename):
+            if file:
+                file_extension = allowed_file(file.filename)
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['DOWNLOAD_FOLDER'], filename))
-                with open(os.path.abspath(DOWNLOAD_FOLDER + filename), 'r') as fd:
-                    while True:
-                        line = fd.readline()
-                        if not line:
-                            break
-                        test_vector.append(line)
-        logger.info("plainlist".center(40, '_'))
-        logger.info(test_vector)
+                with open(os.path.abspath(DOWNLOAD_FOLDER + filename), 'rb') as fd:
+                    content = fd.read()
+                    test_vector.append(base64.b64encode(content).decode('ascii'))
+        logger.debug("plainlist".center(40, '_'))
+        logger.debug(test_vector)
 
-        GI.Encrypt(task_id, test_vector, client)
-        cipherlist = GI.ReceivedEncrypt(task_id, client)
+        if test_select.find('Encrypt') != -1:
+            logger.info("Encryption Begins")
+            GI.Encrypt(task_id, test_vector, client)
+            cipherlist = GI.ReceivedEncrypt(task_id, client)
+            logger.info("plaintext".center(40, '_'))
+            logger.info('\n'.join(cipherlist))
+            logger.info("Encryption Ends")
+            if test_select.find('Decrypt') != -1:
+                logger.info("Decryption Begins")
+                GI.Decrypt(task_id, cipherlist, client)
+                plainlist = GI.ReceivedDecrypt(task_id, client)
+                logger.info("ciphertext".center(40, '_'))
+                logger.info('\n'.join(plainlist))
+                logger.info("Decryption Ends")
 
         ciphertext = '\n'.join(cipherlist)
         plaintext = '\n'.join(test_vector)
-        logger.info("cipherlist".center(40, '_'))
-        logger.info(cipherlist)
+        logger.debug("cipherlist".center(40, '_'))
+        logger.debug(cipherlist)
         check_equals(plaintext, ciphertext)
-
+        
+        ciphertext = base64.b64decode(ciphertext)
+        plaintext = base64.b64decode(plaintext)
         cipherpath = str(os.path.abspath(UPLOAD_FOLDER)) + '/' + \
-                     str(task_id) + '-ciphertext.txt'
+                     str(task_id) + filename.split('.')[0] + '-ciphertext.' + file_extension
 
-        with open(cipherpath, 'w') as fd:
+        plainpath = str(os.path.abspath(UPLOAD_FOLDER)) + '/' + \
+            str(task_id) + filename.split('.')[0] + '-plaintext.' + file_extension
+
+        with open(cipherpath, 'wb') as fd:
             fd.write(ciphertext)
+
+        with open(plainpath, 'wb') as fd:
+            fd.write(plaintext)
+
         task_id += 1
 
     return render_template('view.html', ciphertext=ciphertext,
+                                        plaintext=plaintext,
                                         test=test_select,
                                         algo=algo_select
                                         )
                                         
 
-@app.route("/download/")
+@app.route("/download/cipher/")
 def download_cipher():
     return send_file(cipherpath, as_attachment=True)
+
+
+@app.route("/download/plain/")
+def download_plain():
+    return send_file(plainpath, as_attachment=True)
 
 
 if __name__ == "__main__":

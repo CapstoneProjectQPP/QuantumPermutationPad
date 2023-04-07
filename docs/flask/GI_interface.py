@@ -6,7 +6,7 @@ import sys
 import json
 import time
 LOG_FILE = "out.log"
-
+encoding='utf-8'
 
 class Logger:
     def init(file, level) -> None:
@@ -78,8 +78,9 @@ class GI:
         cipher_list = []
         while True:
             data = client.get_queue()
+            recv_msg = data.decode(encoding)
             try:
-                decoded_msg = json.loads(data)
+                decoded_msg = json.loads(recv_msg)
             except json.decoder.JSONDecodeError:
                 delim ='.(?={"api_call": "ENCRYPT", "task_id": "\d", "interface_type": "GI", "sender_id": "0",)'
                 recv_msg = re.split(delim, recv_msg)
@@ -114,7 +115,7 @@ class GI:
         cipher_list = []
         while True:
             data = client.get_queue()
-            recv_msg = data.decode('ascii')
+            recv_msg = data.decode(encoding)
             try:
                 decoded_msg = json.loads(recv_msg)
             except json.decoder.JSONDecodeError:

@@ -12,6 +12,7 @@ from GI_interface import Logger
 logger = Logger.init(None, logging.DEBUG)
 PAYLOAD = 4096
 delim ='.(?={"api_call": "ENCRYPT", "task_id": "\d", "interface_type": "GI", "sender_id": "0",)'
+encoding = 'utf-8'
 
 """
 Steps:
@@ -44,10 +45,10 @@ class Client:
     def connection_send(self):
         while True:
             if not self.send_queue.empty():
-                # self.outgoing_mutex.acquire()
+                self.outgoing_mutex.acquire()
                 message = self.send_queue.get()
-                # self.outgoing_mutex.release()
-                self.s.send(message.encode('ascii'))
+                self.outgoing_mutex.release()
+                self.s.send(message.encode(encoding))
 
     def send_to_queue(self, message):
         # self.outgoing_mutex.acquire()
@@ -60,7 +61,7 @@ class Client:
         data = b''
         while True:
             data  += self.s.recv(PAYLOAD)
-            recv_msg = data.decode('ascii')
+            recv_msg = data.decode(encoding)
             try:
                 decoded_msg = json.loads(recv_msg)
             except json.decoder.JSONDecodeError:
@@ -79,12 +80,12 @@ class Client:
                     try:
                         decoded_msg = json.loads(msg)
                     except json.decoder.JSONDecodeError:
-                       data = msg.encode('ascii')
+                       data = msg.encode(encoding)
                     else:
-                        self.recv_queue.put(msg.encode('ascii'))
+                        self.recv_queue.put(msg.encode(encoding))
                         data = b''
             else:
-                self.recv_queue.put(recv_msg.encode('ascii'))
+                self.recv_queue.put(recv_msg.encode(encoding))
                 data = b''
 
     def get_queue(self):
