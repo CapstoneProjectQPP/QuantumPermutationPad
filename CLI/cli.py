@@ -191,44 +191,37 @@ class QPP_parser:
         
         # multithreading
         incoming_t = threading.Thread(target=client.connection_recv, args=())
-        print("THREAD OUT")
         outgoing_t = threading.Thread(target=client.connection_send, args=())
-        print("THREAD MSG")
         print_msg_t = threading.Thread(target=client.print_outgoing_queue, args=())
         
-        print("THREAD INCOME")
         
         incoming_t.start()
-        print("THREAD OUTGO")
         outgoing_t.start()
-        print("THREAD START")
         print_msg_t.start()
-
-        print("THREAD START")
         # parse the arguments from standard input
         while True:
             userinput = input("-> ")
             args = self.parser.parse_args([userinput])
             print(args)
 
-            if args.verbose:
-                log_level = logging.DEBUG
-            else:
-                log_level = logging.ERROR
+            # if args.verbose:
+            #     log_level = logging.DEBUG
+            # else:
+            #     log_level = logging.ERROR
 
-            if not args.logging:
-                LOG_FILE = None
+            # if not args.logging:
+            #     LOG_FILE = None
 
             # configure logging to user preference
-            logger = Logger.init(LOG_FILE, log_level)
+            # logger = Logger.init(LOG_FILE, log_level)
 
-            logger.debug("DEBUG_IN_PROGRAM")
-            logger.info("INFO_IN_PROGRAM")
-            logger.warning("WARNING_IN_PROGRAM")
-            logger.error("ERROR_IN_PROGRAM")
-            logger.critical("CRITICAL_IN_PROGRAM")
+            # logger.debug("DEBUG_IN_PROGRAM")
+            # logger.info("INFO_IN_PROGRAM")
+            # logger.warning("WARNING_IN_PROGRAM")
+            # logger.error("ERROR_IN_PROGRAM")
+            # logger.critical("CRITICAL_IN_PROGRAM")
 
-            commands = Commands(logger)
+            # commands = Commands(logger)
 
             # test_vectors = QPP_commands.test_vector_gen(args.vector)
 
@@ -241,16 +234,9 @@ class QPP_parser:
                 print("Send encryption")
                 #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
                 task_id += 1
-                msg = client.string_to_json("ENCRYPT",task_id, "GC", 0, 0, 0, 0, "Hello World")
-                # client.connection_send(msg)
-                # client.connection_send('\n')
-                
-                # recv = client.get_recv_message()
-                # while recv == None:
-                #     recv = client.get_recv_message()
-                #     continue
-                # print(recv)
-                #send the encryption data to the CoreComplex
+                l = len("48656c6c6f20576f726c640d0a")
+                msg = client.string_to_json("ENCRYPT",task_id, "GC", 0, 0, 0, 2*l, "48656c6c6f20576f726c640d0a")
+
                 
                 client.to_outgoing_queue(msg)
 
@@ -266,11 +252,9 @@ class QPP_parser:
                 msg = client.string_to_json("DECRYPT",task_id, "GC", 0, 0, 0, 0, "Hello World")
                 
                 client.to_outgoing_queue(msg)
+            else:
+                continue
 
-                #recieve the decryption data from the CoreComplex
-
-            # QPP_commands.compare_results(qpp_results, test_vectors)
-            # QPP_commands.compare_results(aes_results, test_vectors)
             
         producer_t.join()
 

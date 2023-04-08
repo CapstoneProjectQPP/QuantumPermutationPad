@@ -68,6 +68,15 @@ class Client:
         if not self.recv_queue.empty():
             data = self.recv_queue.get()
             # self.mutex.release()
+            #save data to file
+            print("Received from server: " + data)
+
+            #open a file to write the data
+            f = open("data.txt", "w")
+            f.write(data)
+            f.close()
+
+            
             return data
 
         else:
@@ -77,7 +86,7 @@ class Client:
 
     @staticmethod
     def string_to_json(api_call, task_id, interface_type = "GC", sender_id = "0", payload_total_fragments = "0",
-                       payload_fragment_number = "0", payload_size = "0", payload_content = "Hello World"):
+                       payload_fragment_number = "0", payload_size = "0", payload_content = "48656c6c6f20576f726c640d0a"):
         msg = {"api_call":api_call,
                "task_id":task_id,
                "interface_type":interface_type,
