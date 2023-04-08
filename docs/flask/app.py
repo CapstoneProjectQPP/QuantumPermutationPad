@@ -67,8 +67,13 @@ def research():
     return render_template('research.html')
 
 
-@app.route("/demo/")
+@app.route("/demo/", methods=['GET', 'POST'])
 def demo():
+    if request.method == "POST":
+        print('hi')
+        
+    else:
+        print('hi')
     return render_template('demo.html')
 
 
@@ -183,9 +188,6 @@ def view():
                            decrypt_time=decrypt_time
                            )
 
-
-
-                                        
 
 @app.route("/download/cipher/")
 def download_cipher():

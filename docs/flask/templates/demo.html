@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %} QPP Results {% endblock %}
+{% block header %} Results {% endblock %}
+
+{% block header_content %} 
+  <p> Here are the final results </p>
+{% endblock %}
+
+
+{% block content %}
+
+<form method="POST" >
+    <div> <h2>User Input</h2>
+       <input size=50 type=text name=user_input required>
+    </div>
+</form>
+<form method="GET" >
+    <div> <h2>CipherText</h2>
+        <textarea style="resize:none" rows="4" cols="50"> {{ ciphertext }} </textarea>
+    </div>
+    <div> <h2>PlainText</h2>
+        <textarea style="resize:none" rows="4" cols="50"> {{ plaintext }} </textarea>
+    </div>
+
+    <button type="submit"> Submit </button>
+</form>
+
+{% endblock %}
