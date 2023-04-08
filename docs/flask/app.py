@@ -67,14 +67,38 @@ def research():
     return render_template('research.html')
 
 
+
 @app.route("/demo/", methods=['GET', 'POST'])
 def demo():
+    global task_id
+    if len(request.args) == 0:
+        cipher_list = plain_list = [" "]
+        decrypt_time = encrypt_time = 0
+
     if request.method == "POST":
-        print('hi')
+        user_input = request.form["user_input"]
+
+        pre_encrypt_time = time.time()
+        GI.Encrypt(task_id, [user_input], client)
+        cipher_list, post_encrypt_time = GI.ReceivedEncrypt(task_id, client)
+        encrypt_time = post_encrypt_time - pre_encrypt_time
+        task_id += 1
+    
+        print(cipher_list)
+        print(encrypt_time)
+
+        pre_decrypt_time = time.time()
+        GI.Decrypt(task_id, cipher_list, client)
+        plain_list, post_decrypt_time = GI.ReceivedDecrypt(task_id, client)
+        decrypt_time = post_decrypt_time - pre_decrypt_time
+        task_id += 1
         
-    else:
-        print('hi')
-    return render_template('demo.html')
+        print(plain_list)
+        print(decrypt_time)
+    return render_template('demo.html', ciphertext=cipher_list[0],
+                                        plaintext=plain_list[0],
+                                        decrypt_time=decrypt_time,
+                                        encrypt_time=encrypt_time)
 
 
 @app.route("/calc/", methods=['GET', 'POST'])
@@ -221,7 +245,8 @@ if __name__ == "__main__":
         incoming_t.start()
         outgoing_t.start()
 
-        app.run(debug=False, host=socket.gethostname(), port=4996)
+        app.run(debug=False, host=socket.gethostname(),
+                port=4996) #ssl_context='adhoc')
 
         incoming_t.join()
         outgoing_t.join()

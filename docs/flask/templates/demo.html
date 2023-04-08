@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %} QPP Results {% endblock %}
-{% block header %} Results {% endblock %}
+{% block title %} QPP Demo {% endblock %}
+{% block header %} Interactive Demo {% endblock %}
 
 {% block header_content %} 
-  <p> Here are the final results </p>
+  <p> This page allows users to interact with the embedded system with textual input </p>
 {% endblock %}
 
 
@@ -12,18 +12,30 @@
 
 <form method="POST" >
     <div> <h2>User Input</h2>
-       <input size=50 type=text name=user_input required>
+        <textarea style="resize:none" name=user_input rows="4" cols="50" required></textarea>
     </div>
+    <button class="button" type="submit"> Submit </button>
 </form>
 <form method="GET" >
     <div> <h2>CipherText</h2>
-        <textarea style="resize:none" rows="4" cols="50"> {{ ciphertext }} </textarea>
+        <p style="resize:none" rows="4" cols="10"> {{ ciphertext }} </p>
     </div>
     <div> <h2>PlainText</h2>
-        <textarea style="resize:none" rows="4" cols="50"> {{ plaintext }} </textarea>
+        <p style="resize:none" rows="4" cols="10"> {{ plaintext }} </p>
     </div>
 
-    <button type="submit"> Submit </button>
+    <div><br></br>
+        <p>Encrypt Time:
+        <span style="resize:none" rows="1" cols="10">{{ encrypt_time }} </span>(s)
+        </p>
+    </div>
+    <div>
+        <p>
+        <label>Decrypt Time: </label>
+        <span style="resize:none" rows="1" cols="10"> {{ decrypt_time }} </span>(s)
+        </p>
+    </div>
+
 </form>
 
 {% endblock %}
