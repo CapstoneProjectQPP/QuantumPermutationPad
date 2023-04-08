@@ -216,21 +216,8 @@ class QPP_parser:
             else:
                 log_level = logging.ERROR
 
-<<<<<<< Updated upstream
             if not args.logging:
                 LOG_FILE = None
-=======
-        json = \
-        {
-            "task_id": 1,
-            "sender_id": 1
-        }
-
-        if args.verbose:
-            log_level = logging.DEBUG
-        else:
-            log_level = logging.ERROR
->>>>>>> Stashed changes
 
             # configure logging to user preference
             logger = Logger.init(LOG_FILE, log_level)
@@ -254,7 +241,7 @@ class QPP_parser:
                 print("Send encryption")
                 #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
                 task_id += 1
-                msg = client.string_to_json("ENCRYPT", str(task_id), "GC", "0", "0", "0", "0", "Hello World")
+                msg = client.string_to_json("ENCRYPT",task_id, "GC", 0, 0, 0, 0, "Hello World")
                 # client.connection_send(msg)
                 # client.connection_send('\n')
                 
@@ -276,10 +263,9 @@ class QPP_parser:
 
                 #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
                 task_id += 1
-                msg = client.string_to_json("DECRYPT", str(task_id), "GC", "0", "0", "0", "0", "Hello World")
-
-                client.connection_send(msg)
-                client.connection_send('\n')
+                msg = client.string_to_json("DECRYPT",task_id, "GC", 0, 0, 0, 0, "Hello World")
+                
+                client.to_outgoing_queue(msg)
 
                 #recieve the decryption data from the CoreComplex
 
