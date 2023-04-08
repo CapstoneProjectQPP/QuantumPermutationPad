@@ -18,10 +18,14 @@
 </form>
 <form method="GET" >
     <div> <h2>CipherText</h2>
-        <p style="resize:none" rows="4" cols="10"> {{ ciphertext }} </p>
+        {% for cipher in ciphertext %} 
+            <p style="resize:none" rows="4" cols="10"> {{ cipher }} </p>
+        {% endfor %}
     </div>
     <div> <h2>PlainText</h2>
-        <p style="resize:none" rows="4" cols="10"> {{ plaintext }} </p>
+        {% for plain in plaintext %}
+            <p style="resize:none" rows="4" cols="10"> {{ plain }} </p>
+        {% endfor %}
     </div>
 
     <div><br></br>

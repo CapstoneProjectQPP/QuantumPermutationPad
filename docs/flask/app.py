@@ -95,8 +95,12 @@ def demo():
         
         print(plain_list)
         print(decrypt_time)
-    return render_template('demo.html', ciphertext=cipher_list[0],
-                                        plaintext=plain_list[0],
+        
+        cipher_list=cipher_list[0].split('\n')
+        plain_list=plain_list[0].split('\n')
+
+    return render_template('demo.html', ciphertext=cipher_list,
+                                        plaintext=plain_list,
                                         decrypt_time=decrypt_time,
                                         encrypt_time=encrypt_time)
 
