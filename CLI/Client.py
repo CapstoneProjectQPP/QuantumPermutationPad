@@ -42,7 +42,9 @@ class Client:
             message = self.send_queue.get()
             # self.outgoing_mutex.release()
             print(message)
+            message = message + '\n'
             self.s.send(message.encode('ascii'))
+            
             print("sent")
             
     def to_outgoing_queue(self, message):
@@ -81,7 +83,7 @@ class Client:
                "interface_type":interface_type,
                "sender_id":sender_id,
                "payload_total_fragments": payload_total_fragments,
-               "payload_fragment_number": payload_fragment_number,
+               "payload_frag_number": payload_fragment_number,
                "payload_size": payload_size,
                "payload_content": payload_content}
 

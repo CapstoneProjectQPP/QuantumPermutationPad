@@ -241,7 +241,7 @@ class QPP_parser:
                 print("Send encryption")
                 #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
                 task_id += 1
-                msg = client.string_to_json("ENCRYPT", str(task_id), "GC", "0", "0", "0", "0", "Hello World")
+                msg = client.string_to_json("ENCRYPT",task_id, "GC", 0, 0, 0, 0, "Hello World")
                 # client.connection_send(msg)
                 # client.connection_send('\n')
                 
@@ -263,7 +263,7 @@ class QPP_parser:
 
                 #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
                 task_id += 1
-                msg = client.string_to_json("DECRYPT", str(task_id), "GC", "0", "0", "0", "0", "Hello World")
+                msg = client.string_to_json("DECRYPT",task_id, "GC", 0, 0, 0, 0, "Hello World")
                 
                 client.to_outgoing_queue(msg)
 
