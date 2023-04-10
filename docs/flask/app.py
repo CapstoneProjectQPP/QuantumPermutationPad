@@ -28,7 +28,7 @@ vector_select = "True"
 vector_len = 100
 vector_num = 100
 
-logger = Logger.init(None, logging.ERROR)
+logger = Logger.init(None, logging.DEBUG)
 client = Client(GI_PORT, socket.gethostname(), "CLI")
 
 task_id = 0
@@ -82,7 +82,7 @@ def demo():
         GI.Encrypt(task_id, [user_input], client)
         cipher_list, post_encrypt_time = GI.ReceivedEncrypt(task_id, client)
         encrypt_time = post_encrypt_time - pre_encrypt_time
-        task_id += 1
+        task_id += 1 
     
         print(cipher_list)
         print(encrypt_time)
@@ -136,7 +136,7 @@ def view():
             test_vector = Commands.test_vector_gen([int(vector_len), int(vector_num)])
             logger.debug("vectors".center(40, '_'))
             logger.debug(test_vector)
-            test_vector = [base64.b64encode(bytes(item, 'utf-8')).decode('ascii') for item in test_vector]
+            test_vector = [ bytes(item, 'ascii').hex() for item in test_vector]
             filename = "test-vectors-" + vector_len + "-" + vector_num
             file_extension = "txt"
         else:
@@ -151,7 +151,7 @@ def view():
                 file.save(os.path.join(app.config['DOWNLOAD_FOLDER'], filename))
                 with open(os.path.abspath(DOWNLOAD_FOLDER + filename), 'rb') as fd:
                     content = fd.read()
-                    test_vector.append(base64.b64encode(content).decode('ascii'))
+                    test_vector.append(content.hex())
         logger.debug("plainlist".center(40, '_'))
         logger.debug(test_vector)
 
@@ -181,12 +181,12 @@ def view():
                     str(task_id) + filename.split('.')[0] + '-plaintext.' + file_extension
 
                 if len(plainlist) != 1:
-                    plainlist = [ base64.b64decode(cipher).decode('utf-8') for cipher in plainlist ]
+                    plainlist = [ bytes.fromhex(cipher) for cipher in plainlist ]
                     plaintext = '\n'.join(plainlist)
                     with open(plainpath, 'wb') as fd:
-                        fd.write(bytes(plaintext,'utf-8'))
+                        fd.write(plaintext)
                 else:
-                    plainlist = [ base64.b64decode(cipher) for cipher in plainlist ]
+                    plainlist = [ bytes.fromhex(cipher) for cipher in plainlist ]
                     plaintext = plainlist[0]
                     with open(plainpath, 'wb') as fd:
                         fd.write(plaintext)
@@ -195,12 +195,16 @@ def view():
             str(task_id) + filename.split('.')[0] + '-ciphertext.' + file_extension
 
         if len(cipherlist) != 1:
-            cipherlist = [ base64.b64decode(cipher).decode('utf-8') for cipher in cipherlist ]
+            cipherlist = [ bytes.fromhex(cipher).decode('ascii') for cipher in cipherlist ]
             ciphertext = '\n'.join(cipherlist)
+            print("cipherlist".center(40, "_"))
+            print(cipherlist)
+            print("ciphertex".center(40, "_"))
+            print(ciphertext)
             with open(cipherpath, 'wb') as fd:
-                fd.write(bytes(ciphertext, 'utf-8'))
+                fd.write(bytes(ciphertext, 'ascii'))
         else:
-            cipherlist = [ base64.b64decode(cipher) for cipher in cipherlist ]
+            cipherlist = [ bytes.fromhex(cipher) for cipher in cipherlist ]
             ciphertext = cipherlist[0]
             with open(cipherpath, 'wb') as fd:
                 fd.write(ciphertext)
