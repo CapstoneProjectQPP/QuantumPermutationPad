@@ -81,7 +81,7 @@ def demo():
         pre_encrypt_time = time.time()
         GI.Encrypt(task_id, [bytes(user_input, 'ascii').hex()], client)
         cipher_list, post_encrypt_time = GI.ReceivedEncrypt(task_id, client)
-        encrypt_time = post_encrypt_time - pre_encrypt_time
+        encrypt_time = round(post_encrypt_time - pre_encrypt_time , 2)
         task_id += 1 
     
         print(cipher_list)
@@ -90,7 +90,7 @@ def demo():
         pre_decrypt_time = time.time()
         GI.Decrypt(task_id, cipher_list, client)
         plain_list, post_decrypt_time = GI.ReceivedDecrypt(task_id, client)
-        decrypt_time = post_decrypt_time - pre_decrypt_time
+        decrypt_time = round(post_decrypt_time - pre_decrypt_time, 2)
         task_id += 1
         
         print([ bytes.fromhex(text) for text in plain_list ])
@@ -165,7 +165,7 @@ def view():
             pre_encrypt_time = time.time()
             GI.Encrypt(task_id, test_vector, client)
             cipherlist, post_encrypt_time = GI.ReceivedEncrypt(task_id, client)
-            encrypt_time = post_encrypt_time - pre_encrypt_time
+            encrypt_time = round(post_encrypt_time - pre_encrypt_time, 2)
 
             logger.info("plaintext".center(40, '_'))
             logger.info('\n'.join(cipherlist))
@@ -178,7 +178,7 @@ def view():
                 logger.info("Decrypt sent")
 
                 plainlist, post_decrypt_time = GI.ReceivedDecrypt(task_id, client)
-                decrypt_time = post_decrypt_time - pre_decrypt_time
+                decrypt_time = round(post_decrypt_time - pre_decrypt_time, 2)
                 plainpath = str(os.path.abspath(UPLOAD_FOLDER)) + '/' + \
                     str(task_id) + filename.split('.')[0] + '-plaintext.' + file_extension
 
@@ -211,7 +211,6 @@ def view():
             with open(cipherpath, 'wb') as fd:
                 fd.write(ciphertext)
         
-
         task_id += 1
 
     return render_template('view.html', ciphertext=ciphertext,

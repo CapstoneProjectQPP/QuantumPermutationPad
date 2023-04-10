@@ -3,8 +3,6 @@
 import socket
 import sys
 import time
-import threading
-from Client import *
 
 
 def server_program():
@@ -23,13 +21,11 @@ def server_program():
     print("Connection from: " + str(address))
     while True:
         # receive data stream. it won't accept data packet greater than 1024 bytes
-        data = conn.recv(4096).decode()
-        time.sleep(0.1)
+        data = conn.recv(1024).decode()
         if not data:
             # if data is not received break
             break
 #        print("from connected user: " + str(data))
-        time.sleep(0.1)
         conn.send(data.encode())
 
     conn.close()  # close the connection
