@@ -181,10 +181,10 @@ def view():
                     str(task_id) + filename.split('.')[0] + '-plaintext.' + file_extension
 
                 if len(plainlist) != 1:
-                    plainlist = [ bytes.fromhex(cipher) for cipher in plainlist ]
+                    plainlist = [ bytes.fromhex(cipher).decode('ascii') for cipher in plainlist ]
                     plaintext = '\n'.join(plainlist)
                     with open(plainpath, 'wb') as fd:
-                        fd.write(plaintext)
+                        fd.write(bytes(plaintext, 'ascii'))
                 else:
                     plainlist = [ bytes.fromhex(cipher) for cipher in plainlist ]
                     plaintext = plainlist[0]
