@@ -254,7 +254,7 @@ if __name__ == "__main__":
         incoming_t.start()
         outgoing_t.start()
 
-        app.run(debug=False, host=socket.gethostname(),
+        app.run(debug=True, host=socket.gethostname(),
                 port=4996) #ssl_context='adhoc')
 
         incoming_t.join()
