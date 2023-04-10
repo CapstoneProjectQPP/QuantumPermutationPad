@@ -79,7 +79,7 @@ def demo():
         user_input = request.form["user_input"]
 
         pre_encrypt_time = time.time()
-        GI.Encrypt(task_id, [user_input], client)
+        GI.Encrypt(task_id, [bytes(user_input, 'ascii').hex()], client)
         cipher_list, post_encrypt_time = GI.ReceivedEncrypt(task_id, client)
         encrypt_time = post_encrypt_time - pre_encrypt_time
         task_id += 1 
@@ -93,11 +93,13 @@ def demo():
         decrypt_time = post_decrypt_time - pre_decrypt_time
         task_id += 1
         
-        print(plain_list)
+        print([ bytes.fromhex(text) for text in plain_list ])
         print(decrypt_time)
         
-        cipher_list=cipher_list[0].split('\n')
-        plain_list=plain_list[0].split('\n')
+        cipher_list=bytes.fromhex(cipher_list[0]).decode('ascii').split('\n')
+        print(cipher_list)
+        plain_list=bytes.fromhex(plain_list[0]).decode('ascii').split('\n')
+        print(plain_list)
 
     return render_template('demo.html', ciphertext=cipher_list,
                                         plaintext=plain_list,
