@@ -77,6 +77,8 @@ def demo():
 
     if request.method == "POST":
         user_input = request.form["user_input"]
+        logger.debug("user_input".center(40, '_'))
+        logger.debug(bytes(user_input, 'ascii').hex())
 
         pre_encrypt_time = time.time()
         GI.Encrypt(task_id, [bytes(user_input, 'ascii').hex()], client)
@@ -84,8 +86,8 @@ def demo():
         encrypt_time = round(post_encrypt_time - pre_encrypt_time , 2)
         task_id += 1 
     
-        print(cipher_list)
-        print(encrypt_time)
+        logger.debug("cipherlist".center(40, '_'))
+        logger.debug(cipher_list)
 
         pre_decrypt_time = time.time()
         GI.Decrypt(task_id, cipher_list, client)
@@ -93,13 +95,22 @@ def demo():
         decrypt_time = round(post_decrypt_time - pre_decrypt_time, 2)
         task_id += 1
         
-        print([ bytes.fromhex(text) for text in plain_list ])
-        print(decrypt_time)
+
+
+        logger.debug("plain_list".center(40, '_'))
+        logger.debug(plain_list)
+        logger.debug("cipherlist".center(40, '_'))
+        logger.debug(cipher_list)
+        #print([ bytes.fromhex(text) for text in plain_list ])
+        #print(decrypt_time)
         
         cipher_list=bytes.fromhex(cipher_list[0]).decode('ascii').split('\n')
-        print(cipher_list)
         plain_list=bytes.fromhex(plain_list[0]).decode('ascii').split('\n')
-        print(plain_list)
+
+        logger.debug("plain_list".center(40, '_'))
+        logger.debug(plain_list)
+        logger.debug("cipherlist".center(40, '_'))
+        logger.debug(cipher_list)
 
     return render_template('demo.html', ciphertext=cipher_list,
                                         plaintext=plain_list,
@@ -254,7 +265,7 @@ if __name__ == "__main__":
         incoming_t.start()
         outgoing_t.start()
 
-        app.run(debug=True, host=socket.gethostname(),
+        app.run(debug=False, host=socket.gethostname(),
                 port=4996) #ssl_context='adhoc')
 
         incoming_t.join()
