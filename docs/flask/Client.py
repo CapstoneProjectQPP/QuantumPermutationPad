@@ -17,7 +17,7 @@ encoding = 'utf-8'
 """
 Steps:
 Get the user interaction
-Make sure connection is established between CLI and Core
+Make sure connection is established between CLI and Co(\{(?:(?>[^{}"'\/]+)|(?>"(?:(?>[^\\"]+)|\\.)*")|(?>'(?:(?>[^\\']+)|\\.)*')|(?>\/\/.*\n)|(?>\/\*.*?\*\/)|(?-1))*\})re
 Send some message
 Separate send message and listening into 2 threads
 """
@@ -59,34 +59,36 @@ class Client:
     def connection_recv(self):
         decoded_msg = None
         data = b''
+        regex_group = None
         while True:
             data  += self.s.recv(PAYLOAD)
+            logger.debug('data'.center(40, '_') + '\n')
+            logger.debug(data)
             recv_msg = data.decode(encoding)
-            try:
-                decoded_msg = json.loads(recv_msg)
-            except json.decoder.JSONDecodeError:
-                logger.debug('recv msg'.center(40, '_') + '\n' + recv_msg + '\n')
-                delim ='.\n(?={"api_call": ".*?", "task_id": \d, "interface_type": "GI", "sender_id": \d, )'
-                logger.debug('delim'.center(40,'_') + '\n' + delim + '\n')
+            if recv_msg != '\n':
+                try:
+                    decoded_msg = json.loads(recv_msg)
+                except json.decoder.JSONDecodeError:
+                    logger.debug('recv msg'.center(40, '_') + '\n' + recv_msg + '\n')
+                    delim = r"(\{(?:(?>[^{}\"'\/]+)|(?>\"(?:(?>[^\\\\\"]+)|\\\\.)*\")|(?>'(?:(?>[^\\\\']+)|\\\\.)*')|(?>\/\/.*\\n)|(?>\/\*.*?\*\/)|)*\})"
+                    pattern = re.compile(delim, re.M | re.S | re.I)
+                    logger.debug('delim'.center(40,'_') + '\n' + delim + '\n')
 
-                recv_msg = re.split(delim, recv_msg)
-                logger.debug('last_msg'.center(40, '_') + '\n')
-                last_msg = recv_msg[-1]
-                logger.debug(recv_msg)
-                for msg in recv_msg:
-                    if msg != last_msg:
-                        msg = msg + "}"
-                    logger.debug('msg'.center(40, '_') + '\n' + msg + '\n')
-                    try:
-                        decoded_msg = json.loads(msg)
-                    except json.decoder.JSONDecodeError:
-                       data = msg.encode(encoding)
-                    else:
-                        self.recv_queue.put(msg.encode(encoding))
-                        data = b''
+                    for msg in re.finditer(pattern, recv_msg):
+                        msg = msg.group(0)
+                        logger.debug('msg'.center(40, '_') + '\n' + msg + '\n')
+                        try:
+                            decoded_msg = json.loads(msg)
+                        except json.decoder.JSONDecodeError:
+                           data = msg.encode(encoding)
+                        else:
+                            self.recv_queue.put(msg.encode(encoding))
+                            data = b''
+                else:
+                    self.recv_queue.put(recv_msg.encode(encoding))
+                    data = b''
             else:
-                self.recv_queue.put(recv_msg.encode(encoding))
-                data = b''
+                continue
 
     def get_queue(self):
         while True:
