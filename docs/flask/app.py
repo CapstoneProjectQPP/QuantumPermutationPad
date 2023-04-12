@@ -144,6 +144,7 @@ def view():
            vector_num, vector_len, task_id, client, cipherpath, plainpath
     test = algo = "ERROR"
     test_vector = []
+    og_vector = []
     plaintext = None
     client.clear_queue()
     if request.method == 'POST':
@@ -157,6 +158,7 @@ def view():
             test_vector = Commands.test_vector_gen([int(vector_len), int(vector_num)])
             logger.debug("vectors".center(40, '_'))
             logger.debug(test_vector)
+            og_vector = test_vector.copy()
             test_vector = [ bytes(item, 'ascii').hex() for item in test_vector]
             filename = "test-vectors-" + vector_len + "-" + vector_num
             file_extension = "txt"
@@ -172,6 +174,7 @@ def view():
                 file.save(os.path.join(app.config['DOWNLOAD_FOLDER'], filename))
                 with open(os.path.abspath(DOWNLOAD_FOLDER + filename), 'rb') as fd:
                     content = fd.read()
+                    og_vector.append(content)
                     test_vector.append(content.hex())
         logger.debug("plainlist".center(40, '_'))
         logger.debug(test_vector)
@@ -193,7 +196,7 @@ def view():
                 logger.info("Decryption Begins")
 
                 pre_decrypt_time = time.time()
-                GI.Decrypt(task_id, cipherlist, test_vector, client)
+                GI.Decrypt(task_id, cipherlist, og_vector, client)
                 logger.info("Decrypt sent")
 
                 plainlist, post_decrypt_time = GI.ReceivedDecrypt(task_id, client)
