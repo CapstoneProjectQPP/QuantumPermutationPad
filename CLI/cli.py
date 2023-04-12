@@ -231,11 +231,12 @@ class QPP_parser:
                 # qpp_cipher = QPP_commands.encrypt(test_vectors, "QPP")
                 # if args.AES:
                 #     aes_cipher = QPP_commands.encrypt(test_vectors, "AES")
+                text = input("input encryption message:")
                 print("Send encryption")
                 #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
                 task_id += 1
                 l = len("48656c6c6f20576f726c640d0a")
-                msg = client.string_to_json("ENCRYPT",task_id, "GC", 0, 0, 0, 2*l, "48656c6c6f20576f726c640d0a")
+                msg = client.string_to_json("ENCRYPT",task_id, "GC", 0, 0, 0, 2l, text)
 
                 
                 client.to_outgoing_queue(msg)
@@ -249,7 +250,8 @@ class QPP_parser:
 
                 #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
                 task_id += 1
-                msg = client.string_to_json("DECRYPT",task_id, "GC", 0, 0, 0, 0, "Hello World")
+                text = input("enter cipher text: ")
+                msg = client.string_to_json("DECRYPT",task_id, "GC", 0, 0, 0, 13, text)
                 
                 client.to_outgoing_queue(msg)
             else:
