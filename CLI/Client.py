@@ -54,7 +54,6 @@ class Client:
         # self.outgoing_mutex.release()
 
 
-
     def connection_recv(self):
         while True:
             msg = self.s.recv(4096)

@@ -6,14 +6,23 @@
 # Mac/OSX
 .DS_Store
 
+# flask pycache
+/docs/examples/flask/pycache/
+/docs/examples/flask/venv/
+
 /test_framework_package/.idea
 
 # UI test folder
 /docs/examples
 
-# flask venv and pycache
+# flask venv, pycache, and user uploaded files
 /docs/flask/venv/
 /docs/flask/__pycache__/
+/docs/flask/downloads/
+/docs/flask/uploads/
 
 # ccls language server cache
 /.ccls-cache/
+
+# pycache for CLI
+/CLI/__pycache__/

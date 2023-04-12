@@ -203,8 +203,8 @@ class QPP_parser:
         outgoing_t.start()
         print("THREAD START")
         print_msg_t.start()
-
         print("THREAD START")
+
         # parse the arguments from standard input
         while True:
             userinput = input("-> ")
@@ -234,6 +234,7 @@ class QPP_parser:
 
 
 
+
             if args.encryption:
                 # qpp_cipher = QPP_commands.encrypt(test_vectors, "QPP")
                 # if args.AES:
@@ -241,7 +242,7 @@ class QPP_parser:
                 print("Send encryption")
                 #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
                 task_id += 1
-                msg = client.string_to_json("ENCRYPT",task_id, "GC", 0, 0, 0, 0, "Hello World")
+                msg = client.string_to_json("ENCRYPT",task_id, "GC", 0, 0, 0, 5, "Hello")
                 # client.connection_send(msg)
                 # client.connection_send('\n')
                 
@@ -263,7 +264,7 @@ class QPP_parser:
 
                 #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
                 task_id += 1
-                msg = client.string_to_json("DECRYPT",task_id, "GC", 0, 0, 0, 0, "Hello World")
+                msg = client.string_to_json("DECRYPT",task_id, "GC", 0, 0, 0, 5, "33b492227b33b492bf7133b492bf7133b492bf71")
                 
                 client.to_outgoing_queue(msg)
 

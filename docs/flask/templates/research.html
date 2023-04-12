@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %} QPP Research {% endblock %}
+{% block header %} Interactive Research {% endblock %}
+
+{% block header_content %} 
+  <p> This page allows users to interact with the embedded system with textual input
+  which will be Encrypted and Decrypted in QPP. Just hit the Submit button to send the message</p>
+    <script type="text/javascript">
+
+    function EncryptShow() {
+        if (document.getElementById('encrypt_show').checked) {
+            document.getElementById('ifEncypt').style.display = 'block';
+        } else {
+            document.getElementById('ifEncrypt').style.display= 'none';
+        }
+    }
+
+    function DecryptShow() {
+        if (document.getElementById('decrypt_show').checked) {
+            document.getElementById('ifDecrypt').style.display = 'block';
+        } else {
+            document.getElementById('ifDecrypt').style.display= 'none';
+        }
+    }
+
+    function ButtonShow() {
+        if (document.getElementById('decrypt_show').checked ||
+            document.getElementById('encrypt_show').checked) {
+            document.getElementById('submit_button').style.display = 'block';
+        } else {
+            document.getElementById('submit_button').style.display = 'none';
+        }
+    }
+
+</script>
+{% endblock %}
+
+{% block content %}
+
+<div> Encrypt <input type="checkbox"
+                     onclick="javascript:EncryptShow();javascript:ButtonShow()"
+                     name="encrypt_show" id="encrypt_show"/></div>
+
+<div> Decrypt <input type="checkbox" 
+                     onclick="javascript:DecryptShow();javascript:ButtonShow()"
+                     name="decrypt_show" id="decrypt_show"/></div>
+<br>
+<div id="ifEncypt" style="display:none">If yes, explain:
+    <input type='text' id='yes' name='yes'/>
+    <br>What can we do to accommodate you?
+        <input type='text' id='acc' name='acc'/>
+</div>
+<div id="ifDecrypt" style="display:none">If yes, explain:
+    <input type='text' id='yes' name='yes'/>
+    <br>What can we do to accommodate you?
+        <input type='text' id='acc' name='acc'/>
+</div>
+   other 3
+<input type='text' id='other3' name='other3'>
+<br>
+    other 4
+<input type='text' id='other4' name='other4'>
+<br>
+<div id="submit_button" style="display:none">
+<button  class="button" type="submit"> Submit </button>
+<div>
+
+
+{% endblock %}

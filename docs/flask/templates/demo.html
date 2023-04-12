@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %} QPP Demo {% endblock %}
+{% block header %} Interactive Demo {% endblock %}
+
+{% block header_content %} 
+  <p> This page allows users to interact with the embedded system with textual input
+  which will be Encrypted and Decrypted in QPP. Just hit the Submit button to send the message</p>
+{% endblock %}
+
+
+{% block content %}
+
+<form method="POST" >
+    <div> <h2>User Input</h2>
+        <textarea style="resize:none" name=user_input rows="4" cols="50" required></textarea>
+    </div>
+    <button class="button" type="submit"> Submit </button>
+</form>
+<form method="GET" >
+    <div> <h2>Encrypted CipherText</h2>
+        {% for cipher in ciphertext %} 
+            <p style="resize:none" rows="4" cols="10"> {{ cipher }} </p>
+        {% endfor %}
+    </div>
+    <div> <h2>Decrypted PlainText</h2>
+        {% for plain in plaintext %}
+            <p style="resize:none" rows="4" cols="10"> {{ plain }} </p>
+        {% endfor %}
+    </div>
+
+    <div><br></br>
+        <p>Encrypt Time:
+        <span style="resize:none" rows="1" cols="10">{{ encrypt_time }} </span>(s)
+        </p>
+    </div>
+    <div>
+        <p>
+        <label>Decrypt Time: </label>
+        <span style="resize:none" rows="1" cols="10"> {{ decrypt_time }} </span>(s)
+        </p>
+    </div>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %} QPP API {% endblock %}
+{% block header %} API {% endblock %}
+{% block header_stuff %}
+<div class="api-filter">
+  <label for="api-filter"> Filter </label>
+  <input id="api-filter" type="search" placeholder="Enter keyword" />
+</div>
+{% endblock %}
+
+{% block content %}
+<article class="api-section">
+  <div class="api-section-body">
+    <div class="api-group">
+      <h1>CC -> nodeE</h1>
+      <ul>
+        <li>RequestHandshake()</li>
+        <li>ReceivedID()</li>
+        <li>SetApprovedToCommunicate()</li>
+        <li>SetSeed()</li>
+        <li>Encrypt()</li>
+        <li>Decrypt()</li>
+      </ul>
+    </div>
+    <div class="api-group">
+      <h1>nodeE -> CC</h1>
+      <ul>
+        <li>SendID()</li>
+        <li>HSComplete()</li>
+        <li>SendEncrypted()</li>
+        <li>SendDecrypted()</li>
+      </ul>
+    </div>
+  </div>
+</article>
+{% endblock %}

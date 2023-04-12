@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %} Results {% endblock %}
+{% block header %} Results {% endblock %}
+
+{% block content %}
+
+<form>
+    {% for o in data %}
+    <p>{{ o }}</p>
+    {% endfor %}
+</form>
+
+{% endblock %}
