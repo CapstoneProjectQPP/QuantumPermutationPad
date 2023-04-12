@@ -10,7 +10,7 @@
 
     function EncryptShow() {
         if (document.getElementById('encrypt_show').checked) {
-            document.getElementById('ifEncypt').style.display = 'block';
+            document.getElementById('ifEncrypt').style.display = 'block';
         } else {
             document.getElementById('ifEncrypt').style.display= 'none';
         }
@@ -24,47 +24,71 @@
         }
     }
 
-    function ButtonShow() {
-        if (document.getElementById('decrypt_show').checked ||
-            document.getElementById('encrypt_show').checked) {
-            document.getElementById('submit_button').style.display = 'block';
-        } else {
-            document.getElementById('submit_button').style.display = 'none';
-        }
+    function CheckBoxChecK(){
+      EncryptShow();
+      DecryptShow();
     }
 
 </script>
 {% endblock %}
 
 {% block content %}
+<script type="text/javascript" defer> window.load = CheckBoxChecK() </script>
 
 <div> Encrypt <input type="checkbox"
-                     onclick="javascript:EncryptShow();javascript:ButtonShow()"
-                     name="encrypt_show" id="encrypt_show"/></div>
+                     onclick="javascript:EncryptShow();"
+                     name="encrypt_show" id="encrypt_show" checked="{{ encrypt_select }}" /></div>
 
 <div> Decrypt <input type="checkbox" 
-                     onclick="javascript:DecryptShow();javascript:ButtonShow()"
-                     name="decrypt_show" id="decrypt_show"/></div>
+                     onclick="javascript:DecryptShow();"
+                     name="decrypt_show" id="decrypt_show" checked="{{ decrypt_select }}" /></div>
 <br>
-<div id="ifEncypt" style="display:none">If yes, explain:
-    <input type='text' id='yes' name='yes'/>
-    <br>What can we do to accommodate you?
-        <input type='text' id='acc' name='acc'/>
-</div>
-<div id="ifDecrypt" style="display:none">If yes, explain:
-    <input type='text' id='yes' name='yes'/>
-    <br>What can we do to accommodate you?
-        <input type='text' id='acc' name='acc'/>
-</div>
-   other 3
-<input type='text' id='other3' name='other3'>
-<br>
-    other 4
-<input type='text' id='other4' name='other4'>
-<br>
-<div id="submit_button" style="display:none">
-<button  class="button" type="submit"> Submit </button>
+<div style="display:flex">
+  <div id="ifEncrypt" style="display:none">
+    <form method="POST" action="{{ url_for('enc_research') }}">
+      <div> <h2>UTF-8 User Input</h2>
+        <textarea style="resize:none" name=user_input_enc rows="4" cols="50" required></textarea>
+      </div>
+      <div id="submit_button_enc" >
+        <button  class="button" type="submit"> Submit </button>
+      </div>
+    </form>
+    <form method="GET">
+      <div> <h2>Encrypted CipherText</h2>
+          {% for cipher in ciphertext %} 
+              <p style="resize:none" rows="4" cols="10"> {{ cipher }} </p>
+          {% endfor %}
+      </div>
+    </form>
+      <div><br></br>
+          <p>Encrypt Time:
+          <span style="resize:none" rows="1" cols="10">{{ encrypt_time }} </span>(s)
+          </p>
+      </div>
+  </div>
+
+  <div id="ifDecrypt" style="display:none">
+    <form method="POST" action="{{ url_for('dec_research') }}">
+        <div> <h2>Hexadecimal Encrypted User Input</h2>
+            <textarea style="resize:none" name=user_input_dec rows="4" cols="50" required></textarea>
+        </div>
+        <div id="submit_button_dec">
+          <button  class="button" type="submit"> Submit </button>
+        <div>
+      </form>
+      <form method="GET">
+        <div> <h2>Decrypted PlainText</h2>
+            {% for plain in plaintext %}
+                <p style="resize:none" rows="4" cols="10"> {{ plain }} </p>
+            {% endfor %}
+        </div>
+      </form>
+      <div>
+          <p>
+          <label>Decrypt Time: </label>
+          <span style="resize:none" rows="1" cols="10"> {{ decrypt_time }} </span>(s)
+          </p>
+      </div>
+  </div>
 <div>
-
-
 {% endblock %}

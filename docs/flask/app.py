@@ -63,8 +63,36 @@ def api():
     return render_template('api.html')
 
 
-@app.route("/research/")
+@app.route("/research/", methods=['GET', 'POST'])
 def research():
+    return render_template('research.html')
+
+
+@app.route("/research/encrypt/", methods=['GET', 'POST'])
+def enc_research():
+    global task_id
+    user_input = request.form["user_input_enc"]
+    logger.debug("user_input".center(40, '_'))
+    logger.debug(bytes(user_input, 'ascii').hex())
+
+
+    pre_encrypt_time = time.time()
+    GI.Encrypt(task_id, [bytes(user_input, 'ascii').hex()], client)
+    cipher_list, post_encrypt_time = GI.ReceivedEncrypt(task_id, client)
+    encrypt_time = round(post_encrypt_time - pre_encrypt_time , 2)
+    task_id += 1 
+
+    logger.debug("cipherlist".center(40, '_'))
+    logger.debug(cipher_list)
+    
+    return render_template('research.html', ciphertext=cipher_list,
+                                            encrypt_time=encrypt_time,
+                                            encrypt_select="true",
+                                            decrypt_select="false")
+
+
+@app.route("/research/decrypt/", methods=['GET', 'POST'])
+def dec_research():
     return render_template('research.html')
 
 
