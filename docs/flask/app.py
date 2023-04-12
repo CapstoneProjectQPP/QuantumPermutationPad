@@ -12,6 +12,7 @@ from flask import Flask, flash, render_template, request, redirect, send_file
 from werkzeug.utils import secure_filename
 from Client import *
 from GI_interface import *
+from numpy import *
 
 app = Flask(__name__)
 algos = ['AES', 'QPP', 'AES & QPP']
@@ -80,6 +81,7 @@ def demo():
         logger.debug("user_input".center(40, '_'))
         logger.debug(bytes(user_input, 'ascii').hex())
 
+
         pre_encrypt_time = time.time()
         GI.Encrypt(task_id, [bytes(user_input, 'ascii').hex()], client)
         cipher_list, post_encrypt_time = GI.ReceivedEncrypt(task_id, client)
@@ -89,8 +91,11 @@ def demo():
         logger.debug("cipherlist".center(40, '_'))
         logger.debug(cipher_list)
 
+        logger.debug("user_input".center(40, '_'))
+        logger.debug(user_input)
+
         pre_decrypt_time = time.time()
-        GI.Decrypt(task_id, cipher_list, client)
+        GI.Decrypt(task_id, cipher_list, [user_input], client)
         plain_list, post_decrypt_time = GI.ReceivedDecrypt(task_id, client)
         decrypt_time = round(post_decrypt_time - pre_decrypt_time, 2)
         task_id += 1
@@ -104,7 +109,10 @@ def demo():
         #print([ bytes.fromhex(text) for text in plain_list ])
         #print(decrypt_time)
         
-        cipher_list=bytes.fromhex(cipher_list[0]).decode('ascii').split('\n')
+        cipher_list= cipher_list
+        logger.debug("cipherlist".center(40, '_'))
+        logger.debug(cipher_list)
+        
         plain_list=bytes.fromhex(plain_list[0]).decode('ascii').split('\n')
 
         logger.debug("plain_list".center(40, '_'))
@@ -185,7 +193,7 @@ def view():
                 logger.info("Decryption Begins")
 
                 pre_decrypt_time = time.time()
-                GI.Decrypt(task_id, cipherlist, client)
+                GI.Decrypt(task_id, cipherlist, test_vector, client)
                 logger.info("Decrypt sent")
 
                 plainlist, post_decrypt_time = GI.ReceivedDecrypt(task_id, client)
@@ -194,12 +202,12 @@ def view():
                     str(task_id) + filename.split('.')[0] + '-plaintext.' + file_extension
 
                 if len(plainlist) != 1:
-                    plainlist = [ bytes.fromhex(cipher).decode('ascii') for cipher in plainlist ]
+                    plainlist = [ bytes.fromhex(line).decode('ascii') for line in plainlist ]
                     plaintext = '\n'.join(plainlist)
                     with open(plainpath, 'wb') as fd:
                         fd.write(bytes(plaintext, 'ascii'))
                 else:
-                    plainlist = [ bytes.fromhex(cipher) for cipher in plainlist ]
+                    plainlist = [ bytes.fromhex(line) for line in plainlist ]
                     plaintext = plainlist[0]
                     with open(plainpath, 'wb') as fd:
                         fd.write(plaintext)
@@ -208,7 +216,7 @@ def view():
             str(task_id) + filename.split('.')[0] + '-ciphertext.' + file_extension
 
         if len(cipherlist) != 1:
-            cipherlist = [ bytes.fromhex(cipher).decode('ascii') for cipher in cipherlist ]
+            cipherlist = [ bytes.fromhex(cipher) for cipher in cipherlist ]
             ciphertext = '\n'.join(cipherlist)
             print("cipherlist".center(40, "_"))
             print(cipherlist)

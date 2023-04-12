@@ -64,6 +64,7 @@ class GI:
     def Encrypt(task_id, str_list, client):
 #       logger = Logger.init(LOG_FILE, logging.DEBUG)
         ii = 0
+        
         for vector in str_list:
             msg = client.string_to_json("ENCRYPT", task_id, "GI",
                                         0, len(str_list), ii,
@@ -101,12 +102,12 @@ class GI:
             data = client.get_queue()
 
     @staticmethod
-    def Decrypt(task_id, str_list, client):
+    def Decrypt(task_id, str_list, og_list, client):
         ii = 0
         for vector in str_list:
             msg = client.string_to_json("DECRYPT", task_id, "GI",
                                         0, len(str_list), ii,
-                                        len(vector), vector)
+                                        len(og_list[ii]), vector)
             client.send_to_queue(msg)
             ii += 1
         return
