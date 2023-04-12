@@ -20,7 +20,7 @@
 <form method="GET" >
     <div> <h2>Encrypted CipherText</h2>
         {% for cipher in ciphertext %} 
-            <p style="resize:none" rows="4" cols="10"> {{ cipher }} </p>
+            <p style="resize:none" rows="4" cols="10" style="overflow-wrap:break-word"> {{ cipher }} </p>
         {% endfor %}
     </div>
     <div> <h2>Decrypted PlainText</h2>

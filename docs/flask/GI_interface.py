@@ -105,6 +105,7 @@ class GI:
     def Decrypt(task_id, str_list, og_list, client):
         ii = 0
         for vector in str_list:
+            print("ii = {}, og_list = {}".format(ii, og_list))
             msg = client.string_to_json("DECRYPT", task_id, "GI",
                                         0, len(str_list), ii,
                                         len(og_list[ii]), vector)

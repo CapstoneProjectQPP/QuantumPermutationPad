@@ -6,45 +6,12 @@
 {% block header_content %} 
   <p> This page allows users to interact with the embedded system with textual input
   which will be Encrypted and Decrypted in QPP. Just hit the Submit button to send the message</p>
-    <script type="text/javascript">
-
-    function EncryptShow() {
-        if (document.getElementById('encrypt_show').checked) {
-            document.getElementById('ifEncrypt').style.display = 'block';
-        } else {
-            document.getElementById('ifEncrypt').style.display= 'none';
-        }
-    }
-
-    function DecryptShow() {
-        if (document.getElementById('decrypt_show').checked) {
-            document.getElementById('ifDecrypt').style.display = 'block';
-        } else {
-            document.getElementById('ifDecrypt').style.display= 'none';
-        }
-    }
-
-    function CheckBoxChecK(){
-      EncryptShow();
-      DecryptShow();
-    }
-
-</script>
 {% endblock %}
 
 {% block content %}
-<script type="text/javascript" defer> window.load = CheckBoxChecK() </script>
 
-<div> Encrypt <input type="checkbox"
-                     onclick="javascript:EncryptShow();"
-                     name="encrypt_show" id="encrypt_show" checked="{{ encrypt_select }}" /></div>
-
-<div> Decrypt <input type="checkbox" 
-                     onclick="javascript:DecryptShow();"
-                     name="decrypt_show" id="decrypt_show" checked="{{ decrypt_select }}" /></div>
-<br>
 <div style="display:flex">
-  <div id="ifEncrypt" style="display:none">
+  <div id="ifEncrypt">
     <form method="POST" action="{{ url_for('enc_research') }}">
       <div> <h2>UTF-8 User Input</h2>
         <textarea style="resize:none" name=user_input_enc rows="4" cols="50" required></textarea>
@@ -56,7 +23,7 @@
     <form method="GET">
       <div> <h2>Encrypted CipherText</h2>
           {% for cipher in ciphertext %} 
-              <p style="resize:none" rows="4" cols="10"> {{ cipher }} </p>
+              <p rows="4" cols="10"style="word-break:break-all"> {{ cipher }} </p>
           {% endfor %}
       </div>
     </form>
@@ -64,13 +31,20 @@
           <p>Encrypt Time:
           <span style="resize:none" rows="1" cols="10">{{ encrypt_time }} </span>(s)
           </p>
+          <p>Input Size:
+          <span style="resize:none" rows="1" cols="10">{{ input_size }} </span>(s)
+          </p>
       </div>
   </div>
 
-  <div id="ifDecrypt" style="display:none">
+  <div id="ifDecrypt">
     <form method="POST" action="{{ url_for('dec_research') }}">
         <div> <h2>Hexadecimal Encrypted User Input</h2>
-            <textarea style="resize:none" name=user_input_dec rows="4" cols="50" required></textarea>
+            <textarea style="resize:none; overflow-wrap:break-word" name=user_input_dec rows="4" cols="50"  required></textarea>
+        </div>
+        <div class="api-filter">
+          <label for="api-filter">Originial PlainText Size (in Bytes): </label>
+          <input id="api-filter" type="number" name="og_size" required />
         </div>
         <div id="submit_button_dec">
           <button  class="button" type="submit"> Submit </button>

@@ -79,7 +79,7 @@ def enc_research():
     pre_encrypt_time = time.time()
     GI.Encrypt(task_id, [bytes(user_input, 'ascii').hex()], client)
     cipher_list, post_encrypt_time = GI.ReceivedEncrypt(task_id, client)
-    encrypt_time = round(post_encrypt_time - pre_encrypt_time , 2)
+    encrypt_time = round(post_encrypt_time - pre_encrypt_time , 3)
     task_id += 1 
 
     logger.debug("cipherlist".center(40, '_'))
@@ -88,12 +88,34 @@ def enc_research():
     return render_template('research.html', ciphertext=cipher_list,
                                             encrypt_time=encrypt_time,
                                             encrypt_select="true",
-                                            decrypt_select="false")
+                                            decrypt_select="true",
+                                            input_size=len(user_input))
 
 
 @app.route("/research/decrypt/", methods=['GET', 'POST'])
 def dec_research():
-    return render_template('research.html')
+    global task_id
+    user_input = request.form["user_input_dec"]
+    og_size = request.form["og_size"]
+    logger.debug("user_input".center(40, '_'))
+    logger.debug(bytes(user_input, 'ascii').hex())
+
+    og_list = [' ' * int(og_size)]
+    logger.debug("size".center(40, '_'))
+    logger.debug(og_size)
+    pre_decrypt_time = time.time()
+    GI.Decrypt(task_id, [user_input], og_list, client)
+    plain_list, post_decrypt_time = GI.ReceivedDecrypt(task_id, client)
+    decrypt_time = round(post_decrypt_time - pre_decrypt_time, 3)
+    task_id += 1
+
+    logger.debug("plain_list".center(40, '_'))
+    logger.debug(plain_list)
+    plain_list=bytes.fromhex(plain_list[0]).decode('ascii').split('\n')
+    return render_template('research.html', plaintext=plain_list,
+                                            decrypt_time=decrypt_time,
+                                            encrypt_select="true",
+                                            decrypt_select="true")
 
 
 
@@ -113,7 +135,7 @@ def demo():
         pre_encrypt_time = time.time()
         GI.Encrypt(task_id, [bytes(user_input, 'ascii').hex()], client)
         cipher_list, post_encrypt_time = GI.ReceivedEncrypt(task_id, client)
-        encrypt_time = round(post_encrypt_time - pre_encrypt_time , 2)
+        encrypt_time = round(post_encrypt_time - pre_encrypt_time , 3)
         task_id += 1 
     
         logger.debug("cipherlist".center(40, '_'))
@@ -125,7 +147,7 @@ def demo():
         pre_decrypt_time = time.time()
         GI.Decrypt(task_id, cipher_list, [user_input], client)
         plain_list, post_decrypt_time = GI.ReceivedDecrypt(task_id, client)
-        decrypt_time = round(post_decrypt_time - pre_decrypt_time, 2)
+        decrypt_time = round(post_decrypt_time - pre_decrypt_time, 3)
         task_id += 1
         
 
@@ -215,7 +237,7 @@ def view():
             pre_encrypt_time = time.time()
             GI.Encrypt(task_id, test_vector, client)
             cipherlist, post_encrypt_time = GI.ReceivedEncrypt(task_id, client)
-            encrypt_time = round(post_encrypt_time - pre_encrypt_time, 2)
+            encrypt_time = round(post_encrypt_time - pre_encrypt_time, 3)
 
             logger.info("plaintext".center(40, '_'))
             logger.info('\n'.join(cipherlist))
@@ -228,7 +250,7 @@ def view():
                 logger.info("Decrypt sent")
 
                 plainlist, post_decrypt_time = GI.ReceivedDecrypt(task_id, client)
-                decrypt_time = round(post_decrypt_time - pre_decrypt_time, 2)
+                decrypt_time = round(post_decrypt_time - pre_decrypt_time, 3)
                 plainpath = str(os.path.abspath(UPLOAD_FOLDER)) + '/' + \
                     str(task_id) + filename.split('.')[0] + '-plaintext.' + file_extension
 
