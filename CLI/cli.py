@@ -236,7 +236,7 @@ class QPP_parser:
                 #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
                 task_id += 1
                 l = len("48656c6c6f20576f726c640d0a")
-                msg = client.string_to_json("ENCRYPT",task_id, "GC", 0, 0, 0, 2l, text)
+                msg = client.string_to_json("ENCRYPT",task_id, "GC", 0, 0, 0, 2*l, text)
 
                 
                 client.to_outgoing_queue(msg)
