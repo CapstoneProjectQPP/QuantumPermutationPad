@@ -202,7 +202,7 @@ class QPP_parser:
         while True:
             userinput = input("-> ")
             args = self.parser.parse_args([userinput])
-            print(args)
+            # print(args)
 
             # if args.verbose:
             #     log_level = logging.DEBUG
@@ -235,8 +235,8 @@ class QPP_parser:
                 print("Send encryption")
                 #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
                 task_id += 1
-                l = len("48656c6c6f20576f726c640d0a")
-                msg = client.string_to_json("ENCRYPT",task_id, "GC", 0, 0, 0, 2*l, text)
+                l = len(text)
+                msg = client.string_to_json("ENCRYPT",task_id, "GC", 0, 1, 0,l, bytes(text, 'ascii').hex())
 
                 
                 client.to_outgoing_queue(msg)
@@ -250,8 +250,16 @@ class QPP_parser:
 
                 #{"api_call":"REQUEST_HANDSHAKE","task_id":"2","interface_type":"T1","sender_id":"1"}\n
                 task_id += 1
-                text = input("enter cipher text: ")
-                msg = client.string_to_json("DECRYPT",task_id, "GC", 0, 0, 0, 13, text)
+                size = input("size of text: ")
+                #open a file
+                #read the contenet to a string
+
+                with open('/Users/luwentao/Desktop/QuantumPermutationPad/CLI/text.txt', 'rb') as fd:
+                    text = (fd.read()).decode('ascii')
+
+
+                msg = client.string_to_json("DECRYPT",task_id, "GC", 0, 1, 0, int(size), text)
+
                 
                 client.to_outgoing_queue(msg)
             else:
