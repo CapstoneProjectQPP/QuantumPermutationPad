@@ -15,11 +15,8 @@ from GI_interface import *
 from numpy import *
 
 app = Flask(__name__)
-algos = ['AES', 'QPP', 'AES & QPP']
-tests = ['Encrypt', 'Encrypt & Decrypt', 'M.I.T.M',
-         'Brute Force', 'Monte Carlo',
-         'Multi-block Message', 'Known Answer'
-         ]
+algos = ['QPP']
+tests = ['Encrypt', 'Encrypt & Decrypt']
 DOWNLOAD_FOLDER = "downloads/"
 UPLOAD_FOLDER = "uploads/"
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
