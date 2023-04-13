@@ -126,11 +126,8 @@ a {
 body {
   margin: 0px;
   font-family: var(--vt-font-family-base);
-  letter-spacing: 0.2px;
-<<<<<<< HEAD
-=======
-  line-height: 24px;
->>>>>>> 8cf1338 (renamed UI folder to docs for github pages)
+  letter-spacing: 1px;
+  line-height: 30px;
   font-size: 16px;
   font-weight: 400;
   direction: ltr;
@@ -231,16 +228,16 @@ p {
 .article-1 {
   padding: 30px;
   color: #000;
-  background-color: rgb(78, 226, 65);
+  background-color: #A4DAFF;
 }
 
 .article-2 {
-  background-color: rgb(233, 247, 47);
+  background-color: #A4ACFF;
   border-right: #000 solid 1px;
 }
 
 .article-3 {
-  background-color: #ff48d7;
+  background-color: #A4FFF7;
 }
 
 .article-interim {

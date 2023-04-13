@@ -4,52 +4,122 @@
 {% block header %} QPP Testbed {% endblock %}
 
 {% block header_content %} 
-  <p> This is the description for this page </p>
+  <p> 
+    The increasing threat of quantum computing has
+    made it essential to explore new cryptographic
+    techniques that can withstand attacks by quantum
+    computers. The Quantum Permutation Pad (QPP) is
+    a promising solution to this problem, offering a
+    quantum-safe cryptographic technique that could
+    greatly enhance the security of digital
+    communication and data storage in various
+    industries, and it has the potential to make a
+    significant impact on society. 
+  </p>
 {% endblock %}
 
 
 {% block content %}
     <article class="col article-1">
-      <h2>Some random thingy</h2>
+      <h2>Project Design</h2>
       <p>
-        Phasellus convallis elit id ullamcorper pulvinar. Duis aliquam turpis
-        mauris, eu ultricies erat malesuada quis. Aliquam dapibus, lacus eget
-        hendrerit bibendum, urna est aliquam sem, sit amet imperdiet est velit
-        quis lorem.
+        The purpose of the Quantum Permutation Pad
+        (QPP) testbed prototype is to assess the
+        functionality of the QPP algorithm in an end-to-end
+        encryption and decryption system. The prototype
+        allows the user to input plaintext via an interface
+        on a host machine, which is then transmitted to an
+        embedded system for encryption. The encrypted
+        data is then sent back to the host machine for
+        storage and potential cryptanalysis. Conversely, the
+        host machine can send cypher text to the embedded
+        system for decryption. The testbed prototype was
+        developed using a Xilinx Zybo Z7 FPGA board and
+        was programmed using various languages such as
+        Xilinx HLS, C++, Python, Flask, Java, and
+        JavaScript.
       </p>
     </article>
     <div class="side-view">
       <article class="col article-2">
-        <h2>Some random thingy</h2>
+        <h2>Algorithim Design</h2>
         <p>
-          Phasellus convallis elit id ullamcorper pulvinar. Duis aliquam turpis
-          mauris, eu ultricies erat malesuada quis. Aliquam dapibus, lacus eget
-          hendrerit bibendum, urna est aliquam sem, sit amet imperdiet est velit
-          quis lorem.
+          QPP is a symmetric-key encryption algorithm that
+          utilizes permutation logic gates to encrypt and
+          decrypt data[2]. The permutation logic gates are
+          represented as permutation matrices, where each
+          row and column contains only one nonzero
+          element, which is always equal to one. Plaintext
+          and cyphertext are encoded into basis vectors,
+          which are then multiplied with a permutation
+          matrix. To enhance the efficiency of the algorithm,
+          we replaced the matrix data structure with an array
+          that stores the column position of the nonzero value
+          for each row. The multiplication operation is then
+          achieved by indexing the array with the encoded
+          plaintext or cyphertext. The QPP algorithm
+          prototype was developed using the C++
+          programming language.
         </p>
       </article>
 
       <article class="col article-3">
-        <h2>Some random thingy</h2>
+        <h2>Hardware Implementation</h2>
         <p>
-          Phasellus convallis elit id ullamcorper pulvinar. Duis aliquam turpis
-          mauris, eu ultricies erat malesuada quis. Aliquam dapibus, lacus eget
-          hendrerit bibendum, urna est aliquam sem, sit amet imperdiet est velit
-          quis lorem.
+          The embedded system target is a
+          Xilinx Zybo Z7 development board. The Zybo-Z7
+          contains an SoC with both FPGA fabric and a dual-
+          core Cortex-A9 multiprocessor. The algorithm C++
+          prototype was converted to RTL using Xilinx HLS
+          (High-level synthesis).The generated RTL was 
+          used to instantiate a custom IP core on the FPGA fabric. 
+          The host machine communicates with Zybo-Z7 using an
+          Ethernet cable.
         </p>
       </article>
     </div>
-    <article class="col article-interim">
-      <h1>HHHHHHHHHHHHHHH</h1>
-      <p>oasnfoiasjfniuasjfiasfiuhsafiajsfiusafojsaoijfniosanfo</p>
-    </article>
 
     <article class="col">
-      <h1>HSOPCMAOISCM</h1>
+      <h1>Integrated System</h1>
       <p>
-        Moloch the incomprehensible prison! Moloch the crossbone soulless
-        jailhouse and Congress of sorrows! Moloch whose buildings are judgment!
-        Moloch the vast stone of war! Moloch the stunned governments!
+        The QPP testbed includes a command-line interface
+        (CLI), web interface, and a Java backend referred
+        to as the CoreComplex(CC), all of which are
+        platform independent programs which run on the
+        user's host machine. The encryption and decryption
+        module is referred to as the nodeE, which is
+        deployed a Linux process on the Zybo-
+        Z7. These components work together to
+        achieve end-to-end encryption and decryption.
+      </p>
+    </article>
+    <article class="col article-interim">
+      <h1>Conclusion</h1>
+      <p>
+        The testbed serves as an efficient platform for
+        assessing the effectiveness and security of the
+        QPP algorithm. It allows plaintext or ciphertext 
+        input to be encrypted and decrypted using QPP on the
+        embedded system, with the output being
+        automatically stored on the host machine. Future
+        development plans include the addition of the AES-
+        256 symmetric-key algorithm to enable a
+        comparison against QPP, as well as the scaling of
+        the security parameters of QPP to enhance the
+        algorithm's performance.
+      </p>
+      <h2>References</h2>
+      <p>
+        [1] Kuang, R., Lou, D., He, A., McKenzie, C., &
+        Redding, M. (2021). Pseudo quantum random
+        number generator with quantum permutation pad.
+        2021 IEEE International Conference on Quantum
+        Computing and Engineering (QCE), 361–361.
+        https://doi.org/10.1109/qce52317.2021.00053
+        [2] Kuang, R., & Barbeau, M. (2022). Quantum
+        permutation pad for universal quantum-safe
+        cryptography. Quantum Information Processing,
+        21(6). https://doi.org/10.1007/s11128-022-03557-y
       </p>
     </article>
 {% endblock %}
