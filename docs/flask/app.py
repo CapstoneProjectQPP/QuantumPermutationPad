@@ -195,7 +195,10 @@ def view():
     test = algo = "ERROR"
     test_vector = []
     og_vector = []
+    plainlist = []
     plaintext = None
+    plainpath = None
+    cipherpath = None
     client.clear_queue()
     if request.method == 'POST':
         algo_select = request.form.get('algo_select')
@@ -239,7 +242,7 @@ def view():
             cipherlist, post_encrypt_time = GI.ReceivedEncrypt(task_id, client)
             encrypt_time = round(post_encrypt_time - pre_encrypt_time, 3)
 
-            logger.info("plaintext".center(40, '_'))
+            logger.info("ciphertext".center(40, '_'))
             logger.info('\n'.join(cipherlist))
             logger.info("Encryption Ends")
             if test_select.find('Decrypt') != -1:
@@ -254,38 +257,31 @@ def view():
                 plainpath = str(os.path.abspath(UPLOAD_FOLDER)) + '/' + \
                     str(task_id) + filename.split('.')[0] + '-plaintext.' + file_extension
 
-                if len(plainlist) != 1:
+                logger.info("plaintext".center(40, '_'))
+                logger.info(plainlist)
+                if len(test_vector) > 1:
                     plainlist = [ bytes.fromhex(line).decode('ascii') for line in plainlist ]
-                    plaintext = '\n'.join(plainlist)
-                    with open(plainpath, 'wb') as fd:
-                        fd.write(bytes(plaintext, 'ascii'))
+                    plainlist = '\n'.join(plainlist)
+                    plaintext = bytes(plainlist, 'ascii')
                 else:
-                    plainlist = [ bytes.fromhex(line) for line in plainlist ]
-                    plaintext = plainlist[0]
-                    with open(plainpath, 'wb') as fd:
-                        fd.write(plaintext)
+                    plaintext = [ bytes.fromhex(line) for line in plainlist ][0]
+                logger.info("plaintext".center(40, '_'))
+                logger.info(plainlist)
+                with open(plainpath, 'wb') as fd:
+                    fd.write(plaintext)
                     
         cipherpath = str(os.path.abspath(UPLOAD_FOLDER)) + '/' + \
             str(task_id) + filename.split('.')[0] + '-ciphertext.' + file_extension
 
-        if len(cipherlist) != 1:
-            cipherlist = [ bytes.fromhex(cipher) for cipher in cipherlist ]
-            ciphertext = '\n'.join(cipherlist)
-            print("cipherlist".center(40, "_"))
-            print(cipherlist)
-            print("ciphertex".center(40, "_"))
-            print(ciphertext)
-            with open(cipherpath, 'wb') as fd:
-                fd.write(bytes(ciphertext, 'ascii'))
-        else:
-            cipherlist = [ bytes.fromhex(cipher) for cipher in cipherlist ]
-            ciphertext = cipherlist[0]
-            with open(cipherpath, 'wb') as fd:
-                fd.write(ciphertext)
+        print("cipherlist".center(40, "_"))
+        print(cipherlist)
+        with open(cipherpath, 'w') as fd:
+            for cipher in cipherlist:
+                fd.write(cipher)
         
         task_id += 1
 
-    return render_template('view.html', ciphertext=ciphertext,
+    return render_template('view.html',
                            plaintext=plaintext,
                            test=test_select,
                            algo=algo_select,

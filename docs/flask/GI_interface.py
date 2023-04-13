@@ -68,7 +68,7 @@ class GI:
         for vector in str_list:
             msg = client.string_to_json("ENCRYPT", task_id, "GI",
                                         0, len(str_list), ii,
-                                        len(vector), vector)
+                                        int(len(vector)/2), vector)
             client.send_to_queue(msg)
             ii += 1
         return

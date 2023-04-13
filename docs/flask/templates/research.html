@@ -5,7 +5,8 @@
 
 {% block header_content %} 
   <p> This page allows users to interact with the embedded system with textual input
-  which will be Encrypted and Decrypted in QPP. Just hit the Submit button to send the message</p>
+  which will be Encrypted or Decrypted in QPP. Users have the ability to either encrypt 
+  ascii user input or decrypt hexadecimal ciphertext messages.</p>
 {% endblock %}
 
 {% block content %}
@@ -23,16 +24,16 @@
     <form method="GET">
       <div> <h2>Encrypted CipherText</h2>
           {% for cipher in ciphertext %} 
-              <p rows="4" cols="10"style="word-break:break-all"> {{ cipher }} </p>
+              <p rows="4" cols="10"style="word-break:break-all">{{ cipher }}</p>
           {% endfor %}
       </div>
     </form>
       <div><br></br>
           <p>Encrypt Time:
-          <span style="resize:none" rows="1" cols="10">{{ encrypt_time }} </span>(s)
+          <span style="resize:none" rows="1" cols="10"> {{ encrypt_time }} </span>(s)
           </p>
           <p>Input Size:
-          <span style="resize:none" rows="1" cols="10">{{ input_size }} </span>(s)
+          <span style="resize:none" rows="1" cols="10"> {{ input_size }} </span>(s)
           </p>
       </div>
   </div>
@@ -40,10 +41,10 @@
   <div id="ifDecrypt">
     <form method="POST" action="{{ url_for('dec_research') }}">
         <div> <h2>Hexadecimal Encrypted User Input</h2>
-            <textarea style="resize:none; overflow-wrap:break-word" name=user_input_dec rows="4" cols="50"  required></textarea>
+            <textarea style="resize:none; overflow-wrap:break-word" name=user_input_dec rows="4" cols="50" required></textarea>
         </div>
         <div class="api-filter">
-          <label for="api-filter">Originial PlainText Size (in Bytes): </label>
+          <label for="api-filter">Original PlainText Size (in Bytes): </label>
           <input id="api-filter" type="number" name="og_size" required />
         </div>
         <div id="submit_button_dec">
@@ -53,7 +54,7 @@
       <form method="GET">
         <div> <h2>Decrypted PlainText</h2>
             {% for plain in plaintext %}
-                <p style="resize:none" rows="4" cols="10"> {{ plain }} </p>
+                <p style="resize:none" rows="4" cols="10">{{ plain }}</p>
             {% endfor %}
         </div>
       </form>

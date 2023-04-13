@@ -9,7 +9,7 @@ import logging
 from threading import Lock
 from GI_interface import Logger
 
-logger = Logger.init(None, logging.DEBUG)
+logger = Logger.init(None, logging.ERROR)
 PAYLOAD = 4096
 delim ='.(?={"api_call": "ENCRYPT", "task_id": "\d", "interface_type": "GI", "sender_id": "0",)'
 encoding = 'utf-8'
@@ -50,6 +50,7 @@ class Client:
                 self.outgoing_mutex.release()
                 self.s.send(message.encode(encoding))
                 self.s.send('\n'.encode(encoding))
+
     def send_to_queue(self, message):
         # self.outgoing_mutex.acquire()
         self.send_queue.put(message)

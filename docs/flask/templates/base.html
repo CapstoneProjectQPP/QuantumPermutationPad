@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="{{ url_for('static', filename="style.css") }}" rel="stylesheet" />
     <title>{% block title %} {% endblock %}</title>
+    <!-- The header-logo was used from flaticon.com, this is the attribution-->
+    <a href="https://www.flaticon.com/free-icons/quantum-computing" title="quantum-computing icons">Quantum-computing icons created by Natthapong - Flaticon</a>
   </head>
   <body>
     <header>
@@ -13,7 +15,11 @@
       <nav>
         <ul class="header-list">
           <li class="header-logo">
-            <a href="{{ url_for('index') }}"> Header Logo </a>
+            <a href="{{ url_for('index') }}"><img src="/static/image.svg" 
+                                                  style="height: 60px; width: auto">
+                                                  
+            </a>
+           
           </li>
           <li class="header-link">
             <a href="{{ url_for('api') }}"> API </a>
